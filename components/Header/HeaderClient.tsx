@@ -3,22 +3,37 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 import logo from "@/public/images/logo/logo.svg";
 import MobileMenu from "../MobileMenu/MobileMenu";
 import MegaMenu1 from "./MegaMenu1";
 import MegaMenuServices from "./MegaMenu2";
 
+/* ── Route → label map for active detection ── */
+const NAV_LINKS = [
+  { href: "/",           label: "Home",       exact: true },
+  { href: "/about",      label: "About Us",   exact: false },
+  { href: "/contact",    label: "Contact Us", exact: false },
+  { href: "/elena-ai",   label: "Elena.AI",   exact: false },
+  { href: "/blog",       label: "Blog",       exact: false },
+  { href: "/service",    label: "Services",   exact: false },
+];
+
 export default function HeaderClient() {
+  const pathname = usePathname();
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [mobileActive, setMobileActive] = useState(false);
-
   const lastScrollY = useRef(0);
 
-  /* ================================
-      Sticky Header Logic
-  ================================= */
+  /* ── active check ── */
+  const isActive = (href: string, exact: boolean) => {
+    if (exact) return pathname === href;
+    return pathname.startsWith(href);
+  };
+
+  /* ── Sticky Header Logic ── */
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
@@ -43,24 +58,10 @@ export default function HeaderClient() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ================================
-      Memoized Handlers
-  ================================= */
-  const toggleMobileMenu = useCallback(() => {
-    setMobileActive((prev) => !prev);
-  }, []);
-
-  const closeMobileMenu = useCallback(() => {
-    setMobileActive(false);
-  }, []);
-
-  const preventFormSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-  }, []);
-
-  const preventDefault = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-  }, []);
+  const toggleMobileMenu = useCallback(() => setMobileActive((p) => !p), []);
+  const closeMobileMenu  = useCallback(() => setMobileActive(false), []);
+  const preventFormSubmit = useCallback((e: React.FormEvent) => e.preventDefault(), []);
+  const preventDefault    = useCallback((e: React.MouseEvent) => e.preventDefault(), []);
 
   return (
     <header
@@ -86,32 +87,42 @@ export default function HeaderClient() {
             <div className="main-menu__wrap navbar navbar-expand-lg p-0">
               <nav className="main-menu collapse navbar-collapse">
                 <ul>
-                  <li className="menu-item-has-children active">
+                  {/* Home — has submenu */}
+                  <li className={`menu-item-has-children ${isActive("/", true) ? "pw-active" : ""}`}>
                     <Link href="/">Home</Link>
-                    <ul className="submenu">
-                      <li><Link href="/">Ai Agency</Link></li>
-                      <li><Link href="/ai-marketing">Ai Marketing</Link></li>
-                      <li><Link href="/ai-chatbot">Ai Chatbot</Link></li>
-                    </ul>
                   </li>
 
-                  <li><Link href="/about">About Us</Link></li>
+                  <li className={isActive("/about", false) ? "pw-active" : ""}>
+                    <Link href="/about">About Us</Link>
+                  </li>
 
-                  <li className="menu-item-has-children megamenu">
+                  <li className={`menu-item-has-children megamenu ${
+                    ["/project", "/career", "/team", "/blog"].some(p => pathname.startsWith(p)) ? "pw-active" : ""
+                  }`}>
                     <Link href="#" onClick={preventDefault}>Pages</Link>
                     <MegaMenu1 />
                   </li>
 
-                  <li className="menu-item-has-children megamenu">
+                  <li className={`menu-item-has-children megamenu ${
+                    pathname.startsWith("/service") ? "pw-active" : ""
+                  }`}>
                     <Link href="#" onClick={preventDefault}>Services</Link>
                     <MegaMenuServices />
                   </li>
 
-                  <li>
-                    <Link href="/elena-ai" style={{ color: "var(--color-primary)" }}>Elena.AI</Link>
+                  {/* Elena.AI — highlighted */}
+                  <li className={isActive("/elena-ai", false) ? "pw-active" : ""}>
+                    <Link
+                      href="/elena-ai"
+                      style={{ color: "var(--color-primary)" }}
+                    >
+                      Elena.AI
+                    </Link>
                   </li>
 
-                  <li className="menu-item-has-children">
+                  <li className={`menu-item-has-children ${
+                    pathname.startsWith("/blog") ? "pw-active" : ""
+                  }`}>
                     <Link href="/blog">Blog</Link>
                     <ul className="submenu">
                       <li><Link href="/blog">Blog</Link></li>
@@ -119,7 +130,9 @@ export default function HeaderClient() {
                     </ul>
                   </li>
 
-                  <li><Link href="/contact">Contact Us</Link></li>
+                  <li className={isActive("/contact", false) ? "pw-active" : ""}>
+                    <Link href="/contact">Contact Us</Link>
+                  </li>
                 </ul>
               </nav>
             </div>
@@ -158,7 +171,7 @@ export default function HeaderClient() {
                 <div className="xb-header-mobile-search xb-hide-xl">
                   <form role="search" onSubmit={preventFormSubmit}>
                     <input type="text" className="search-field" placeholder="Search..." />
-                    <button type="submit" className="search-submit"> 
+                    <button type="submit" className="search-submit">
                       <i className="far fa-search"></i>
                     </button>
                   </form>

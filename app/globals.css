@@ -92,19 +92,7 @@
 }
 
 /* Glowing layer behind the card */
-.xb-feature-item::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 12px;
-  background: conic-gradient(from 200deg, #00f0ff, #0057ff, #bd00ff, #00f0ff);
-  z-index: -2;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  filter: blur(18px);
-}
-
-/* Darkened inner fill so the glow "bleeds" outward */
+/* Glow shadow layer — lives UNDER the card as a shadow, not behind */
 .xb-feature-item .xb-item--inner {
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   position: relative;
@@ -113,71 +101,62 @@
   border-radius: 10px;
 }
 
-/* Animated glowing border ring on hover */
+/* Glowing border ring — CSS mask trick */
 .xb-feature-item .xb-item--inner::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: 10px;
+  inset: -1px;
+  border-radius: 11px;
   border: 1.5px solid transparent;
-  background: linear-gradient(135deg, #00f0ff55, #0057ff55, #bd00ff55, #00f0ff55) border-box;
+  background: linear-gradient(135deg, #00f0ff80, #0057ff80, #bd00ff80, #00f0ff80) border-box;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.45s ease;
 }
 
 .xb-feature-item:hover {
   transform: translateY(-10px);
 }
 
-.xb-feature-item:hover::after {
-  opacity: 0.9;
-}
-
 .xb-feature-item:hover .xb-item--inner {
-  border-color: rgba(0, 240, 255, 0.3) !important;
+  border-color: rgba(0, 240, 255, 0.2) !important;
+  /* Ambient glow as a CARD SHADOW — spreads from beneath */
   box-shadow:
-    0 20px 45px -10px rgba(0, 0, 0, 0.6),
-    inset 0 0 30px rgba(0, 240, 255, 0.06) !important;
+    0 8px 16px -4px rgba(0, 0, 0, 0.5),
+    0 20px 50px -8px rgba(0, 87, 255, 0.35),
+    0 30px 60px -12px rgba(0, 240, 255, 0.2),
+    0 0 0 1px rgba(0, 240, 255, 0.12) !important;
 }
 
 .xb-feature-item:hover .xb-item--inner::after {
   opacity: 1;
 }
 
-/* ── 4. MAIN MENU NAV — HOVER & ACTIVE ANIMATIONS ────────────── */
+/* ── 4. MAIN MENU NAV — HOVER & ACTIVE (PILL BORDER) ────────── */
 
-.main-menu ul > li > a,
-.main-menu ul > li > span {
+.main-menu ul > li > a {
   position: relative;
-  transition: color 0.3s ease !important;
+  padding: 6px 14px !important;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease !important;
 }
 
-/* Sliding underline */
-.main-menu ul > li > a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--color-primary);
-  border-radius: 2px;
-  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 8px var(--color-primary);
+/* Hover: subtle pill bg */
+.main-menu ul > li:hover > a {
+  color: var(--color-white) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
 }
 
-.main-menu ul > li:hover > a::after,
-.main-menu ul > li.active > a::after {
-  width: 100%;
-  left: 0;
-}
-
-.main-menu ul > li:hover > a,
-.main-menu ul > li.active > a {
-  color: var(--color-primary) !important;
+/* Active page: glowing pill border */
+.main-menu ul > li.pw-active > a {
+  color: var(--color-white) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 0 12px rgba(255, 255, 255, 0.04) !important;
 }
 
 /* ── 5. FLOATING HEADER — COMPACT HEIGHT ON STICKY ───────────── */

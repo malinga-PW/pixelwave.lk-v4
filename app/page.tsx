@@ -8,6 +8,8 @@ import IndustriesMarqueeSection from "@/components/IndustriesMarqueeSection/Indu
 import IndustriesSection from "@/components/Industries/Industries";
 import ContactSection from "@/components/ContactSection/ContactSection";
 import TestimonialSection from "@/components/Testimonial/Testimonial";
+import PricingSection from "@/components/ai-chatbot-components/PricingSection/PricingSection";
+import FAQSection from "@/components/ai-chatbot-components/FAQSection/FAQSection";
 import BlogSection from "@/components/BlogSection/BlogSection";
 import Footer from "@/components/footer/Footer";
 import Scrollbar from "@/components/scrollbar/scrollbar";
@@ -35,6 +37,8 @@ export default function HomePage() {
             <IndustriesSection />
             <ContactSection />
             <TestimonialSection />
+            <PricingSection />
+            <FAQSection />
             <BlogSection />
           </main>
 
