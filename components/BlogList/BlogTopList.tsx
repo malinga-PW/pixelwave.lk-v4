@@ -10,45 +10,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // IMAGES
-import blog1 from "@/public/images/blog/img04.jpg";
-import blog2 from "@/public/images/blog/img4.2.jpg";
-import blog3 from "@/public/images/blog/img4.3.jpg";
-import blog4 from "@/public/images/blog/img4.4.jpg";
+import { blogData } from "@/data/blogData";
 
 import shapeLeft from "@/public/images/shape/prev-shape.png";
 import shapeRight from "@/public/images/shape/next-shape.png";
 
 // SLIDER DATA
-const blogSlides = [
-  {
-    img: blog1,
-    tag: "# ai business tips",
-    title: "We’re live! explore our smart AI solutions for the future of business.",
-    content:
-      "We’re live! Discover our smart AI solutions designed to help businesses automate tasks, gain insights, and grow faster.",
-  },
-  {
-    img: blog2,
-    tag: "# chatbots tips",
-    title: "Why AI chatbots are the next big thing in business communication..",
-    content:
-      "AI chatbots are reshaping communication with instant support and personalized responses, reducing business costs.",
-  },
-  {
-    img: blog3,
-    tag: "# ai business tips",
-    title: "How AI agencies help small businesses compete with global brands..",
-    content:
-      "AI agencies empower small businesses with tools like analytics, automation, and personalized marketing.",
-  },
-  {
-    img: blog4,
-    tag: "# ai business tips",
-    title: "Top services you should expect from a modern AI agency..",
-    content:
-      "Modern AI agencies offer chatbots, predictive analytics, personalized marketing, and process automation.",
-  },
-];
+const blogSlides = Object.values(blogData);
 
 export default function BlogSlider() {
   return (
@@ -74,7 +42,7 @@ export default function BlogSlider() {
                   {/* IMAGE */}
                   <div className="xb-item--img">
                     <Image
-                      src={item.img}
+                      src={item.image}
                       alt={item.title}
                       priority={index === 0}
                     />
@@ -82,15 +50,15 @@ export default function BlogSlider() {
 
                   {/* CONTENT */}
                   <div className="xb-item--holder">
-                    <Link href="/blog-details" className="xb-item--tag xb-border">
-                      {item.tag}
+                    <Link href={`/blog/${item.slug}`} className="xb-item--tag xb-border">
+                      #{item.category.toLowerCase()}
                     </Link>
 
                     <h2 className="xb-item--title">
-                      <Link href="/blog-details">{item.title}</Link>
+                      <Link href={`/blog/${item.slug}`}>{item.title}</Link>
                     </h2>
 
-                    <p className="xb-item--content">{item.content}</p>
+                    <p className="xb-item--content">{item.excerpt}</p>
                   </div>
 
                 </div>

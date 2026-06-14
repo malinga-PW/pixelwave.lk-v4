@@ -1,8 +1,7 @@
 import Link from "next/link";
 
-// Image imports
-import profileIcon from "@/public/images/icon/profile-circle.svg";
 import Image from "next/image";
+import { blogData } from "@/data/blogData";
 
 // ICONS
 const Icons = {
@@ -39,37 +38,19 @@ export default function BlogSidebar() {
 
         {/* RELATED POSTS */}
         <div className="sidebar_widget">
-          <h3 className="sidebar_widget_title">Related posts</h3>
+          <h3 className="sidebar_widget_title">Recent posts</h3>
 
           <ul className="recent_post_block list-unstyled">
-
-            <li className="recent_post_item xb-border">
-              <h3 className="post-title border-effect-2">
-                <Link href="/blog-details">Why your business needs an AI strategy in 2025..</Link>
-              </h3>
-              <span>
-                <Image src={profileIcon} alt="author" /> By Michael David
-              </span>
-            </li>
-
-            <li className="recent_post_item xb-border">
-              <h3 className="post-title border-effect-2">
-                <Link href="/blog-details">AI chatbots vs live chat, which is better?..</Link>
-              </h3>
-              <span>
-                <Image src={profileIcon} alt="author" /> By Christopher
-              </span>
-            </li>
-
-            <li className="recent_post_item xb-border">
-              <h3 className="post-title border-effect-2">
-                <Link href="/blog-details">How AI transforms data into business insights..</Link>
-              </h3>
-              <span>
-                <Image src={profileIcon} alt="author" /> By William Thomas
-              </span>
-            </li>
-
+            {Object.values(blogData).slice(0, 3).map((blog, idx) => (
+              <li key={idx} className="recent_post_item xb-border">
+                <h3 className="post-title border-effect-2">
+                  <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
+                </h3>
+                <span>
+                  By {blog.author}
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -78,49 +59,13 @@ export default function BlogSidebar() {
           <h3 className="sidebar_widget_title">Categories</h3>
 
           <ul className="category_list_block list-unstyled">
-
-            <li>
-              <Link href="/blog-details">
-                <span><i className="far fa-arrow-right"></i> Cybersecurity</span>
-                <span>(05)</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/blog-details">
-                <span><i className="far fa-arrow-right"></i> Digital Transformation</span>
-                <span>(02)</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/blog-details">
-                <span><i className="far fa-arrow-right"></i> Ai Business Growth</span>
-                <span>(02)</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/blog-details">
-                <span><i className="far fa-arrow-right"></i> Security Alerts</span>
-                <span>(04)</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/blog-details">
-                <span><i className="far fa-arrow-right"></i> Investor Highlights</span>
-                <span>(07)</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/blog-details">
-                <span><i className="far fa-arrow-right"></i> Cloud Computing</span>
-                <span>(07)</span>
-              </Link>
-            </li>
-
+            {Array.from(new Set(Object.values(blogData).map(b => b.category))).map((category, idx) => (
+              <li key={idx}>
+                <Link href="#">
+                  <span><i className="far fa-arrow-right"></i> {category}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -129,18 +74,9 @@ export default function BlogSidebar() {
           <h3 className="sidebar_widget_title">Tags</h3>
 
           <ul className="tags_block list-unstyled">
-            {[
-              "AI Solutions",
-              "Data Science",
-              "SaaS",
-              "AI Consulting",
-              "Enterprise AI",
-              "AI",
-              "Helpdesk",
-              "24/7 Chatbot",
-            ].map((tag, i) => (
+            {Array.from(new Set(Object.values(blogData).flatMap(b => b.tags))).slice(0, 8).map((tag, i) => (
               <li key={i}>
-                <Link className="xb-border" href="#!">{tag}</Link>
+                <Link className="xb-border" href="#">{tag}</Link>
               </li>
             ))}
           </ul>

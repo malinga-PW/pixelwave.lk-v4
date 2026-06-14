@@ -118,14 +118,8 @@ export default function HeaderClient() {
                     <Link href="/project">Portfolio</Link>
                   </li>
 
-                  <li className={`menu-item-has-children ${
-                    pathname?.startsWith("/blog") ? "pw-active" : ""
-                  }`}>
+                  <li className={pathname?.startsWith("/blog") ? "pw-active" : ""}>
                     <Link href="/blog">Blog</Link>
-                    <ul className="submenu">
-                      <li><Link href="/blog">Blog</Link></li>
-                      <li><Link href="/blog-details">Blog Details</Link></li>
-                    </ul>
                   </li>
 
                   <li className={isActive("/resources", false) ? "pw-active" : ""}>

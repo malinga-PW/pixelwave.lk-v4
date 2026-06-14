@@ -57,10 +57,6 @@ const menus: MenuItem[] = [
     id: 5,
     title: "Blog",
     link: "/blog",
-    submenu: [
-      { id: 51, title: "Blog", link: "/blog" },
-      { id: 52, title: "Blog Details", link: "/blog-details" },
-    ],
   },
   {
     id: 6,

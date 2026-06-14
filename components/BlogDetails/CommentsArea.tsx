@@ -24,7 +24,7 @@ export default function CommentsArea() {
               <div className="comment_time">November 24, 2025</div>
               <p>“Their next-gen AI solutions helped us cut operational costs while improving accuracy. The integration with our existing systems was smooth and efficient.”</p>
 
-              <Link href="/blog-details" className="comment_reply_btn xb-border">
+              <Link href="#" className="comment_reply_btn xb-border">
                 Reply
               </Link>
             </div>
@@ -43,7 +43,7 @@ export default function CommentsArea() {
                   <div className="comment_time">November 26, 2025</div>
                   <p>“Their team took the time to understand our challenges and delivered tailored automation tools that truly elevated our business processes.”</p>
 
-                  <Link href="/blog-details" className="comment_reply_btn xb-border">
+                  <Link href="#" className="comment_reply_btn xb-border">
                     Reply
                   </Link>
                 </div>
@@ -64,7 +64,7 @@ export default function CommentsArea() {
               <div className="comment_time">November 28, 2025</div>
               <p>“This agency’s automation tools scaled effortlessly with our growing business needs. Their expertise made the entire process hassle-free and rewarding.”</p>
 
-              <Link href="/blog-details" className="comment_reply_btn xb-border">
+              <Link href="#" className="comment_reply_btn xb-border">
                 Reply
               </Link>
             </div>

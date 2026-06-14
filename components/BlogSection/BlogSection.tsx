@@ -8,16 +8,17 @@ import Image from "next/image";
 import blogBg from "@/public/images/bg/blog-bg.png";
 import gifShape from "@/public/images/icon/original-9e54f87f13d.gif";
 
-// Blog Images
-import img01 from "@/public/images/blog/img01.jpg";
-import img02 from "@/public/images/blog/img02.jpg";
-import img03 from "@/public/images/blog/img03.jpg";
+import { blogData } from "@/data/blogData";
 
 // Icons
 import icon01 from "@/public/images/icon/blog-icon01.svg";
 import icon02 from "@/public/images/icon/blog-icon02.svg";
 
 export default function BlogSection() {
+  const blogs = Object.values(blogData);
+  const bigBlog = blogs[0];
+  const smallBlogs = blogs.slice(1, 3);
+
   useEffect(() => {
     const bgEl = document.querySelector<HTMLElement>(".blog.bg_img");
     if (bgEl) {
@@ -104,40 +105,39 @@ export default function BlogSection() {
             <div className="row mt-none-30">
 
               {/* BIG BLOG */}
-              <div className="col-lg-12 mt-30">
-                <div className="xb-blog-item wow fadeInUp" data-wow-duration="600ms">
-                  <div className="xb-item--inner img-hove-effect xb-border">
-                    <div className="xb-img">
-                      {[...Array(4)].map((_, i) => (
-                        <Link href="/blog-details" key={i}>
-                          <Image src={img01} alt="blog" />
+              {bigBlog && (
+                <div className="col-lg-12 mt-30">
+                  <div className="xb-blog-item wow fadeInUp" data-wow-duration="600ms">
+                    <div className="xb-item--inner img-hove-effect xb-border">
+                      <div className="xb-img">
+                        <Link href={`/blog/${bigBlog.slug}`}>
+                          <Image src={bigBlog.image} alt={bigBlog.title} />
                         </Link>
-                      ))}
-                    </div>
+                      </div>
 
-                    <div className="xb-item--holder">
-                      <ul className="xb-item--meta list-unstyled ul_li">
-                        <li>
-                          <Image src={icon01} alt="icon" /> ai business tips
-                        </li>
-                        <li>
-                          <Image src={icon02} alt="icon" /> March 24, 2025
-                        </li>
-                      </ul>
+                      <div className="xb-item--holder">
+                        <ul className="xb-item--meta list-unstyled ul_li">
+                          <li>
+                            <Image src={icon01} alt="icon" /> {bigBlog.category}
+                          </li>
+                          <li>
+                            <Image src={icon02} alt="icon" /> {bigBlog.date}
+                          </li>
+                        </ul>
 
-                      <h2 className="xb-item--title">
-                        <Link href="/blog-details">
-                          How AI is transforming modern business operations and driving innovation —
-                          everything you need to know..
-                        </Link>
-                      </h2>
+                        <h2 className="xb-item--title">
+                          <Link href={`/blog/${bigBlog.slug}`}>
+                            {bigBlog.title}
+                          </Link>
+                        </h2>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* SMALL BLOGS */}
-              {[img02, img03].map((img, i) => (
+              {smallBlogs.map((blog, i) => (
                 <div className="col-lg-6 col-md-6 mt-30" key={i}>
                   <div
                     className="xb-blog-item xb-small-blog-item wow fadeInUp"
@@ -146,26 +146,24 @@ export default function BlogSection() {
                   >
                     <div className="xb-item--inner img-hove-effect xb-border">
                       <div className="xb-img">
-                        {[...Array(4)].map((_, x) => (
-                          <Link href="/blog-details" key={x}>
-                            <Image src={img} alt="blog" />
-                          </Link>
-                        ))}
+                        <Link href={`/blog/${blog.slug}`}>
+                          <Image src={blog.image} alt={blog.title} />
+                        </Link>
                       </div>
 
                       <div className="xb-item--holder">
                         <ul className="xb-item--meta list-unstyled ul_li">
                           <li>
-                            <Image src={icon01} alt="icon" /> ai business
+                            <Image src={icon01} alt="icon" /> {blog.category}
                           </li>
                           <li>
-                            <Image src={icon02} alt="icon" /> April 27, 2025
+                            <Image src={icon02} alt="icon" /> {blog.date}
                           </li>
                         </ul>
 
                         <h2 className="xb-item--title">
-                          <Link href="/blog-details">
-                            How eCommerce brands use AI to increase sales..
+                          <Link href={`/blog/${blog.slug}`}>
+                            {blog.title}
                           </Link>
                         </h2>
                       </div>
