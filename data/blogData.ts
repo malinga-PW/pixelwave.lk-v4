@@ -1,9 +1,9 @@
 import { StaticImageData } from "next/image";
 
-import blog01 from "@/public/images/blog/img01.jpg";
-import blog04 from "@/public/images/blog/img04.jpg";
-import blog08 from "@/public/images/blog/img08.jpg";
-import blog12 from "@/public/images/blog/img12.jpg";
+import blog01 from "@/public/images/blog/nextjs-web-blog.png";
+import blog04 from "@/public/images/blog/n8n-api-blog.png";
+import blog08 from "@/public/images/blog/ai-ecommerce-blog.png";
+import blog12 from "@/public/images/blog/ui-ux-saas-blog.png";
 
 export interface BlogPost {
   slug: string;
