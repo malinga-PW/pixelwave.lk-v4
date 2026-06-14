@@ -90,6 +90,7 @@ export default function HeaderClient() {
             {/* Desktop Menu */}
             <div className="main-menu__wrap navbar navbar-expand-lg p-0">
               <nav className="main-menu collapse navbar-collapse">
+                <ul>
                   <li className={isActive("/", true) ? "pw-active" : ""}>
                     <Link href="/">Home</Link>
                   </li>
