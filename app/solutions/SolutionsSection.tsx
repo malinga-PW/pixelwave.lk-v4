@@ -4,11 +4,15 @@ import Link from "next/link";
 // Background image
 import serviceBg from "@/public/images/bg/service-gradient-bg.png";
 
-// Reusing some service images for solutions as placeholders
-import img07 from "@/public/images/service/img07.jpg";
-import img08 from "@/public/images/service/img08.jpg";
-import img09 from "@/public/images/service/img09.jpg";
-import img11 from "@/public/images/service/img11.jpg";
+// AI Generated Solution Images
+import solCorp from "@/public/images/solutions/solution-corporate.png";
+import solEcom from "@/public/images/solutions/solution-ecommerce.png";
+import solHealth from "@/public/images/solutions/solution-healthcare.png";
+
+// Fallback images (due to API rate limit)
+import resCasestudy from "@/public/images/resources/resource-casestudy.png";
+import resEbook from "@/public/images/resources/resource-ebook.png";
+import resToolkit from "@/public/images/resources/resource-toolkit.png";
 
 export default function SolutionsSection() {
   // Arrow icon
@@ -36,42 +40,42 @@ export default function SolutionsSection() {
       title: "Corporate & Enterprise",
       content:
         "Scale your operations with custom ERPs, internal communication bots, and data intelligence dashboards.",
-      images: [img08, img08, img08, img08],
+      images: [solCorp, solCorp, solCorp, solCorp],
       link: "/contact",
     },
     {
       title: "Retail & E-Commerce",
       content:
         "Boost sales with dynamic pricing, personalized product recommendations, and WhatsApp order automation.",
-      images: [img09, img09, img09, img09],
+      images: [solEcom, solEcom, solEcom, solEcom],
       link: "/contact",
     },
     {
       title: "Healthcare",
       content:
         "Improve patient care with automated appointment scheduling, telemedicine portals, and secure patient data management.",
-      images: [img11, img11, img11, img11],
+      images: [solHealth, solHealth, solHealth, solHealth],
       link: "/contact",
     },
     {
       title: "Real Estate",
       content:
         "Generate leads efficiently with virtual property tours, automated inquiry handling, and CRM integrations.",
-      images: [img07, img07, img07, img07],
+      images: [resCasestudy, resCasestudy, resCasestudy, resCasestudy],
       link: "/contact",
     },
     {
       title: "Education",
       content:
         "Enhance learning with custom LMS platforms, student portals, and AI-driven automated grading and support systems.",
-      images: [img11, img11, img11, img11],
+      images: [resEbook, resEbook, resEbook, resEbook],
       link: "/contact",
     },
     {
       title: "Startups & Agencies",
       content:
         "Launch faster with robust MVPs, scalable SaaS architectures, and complete digital branding packages.",
-      images: [img07, img07, img07, img07],
+      images: [resToolkit, resToolkit, resToolkit, resToolkit],
       link: "/contact",
     },
   ];
