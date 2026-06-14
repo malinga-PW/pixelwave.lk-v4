@@ -90,13 +90,19 @@ export default function HeaderClient() {
             {/* Desktop Menu */}
             <div className="main-menu__wrap navbar navbar-expand-lg p-0">
               <nav className="main-menu collapse navbar-collapse">
-                <ul>
                   <li className={isActive("/", true) ? "pw-active" : ""}>
                     <Link href="/">Home</Link>
                   </li>
 
-                  <li className={isActive("/about", false) ? "pw-active" : ""}>
-                    <Link href="/about">About Us</Link>
+                  <li className={`menu-item-has-children ${
+                    pathname?.startsWith("/about") || pathname?.startsWith("/project") || pathname?.startsWith("/elena-ai") ? "pw-active" : ""
+                  }`}>
+                    <Link href="#">Company</Link>
+                    <ul className="submenu">
+                      <li><Link href="/about">About Us</Link></li>
+                      <li><Link href="/project">Portfolio</Link></li>
+                      <li><Link href="/elena-ai">Elena.AI</Link></li>
+                    </ul>
                   </li>
 
                   <li className={`menu-item-has-children megamenu ${
@@ -110,24 +116,15 @@ export default function HeaderClient() {
                     <Link href="/solutions">Solutions</Link>
                   </li>
 
-                  <li className={isActive("/#pricing", false) ? "pw-active" : ""}>
-                    <Link href="/#pricing">Pricing</Link>
-                  </li>
-
-                  <li className={isActive("/project", false) ? "pw-active" : ""}>
-                    <Link href="/project">Portfolio</Link>
-                  </li>
-
-                  <li className={pathname?.startsWith("/blog") ? "pw-active" : ""}>
-                    <Link href="/blog">Blog</Link>
-                  </li>
-
-                  <li className={isActive("/resources", false) ? "pw-active" : ""}>
-                    <Link href="/resources">Resources</Link>
-                  </li>
-
-                  <li className={isActive("/elena-ai", false) ? "pw-active" : ""}>
-                    <Link href="/elena-ai">Elena.AI</Link>
+                  <li className={`menu-item-has-children ${
+                    pathname?.startsWith("/resources") || pathname?.startsWith("/blog") ? "pw-active" : ""
+                  }`}>
+                    <Link href="#">Resources</Link>
+                    <ul className="submenu">
+                      <li><Link href="/resources">Free Downloads</Link></li>
+                      <li><Link href="/blog">Blog</Link></li>
+                      <li><Link href="/#pricing">Pricing</Link></li>
+                    </ul>
                   </li>
 
                   <li className={isActive("/contact", false) ? "pw-active" : ""}>
