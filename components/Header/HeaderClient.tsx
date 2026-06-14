@@ -34,7 +34,7 @@ export default function HeaderClient() {
   /* ── active check ── */
   const isActive = (href: string, exact: boolean) => {
     if (exact) return pathname === href;
-    return pathname.startsWith(href);
+    return pathname?.startsWith(href) ?? false;
   };
 
   /* ── Sticky Header Logic ── */
@@ -100,7 +100,7 @@ export default function HeaderClient() {
                   </li>
 
                   <li className={`menu-item-has-children megamenu ${
-                    pathname.startsWith("/service") ? "pw-active" : ""
+                    pathname?.startsWith("/service") ? "pw-active" : ""
                   }`}>
                     <Link href="/service">Services</Link>
                     <MegaMenuServices />
