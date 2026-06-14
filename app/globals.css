@@ -215,12 +215,14 @@
 
 .elena-chat-widget {
   position: fixed;
-  bottom: 30px;
-  left: 30px;
+  bottom: 95px;
+  right: 30px;
+  left: auto;
   z-index: 9998;
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
-  gap: 10px;
+  gap: 0px;
   cursor: pointer;
   animation: elena-float 3s ease-in-out infinite;
 }
@@ -274,16 +276,24 @@
   backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 240, 255, 0.25);
   border-radius: 24px;
-  padding: 6px 14px 6px 10px;
+  padding: 6px 0px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 240, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .elena-chat-widget:hover .elena-label {
   border-color: rgba(0, 240, 255, 0.55);
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 240, 255, 0.2);
+  max-width: 200px;
+  opacity: 1;
+  padding: 6px 14px 6px 14px;
+  margin-right: 10px;
 }
 
 .elena-name {
@@ -335,11 +345,12 @@
 /* ── 8. MOBILE RESPONSIVENESS FIXES ─────────────────── */
 @media (max-width: 768px) {
   /* Global Widget Overlaps */
-  .elena-widget-container {
-    bottom: 10px !important;
-    left: 10px !important;
+  .elena-chat-widget {
+    bottom: 85px !important;
+    right: 20px !important;
+    left: auto !important;
     transform: scale(0.8) !important;
-    transform-origin: bottom left !important;
+    transform-origin: bottom right !important;
     z-index: 9999 !important;
   }
   
