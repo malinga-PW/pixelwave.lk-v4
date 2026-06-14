@@ -1,6 +1,9 @@
-/* Custom Overrides for Heading Font Sizes */
+/* ============================================================
+   PixelWave Custom Overrides — globals.css
+   ============================================================ */
 
-/* Hero Titles */
+/* ── 1. HEADING FONT SIZE OVERRIDES ─────────────────────────── */
+
 .hero-content .title {
   font-size: clamp(36px, 5vw, 56px) !important;
   line-height: 1.2 !important;
@@ -11,12 +14,10 @@
   line-height: 1.2 !important;
 }
 
-/* Subtitles for Hero */
 .hero-content .sub-title {
   font-size: clamp(16px, 2vw, 18px) !important;
 }
 
-/* General Section Titles */
 .sec-title .title {
   font-size: clamp(32px, 4.5vw, 48px) !important;
   line-height: 1.3 !important;
@@ -37,7 +38,6 @@
   line-height: 1.3 !important;
 }
 
-/* Specific Section Titles */
 .custom-sec-title .title,
 .pricing-sec-title .title,
 .download-sec-title .title {
@@ -45,42 +45,294 @@
   line-height: 1.3 !important;
 }
 
-/* Premium Feature Item Ambient Glow Effect */
+/* ── 2. HERO FEATURE TILES — SIZE REDUCTION 25% ─────────────── */
+
+.xb-feature-item .xb-item--inner {
+  padding: 32px 32px 28px 22px !important;
+}
+
+.xb-feature-item .xb-item--icon {
+  height: 72px !important;
+  width: 72px !important;
+}
+
+.xb-feature-item .xb-item--icon img {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.xb-feature-item .xb-item--title {
+  font-size: 17px !important;
+  margin: 22px 0 4px !important;
+}
+
+.xb-feature-item .xb-item--content {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+@media (max-width: 1199px) {
+  .xb-feature-item .xb-item--inner {
+    padding: 28px 20px 24px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .xb-feature-item .xb-item--inner {
+    padding: 24px 20px 20px !important;
+  }
+}
+
+/* ── 3. PREMIUM FEATURE TILE AMBIENT GLOW & BORDER EFFECT ────── */
+
 .xb-feature-item {
   position: relative;
   z-index: 1;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.xb-feature-item::before {
+/* Glowing layer behind the card */
+.xb-feature-item::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: conic-gradient(from 200deg, #00f0ff, #0057ff, #bd00ff, #00f0ff);
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  filter: blur(18px);
+}
+
+/* Darkened inner fill so the glow "bleeds" outward */
+.xb-feature-item .xb-item--inner {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 10px;
+}
+
+/* Animated glowing border ring on hover */
+.xb-feature-item .xb-item--inner::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, #00f0ff, #0057ff, #bd00ff);
-  border-radius: 15px; 
-  z-index: -1;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: linear-gradient(135deg, #00f0ff55, #0057ff55, #bd00ff55, #00f0ff55) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
   opacity: 0;
-  transition: all 0.5s ease-in-out;
-  filter: blur(25px);
-  transform: scale(0.95);
+  transition: opacity 0.5s ease-in-out;
 }
 
-.xb-feature-item .xb-item--inner {
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  background: rgba(17, 18, 29, 0.9) !important; 
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  position: relative;
-  z-index: 2;
-  height: 100%;
+.xb-feature-item:hover {
+  transform: translateY(-10px);
 }
 
-.xb-feature-item:hover::before {
-  opacity: 0.6;
-  transform: scale(1) translateY(-8px);
+.xb-feature-item:hover::after {
+  opacity: 0.9;
 }
 
 .xb-feature-item:hover .xb-item--inner {
-  transform: translateY(-8px) scale(1.02) !important;
-  border-color: rgba(0, 240, 255, 0.4) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 240, 255, 0.1) !important;
+  border-color: rgba(0, 240, 255, 0.3) !important;
+  box-shadow:
+    0 20px 45px -10px rgba(0, 0, 0, 0.6),
+    inset 0 0 30px rgba(0, 240, 255, 0.06) !important;
+}
+
+.xb-feature-item:hover .xb-item--inner::after {
+  opacity: 1;
+}
+
+/* ── 4. MAIN MENU NAV — HOVER & ACTIVE ANIMATIONS ────────────── */
+
+.main-menu ul > li > a,
+.main-menu ul > li > span {
+  position: relative;
+  transition: color 0.3s ease !important;
+}
+
+/* Sliding underline */
+.main-menu ul > li > a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px var(--color-primary);
+}
+
+.main-menu ul > li:hover > a::after,
+.main-menu ul > li.active > a::after {
+  width: 100%;
+  left: 0;
+}
+
+.main-menu ul > li:hover > a,
+.main-menu ul > li.active > a {
+  color: var(--color-primary) !important;
+}
+
+/* ── 5. FLOATING HEADER — COMPACT HEIGHT ON STICKY ───────────── */
+
+.xb-header-area-sticky {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  backdrop-filter: blur(20px) !important;
+  background: rgba(0, 2, 15, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease !important;
+}
+
+.xb-header-area-sticky.xb-header-fixed {
+  transform: translateY(0) !important;
+}
+
+.xb-header-area-sticky.xb-header-hidden {
+  transform: translateY(-100%) !important;
+}
+
+/* Compact height when sticky */
+.xb-header-area-sticky .header__wrap {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  min-height: unset !important;
+}
+
+.xb-header-area-sticky .xb-header-logo img {
+  height: 32px !important;
+  width: auto !important;
+}
+
+/* ── 6. ELENA CHAT WIDGET ────────────────────────────────────── */
+
+.elena-chat-widget {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  animation: elena-float 3s ease-in-out infinite;
+}
+
+@keyframes elena-float {
+  0%, 100% { transform: translateY(0); }
+  50%        { transform: translateY(-6px); }
+}
+
+.elena-avatar {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f0ff, #0057ff, #bd00ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(0, 87, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.elena-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(#00f0ff, #0057ff, #bd00ff, #00f0ff);
+  z-index: -1;
+  animation: elena-spin 4s linear infinite;
+  filter: blur(3px);
+}
+
+@keyframes elena-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.elena-avatar-inner {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #00020f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elena-label {
+  background: rgba(0, 2, 15, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 24px;
+  padding: 6px 14px 6px 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 240, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.elena-chat-widget:hover .elena-label {
+  border-color: rgba(0, 240, 255, 0.55);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 240, 255, 0.2);
+}
+
+.elena-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.elena-status {
+  font-size: 10px;
+  color: #00f0ff;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+}
+
+.elena-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #00f0ff;
+  animation: elena-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes elena-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* ── 7. SCROLL-TO-TOP BUTTON OVERRIDE (base) ─────────────────── */
+/* The actual circle progress is in the component CSS */
+.pw-scroll-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  width: 52px;
+  height: 52px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

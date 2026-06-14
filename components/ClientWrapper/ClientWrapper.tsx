@@ -9,6 +9,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import WowInit from "@/app/wow-init";
+import ElenaChatWidget from "@/components/ElenaChatWidget/ElenaChatWidget";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
@@ -79,6 +80,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
     <>
       <WowInit />
       {children}
+      <ElenaChatWidget />
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );

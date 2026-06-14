@@ -107,6 +107,10 @@ export default function HeaderClient() {
                     <MegaMenuServices />
                   </li>
 
+                  <li>
+                    <Link href="/elena-ai" style={{ color: "var(--color-primary)" }}>Elena.AI</Link>
+                  </li>
+
                   <li className="menu-item-has-children">
                     <Link href="/blog">Blog</Link>
                     <ul className="submenu">
