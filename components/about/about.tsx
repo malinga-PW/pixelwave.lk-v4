@@ -41,15 +41,15 @@ export default function AboutSection() {
           <span className="sub-title">Who We are?</span>
 
           <h2 className="title">
-            We helping
+            We are empowering
             <span>
               <Image src={gif1} alt="animation" />
             </span>
-            grow businesses and
+            businesses to build smarter and
             <span>
               <Image src={gif2} alt="animation" />
             </span>
-            scale with smart, data-driven AI agency
+            grow faster with intelligent automation
             <span>
               <Image src={gif3} alt="animation" />
             </span>

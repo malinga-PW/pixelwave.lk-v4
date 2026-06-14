@@ -52,9 +52,9 @@ export default function FeaturesAndBrands() {
                   >
                     <div className="xb-item--inner justify-content-end xb-border">
                       <h2 className="xb-item--title text-end">
-                        {i === 0 && <>Secure, ethical & <br /> scalable AI</>}
+                        {i === 0 && <>Secure, ethical & <br /> scalable systems</>}
                         {i === 1 && <>Custom-built <br /> solutions that fit you</>}
-                        {i === 2 && <>Secure, ethical, and <br /> responsible AI</>}
+                        {i === 2 && <>Seamless <br /> system integrations</>}
                       </h2>
                       <span className="xb-item--icon">
                         <Image src={icon} alt="icon" />
@@ -80,7 +80,7 @@ export default function FeaturesAndBrands() {
                         <Image src={icon} alt="icon" />
                       </span>
                       <h2 className="xb-item--title">
-                        {i === 0 && <>Expert team of AI <br /> specialists</>}
+                        {i === 0 && <>Expert team of <br /> developers</>}
                         {i === 1 && <>Speed without <br /> sacrificing quality</>}
                         {i === 2 && <>Client-centered, <br /> business-focused</>}
                       </h2>
