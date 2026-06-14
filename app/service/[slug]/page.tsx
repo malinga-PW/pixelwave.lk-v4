@@ -12,8 +12,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const service = servicesData[params.slug as keyof typeof servicesData];
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const service = servicesData[slug as keyof typeof servicesData];
   if (!service) {
     return {
       title: "Service Not Found | PixelWave AI Solutions",
@@ -26,8 +27,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function ServiceSinglePage({ params }: { params: { slug: string } }) {
-  const service = servicesData[params.slug as keyof typeof servicesData];
+export default async function ServiceSinglePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const service = servicesData[slug as keyof typeof servicesData];
 
   if (!service) {
     notFound();

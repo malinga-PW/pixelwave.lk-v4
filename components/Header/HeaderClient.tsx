@@ -119,7 +119,7 @@ export default function HeaderClient() {
                   </li>
 
                   <li className={`menu-item-has-children ${
-                    pathname.startsWith("/blog") ? "pw-active" : ""
+                    pathname?.startsWith("/blog") ? "pw-active" : ""
                   }`}>
                     <Link href="/blog">Blog</Link>
                     <ul className="submenu">
