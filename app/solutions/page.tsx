@@ -1,24 +1,24 @@
 import Header from "@/components/Header/Header";
 import PageTitle from "@/components/pagetitle/PageTitle";
-import ServiceSection from "./ServiceSection";
+import SolutionsSection from "./SolutionsSection";
 import Scrollbar from "@/components/scrollbar/scrollbar";
 import Footer from "@/components/footer/Footer";
 
 export const metadata = {
-  title: "Services | PixelWave AI Solutions",
+  title: "Industry Solutions | PixelWave AI Solutions",
   description:
-    "Explore PixelWave's comprehensive services: Premium Websites, E-Commerce, AI Automation, n8n Development, SaaS, and Branding.",
+    "Discover PixelWave's custom AI and SaaS solutions tailored for Corporate, Retail, Healthcare, Real Estate, and Startups.",
 };
 
-export default function ServicePage() {
+export default function SolutionsPage() {
   return (
     <div className="about-page inner-page">
       <div className="body_wrap o-clip">
         <Header />
 
         <main>
-          <PageTitle pageTitle="Services" pagesub="Services" />
-          <ServiceSection />
+          <PageTitle pageTitle="Industry Solutions" pagesub="Solutions" />
+          <SolutionsSection />
         </main>
 
         <Footer />

@@ -26,7 +26,7 @@ export default function ElenaAIPage() {
               position: "relative",
               overflow: "hidden",
               background:
-                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,87,255,0.18) 0%, transparent 70%), #00020f",
+                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,255,151,0.18) 0%, transparent 70%), #00020f",
             }}
           >
             {/* Decorative blobs */}
@@ -35,14 +35,13 @@ export default function ElenaAIPage() {
 
             <div className="container" style={{ position: "relative", zIndex: 2 }}>
               <div style={{ textAlign: "center", maxWidth: 780, margin: "0 auto", padding: "140px 0 80px" }}>
-                {/* Badge */}
                 <div
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 8,
-                    background: "rgba(0,240,255,0.08)",
-                    border: "1px solid rgba(0,240,255,0.25)",
+                    background: "rgba(0,255,151,0.08)",
+                    border: "1px solid rgba(0,255,151,0.25)",
                     borderRadius: 100,
                     padding: "6px 18px",
                     marginBottom: 32,
@@ -53,13 +52,13 @@ export default function ElenaAIPage() {
                       width: 7,
                       height: 7,
                       borderRadius: "50%",
-                      background: "#00f0ff",
+                      background: "#00FF97",
                       display: "inline-block",
-                      boxShadow: "0 0 8px #00f0ff",
+                      boxShadow: "0 0 8px #00FF97",
                       animation: "elena-pulse 1.5s ease-in-out infinite",
                     }}
                   />
-                  <span style={{ fontSize: 13, color: "#00f0ff", fontWeight: 600, letterSpacing: "0.06em" }}>
+                  <span style={{ fontSize: 13, color: "#00FF97", fontWeight: 600, letterSpacing: "0.06em" }}>
                     PixelWave AI Solutions
                   </span>
                 </div>
@@ -71,7 +70,7 @@ export default function ElenaAIPage() {
                     fontWeight: 700,
                     lineHeight: 1.1,
                     letterSpacing: "-0.04em",
-                    background: "linear-gradient(135deg, #fff 30%, #00f0ff 60%, #bd00ff 100%)",
+                    background: "linear-gradient(135deg, #fff 30%, #00FF97 60%, #00d2ff 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -102,13 +101,13 @@ export default function ElenaAIPage() {
                     href="/contact"
                     className="thm-btn agency-btn"
                     style={{
-                      background: "linear-gradient(135deg, #00f0ff, #0057ff)",
+                      background: "linear-gradient(135deg, #00FF97, #00d2ff)",
                       border: "none",
                       color: "#00020f",
                       fontWeight: 700,
                     }}
                   >
-                    Get Early Access
+                    Start Free Audit
                   </Link>
                   <Link
                     href="/about"
@@ -215,20 +214,65 @@ export default function ElenaAIPage() {
             style={{
               padding: "80px 0",
               textAlign: "center",
-              background: "linear-gradient(90deg, rgba(0,240,255,0.06) 0%, rgba(189,0,255,0.06) 100%)",
+              background: "linear-gradient(90deg, rgba(0,255,151,0.06) 0%, rgba(0,210,255,0.06) 100%)",
               borderTop: "1px solid rgba(255,255,255,0.05)",
               borderBottom: "1px solid rgba(255,255,255,0.05)",
             }}
           >
             <div className="container">
+              {/* Interactive Chatbot Placeholder */}
+              <div
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(0, 255, 151, 0.2)",
+                  borderRadius: 16,
+                  padding: "40px",
+                  maxWidth: "800px",
+                  margin: "0 auto 80px",
+                  textAlign: "left",
+                }}
+              >
+                <div style={{ display: "flex", gap: "16px", marginBottom: "24px", alignItems: "flex-start" }}>
+                  <div style={{
+                    width: "48px", height: "48px", borderRadius: "50%", background: "rgba(0,255,151,0.1)",
+                    display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #00FF97"
+                  }}>
+                    <span style={{ fontSize: "24px" }}>👩‍💻</span>
+                  </div>
+                  <div>
+                    <h4 style={{ color: "#00FF97", marginBottom: "8px", fontSize: "18px", fontWeight: "bold" }}>Elena.AI</h4>
+                    <p style={{ color: "rgba(255,255,255,0.8)", margin: 0, fontSize: "16px", lineHeight: "1.6" }}>
+                      Hello! I'm Elena, your AI business consultant. How can I help you automate your business today?
+                    </p>
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
+                  <input 
+                    type="text" 
+                    placeholder="Type your question here..." 
+                    style={{
+                      flex: 1, padding: "16px 24px", borderRadius: "8px", background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(255,255,255,0.1)", color: "#fff", outline: "none"
+                    }}
+                    disabled
+                  />
+                  <button style={{
+                    background: "#00FF97", color: "#000", border: "none", borderRadius: "8px",
+                    padding: "0 32px", fontWeight: "bold", cursor: "pointer"
+                  }}>
+                    Ask
+                  </button>
+                </div>
+              </div>
+
               <h2 style={{ fontSize: "clamp(22px, 3vw, 36px)", color: "#fff", marginBottom: 12 }}>
-                Full launch coming soon
+                Ready to transform your business?
               </h2>
               <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginBottom: 32 }}>
-                Be among the first to experience Elena.AI. Join the waitlist today.
+                Book a consultation to get a customized implementation roadmap.
               </p>
               <Link href="/contact" className="thm-btn agency-btn">
-                Join Waitlist
+                Book Consultation
               </Link>
             </div>
           </section>
@@ -248,12 +292,12 @@ export default function ElenaAIPage() {
           .elena-page-blob--1 {
             width: 500px; height: 500px;
             top: -100px; left: -150px;
-            background: rgba(0,87,255,0.15);
+            background: rgba(0,255,151,0.15);
           }
           .elena-page-blob--2 {
             width: 400px; height: 400px;
             bottom: 50px; right: -100px;
-            background: rgba(189,0,255,0.12);
+            background: rgba(0,210,255,0.12);
           }
         `}</style>
       </div>

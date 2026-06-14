@@ -4,13 +4,13 @@ import Link from "next/link";
 // Background image
 import serviceBg from "@/public/images/bg/service-gradient-bg.png";
 
-// Service images
+// Reusing some service images for solutions as placeholders
 import img07 from "@/public/images/service/img07.jpg";
 import img08 from "@/public/images/service/img08.jpg";
 import img09 from "@/public/images/service/img09.jpg";
 import img11 from "@/public/images/service/img11.jpg";
 
-export default function ServiceSection() {
+export default function SolutionsSection() {
   // Arrow icon
   const ArrowIcon = () => (
     <svg
@@ -30,47 +30,47 @@ export default function ServiceSection() {
     </svg>
   );
 
-  // Services data
-  const services = [
+  // Solutions data
+  const solutions = [
     {
-      title: "Premium Websites",
+      title: "Corporate & Enterprise",
       content:
-        "Fast, secure, and SEO-optimized web development using modern frameworks like Next.js.",
-      images: [img07, img07, img07, img07],
-      link: "/contact",
-    },
-    {
-      title: "E-Commerce Solutions",
-      content:
-        "High-converting online stores with payment gateway integrations and automated WhatsApp order processing.",
+        "Scale your operations with custom ERPs, internal communication bots, and data intelligence dashboards.",
       images: [img08, img08, img08, img08],
       link: "/contact",
     },
     {
-      title: "AI Automation",
+      title: "Retail & E-Commerce",
       content:
-        "Intelligent chatbots, customer support bots, and WhatsApp automation to scale your operations 24/7.",
+        "Boost sales with dynamic pricing, personalized product recommendations, and WhatsApp order automation.",
       images: [img09, img09, img09, img09],
       link: "/contact",
     },
     {
-      title: "n8n Development",
+      title: "Healthcare",
       content:
-        "Custom workflow designs, API integrations, and system synchronizations to eliminate manual repetitive work.",
+        "Improve patient care with automated appointment scheduling, telemedicine portals, and secure patient data management.",
       images: [img11, img11, img11, img11],
       link: "/contact",
     },
     {
-      title: "SaaS Development",
+      title: "Real Estate",
       content:
-        "Custom cloud software, inventory systems, CRM, and ERP dashboards built on robust and scalable tech stacks.",
+        "Generate leads efficiently with virtual property tours, automated inquiry handling, and CRM integrations.",
+      images: [img07, img07, img07, img07],
+      link: "/contact",
+    },
+    {
+      title: "Education",
+      content:
+        "Enhance learning with custom LMS platforms, student portals, and AI-driven automated grading and support systems.",
       images: [img11, img11, img11, img11],
       link: "/contact",
     },
     {
-      title: "Branding & Design",
+      title: "Startups & Agencies",
       content:
-        "Premium brand identity, UI/UX design, labels, packaging, and digital marketing materials that convert.",
+        "Launch faster with robust MVPs, scalable SaaS architectures, and complete digital branding packages.",
       images: [img07, img07, img07, img07],
       link: "/contact",
     },
@@ -83,26 +83,26 @@ export default function ServiceSection() {
     >
       <div className="container">
         <div className="row mt-none-30">
-          {services.map((service, index) => (
+          {solutions.map((solution, index) => (
             <div className="col-lg-6 mt-30" key={index}>
               <div className="xb-ser-item xb-border img-hove-effect">
                 <div className="xb-item--inner">
                   <h3 className="xb-item--title border-effect">
-                    <Link href={service.link}>{service.title}</Link>
+                    <Link href={solution.link}>{solution.title}</Link>
                   </h3>
 
-                  <Link className="xb-item--icon" href={service.link}>
+                  <Link className="xb-item--icon" href={solution.link}>
                     <ArrowIcon />
                   </Link>
 
-                  <p className="xb-item--content">{service.content}</p>
+                  <p className="xb-item--content">{solution.content}</p>
 
                   <div className="xb-item--img xb-img">
-                    {service.images.map((img, i) => (
-                      <Link key={i} href={service.link}>
+                    {solution.images.map((img, i) => (
+                      <Link key={i} href={solution.link}>
                         <Image
                           src={img}
-                          alt={`${service.title} service`}
+                          alt={`${solution.title} solution`}
                         />
                       </Link>
                     ))}
