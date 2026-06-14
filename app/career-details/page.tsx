@@ -5,9 +5,9 @@ import Footer from "@/components/footer/Footer";
 import ApplyForm from "./ApplyForm";
 
 export const metadata = {
-  title: "Career Details | Aivora – AI Agency & Technology",
+  title: "Career Details | PixelWave AI Solutions",
   description:
-    "Explore career opportunities, job responsibilities, required experience, and benefits offered by Aivora.",
+    "Explore career opportunities, job responsibilities, required experience, and benefits offered by PixelWave AI Solutions.",
 };
 
 export default function CareerDetails() {

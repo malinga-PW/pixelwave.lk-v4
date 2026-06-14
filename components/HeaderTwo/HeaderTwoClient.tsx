@@ -75,7 +75,7 @@ export default function HeaderTwoClient() {
                         {/* Logo */}
                         <div className="xb-header-logo">
                             <Link href="/" className="logo1">
-                                <Image src={logo} alt="Aivora Logo" priority />
+                                <Image src={logo} alt="PixelWave Logo" priority />
                             </Link>
                         </div>
 
@@ -213,7 +213,7 @@ export default function HeaderTwoClient() {
 
                                 <div className="xb-logo-mobile xb-hide-xl">
                                     <Link href="/">
-                                        <Image src={logo} alt="Aivora Logo" />
+                                        <Image src={logo} alt="PixelWave Logo" />
                                     </Link>
                                 </div>
 

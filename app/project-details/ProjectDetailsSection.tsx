@@ -28,7 +28,7 @@ const CheckIcon: React.FC = () => (
 export default function ProjectDetailsSection() {
   const projectMeta = [
     { icon: icon4, label: "services :", value: "Ai solutions" },
-    { icon: icon5, label: "client :", value: "Aivora" },
+    { icon: icon5, label: "client :", value: "PixelWave Client" },
     { icon: icon6, label: "location :", value: "New York, NY, USA" },
     { icon: icon7, label: "completed date :", value: "20-12-2025" },
   ];

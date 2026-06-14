@@ -91,7 +91,7 @@ export default function HeaderThreeClient() {
                         {/* LOGO */}
                         <div className="xb-header-logo">
                             <Link href="/" className="logo1">
-                                <Image src={logo} alt="Aivora Logo" />
+                                <Image src={logo} alt="PixelWave Logo" />
                             </Link>
                         </div>
 
@@ -275,7 +275,7 @@ export default function HeaderThreeClient() {
 
                                 <div className="xb-logo-mobile xb-hide-xl">
                                     <Link href="/" rel="home">
-                                        <Image src={logo} alt="Aivora Logo" />
+                                        <Image src={logo} alt="PixelWave Logo" />
                                     </Link>
                                 </div>
 

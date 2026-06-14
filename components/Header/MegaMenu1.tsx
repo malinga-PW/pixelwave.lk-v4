@@ -233,7 +233,7 @@ export default function MegaMenu1() {
                           </h4>
                           <span className="author_designation text-white">
                             CEO & Chairman at,{" "}
-                            <Link href="/">Aivora</Link>
+                            <Link href="/">PixelWave</Link>
                           </span>
                         </div>
                       </div>

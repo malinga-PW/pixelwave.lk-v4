@@ -8,9 +8,9 @@ import Scrollbar from "@/components/scrollbar/scrollbar";
 import Footer from "@/components/footer/Footer";
 
 export const metadata = {
-  title: "Careers | Aivora – Join Our AI & Technology Team",
+  title: "Careers | PixelWave AI Solutions",
   description:
-    "Explore open positions, learn about our hiring process, and discover what it's like to work at Aivora.",
+    "Explore open positions, learn about our hiring process, and discover what it's like to work at PixelWave AI Solutions.",
 };
 
 export default function CareerPage() {

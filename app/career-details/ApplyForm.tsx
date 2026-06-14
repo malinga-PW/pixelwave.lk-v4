@@ -74,7 +74,7 @@ export default function ApplyForm() {
       <div className="form-heading mb-20">
         <h3 className="title">Apply for this job</h3>
         <p className="sub-title">
-          Aivora doesn’t accept unsolicited resumes from recruiters or employment agencies.
+          PixelWave doesn’t accept unsolicited resumes from recruiters or employment agencies.
         </p>
       </div>
 

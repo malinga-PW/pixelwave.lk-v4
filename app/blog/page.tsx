@@ -5,9 +5,9 @@ import Scrollbar from "@/components/scrollbar/scrollbar";
 import Footer from "@/components/footer/Footer";
 
 export const metadata = {
-  title: "Blog | Aivora – AI Agency & Technology",
+  title: "Blog | PixelWave AI Solutions",
   description:
-    "Explore articles, news, and insights on AI, automation, machine learning, and business technology.",
+    "Stay updated with the latest news, insights, and trends in AI technology from PixelWave AI Solutions.",
 };
 
 export default function BlogPage() {

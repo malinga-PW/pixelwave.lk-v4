@@ -19,7 +19,7 @@ export default function NewsletterBox() {
       </div>
 
       <div className="xb-item--item-input_field pos-rel">
-        <input type="email" placeholder="aivora@example.com" />
+        <input type="email" placeholder="hello@pixelwave.lk" />
         <button type="submit">Subscribe</button>
       </div>
     </div>

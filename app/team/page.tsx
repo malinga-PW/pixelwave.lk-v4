@@ -20,14 +20,14 @@ import bgLarge from "@/public/images/team/noice-bg02.png";
 import bgSmall from "@/public/images/team/noice-bg.png";
 
 export const metadata = {
-  title: "Our Team | Aivora – AI Agency & Technology",
+  title: "Our Team | PixelWave AI Solutions",
   description:
-    "Meet the Aivora team — experts in AI engineering, data science, automation, product development, and technology innovation.",
+    "Meet the PixelWave AI Solutions team — experts in AI engineering, data science, automation, product development, and technology innovation.",
 };
 
 const teamMembers = [
-  { name: "Sebastian Patel", role: "CEO & Chairman at, Aivora", img: img09, big: true },
-  { name: "Lennox Gabriel", role: "Chief Operating Officer at, Aivora", img: img10, big: true },
+  { name: "Sebastian Patel", role: "CEO & Chairman at PixelWave AI Solutions", img: img09, big: true },
+  { name: "Lennox Gabriel", role: "Chief Operating Officer at PixelWave AI Solutions", img: img10, big: true },
   { name: "Ethan Reynolds", role: "AI Engineer", img: img01, big: false },
   { name: "Priya Ramirez", role: "Data Scientist", img: img02, big: false },
   { name: "Aiden Brooks", role: "AI Researcher", img: img03, big: false },

@@ -5,9 +5,9 @@ import Scrollbar from "@/components/scrollbar/scrollbar";
 import Footer from "@/components/footer/Footer";
 
 export const metadata = {
-  title: "Project Details | Aivora – AI Agency & Technology",
+  title: "Project Details | PixelWave AI Solutions",
   description:
-    "Explore detailed information about our AI, automation, and technology-driven projects designed to accelerate business growth.",
+    "Explore detailed case studies and solutions delivered by PixelWave AI Solutions.",
 };
 
 export default function ProjectDetails() {
