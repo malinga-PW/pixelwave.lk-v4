@@ -9,12 +9,12 @@ import gif from "@/public/images/icon/b10c3e43e836d32554bf.gif";
 import arrowIcon from "@/public/images/icon/rotate-arrow-black.svg";
 
 // Service images
-import img01 from "@/public/images/service/img01.jpg";
-import img02 from "@/public/images/service/img02.jpg";
-import img03 from "@/public/images/service/img03.jpg";
-import img04 from "@/public/images/service/img04.jpg";
-import img05 from "@/public/images/service/img05.jpg";
-import img06 from "@/public/images/service/img06.jpg";
+import premiumImg from "@/public/images/service/premium_websites.png";
+import ecommerceImg from "@/public/images/service/ecommerce_service.png";
+import aiAutoImg from "@/public/images/service/ai_automation.png";
+import n8nImg from "@/public/images/service/n8n_development.png";
+import saasImg from "@/public/images/service/saas_development.png";
+import brandingImg from "@/public/images/service/branding_design.png";
 
 interface ServiceItem {
   id: number;
@@ -29,43 +29,43 @@ const services: ServiceItem[] = [
     id: 1,
     title: "Premium Websites",
     desc: "Fast, secure, and SEO-optimized web development using modern frameworks like Next.js.",
-    img: img01,
-    link: "/service",
+    img: premiumImg,
+    link: "/service/premium-websites",
   },
   {
     id: 2,
     title: "E-Commerce Solutions",
     desc: "High-converting online stores with payment gateway integrations and WhatsApp orders.",
-    img: img02,
-    link: "/service",
+    img: ecommerceImg,
+    link: "/service/e-commerce-solutions",
   },
   {
     id: 3,
     title: "AI Automation",
     desc: "Intelligent chatbots, customer support bots, and WhatsApp automation to scale your operations.",
-    img: img03,
-    link: "/service",
+    img: aiAutoImg,
+    link: "/service/ai-automation",
   },
   {
     id: 4,
     title: "n8n Development",
     desc: "Custom workflow designs, API integrations, and system synchronizations to eliminate manual work.",
-    img: img04,
-    link: "/service",
+    img: n8nImg,
+    link: "/service/n8n-development",
   },
   {
     id: 5,
     title: "SaaS Development",
     desc: "Custom cloud software, inventory systems, CRM, and ERP dashboards built on robust tech stacks.",
-    img: img05,
-    link: "/service",
+    img: saasImg,
+    link: "/service/saas-development",
   },
   {
     id: 6,
     title: "Branding & Design",
     desc: "Premium brand identity, UI/UX design, labels, packaging, and digital marketing materials.",
-    img: img06,
-    link: "/service",
+    img: brandingImg,
+    link: "/service/branding-design",
   },
 ];
 

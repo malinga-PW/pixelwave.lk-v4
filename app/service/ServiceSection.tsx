@@ -5,10 +5,12 @@ import Link from "next/link";
 import serviceBg from "@/public/images/bg/service-gradient-bg.png";
 
 // Service images
-import img07 from "@/public/images/service/img07.jpg";
-import img08 from "@/public/images/service/img08.jpg";
-import img09 from "@/public/images/service/img09.jpg";
-import img11 from "@/public/images/service/img11.jpg";
+import premiumImg from "@/public/images/service/premium_websites.png";
+import ecommerceImg from "@/public/images/service/ecommerce_service.png";
+import aiAutoImg from "@/public/images/service/ai_automation.png";
+import n8nImg from "@/public/images/service/n8n_development.png";
+import saasImg from "@/public/images/service/saas_development.png";
+import brandingImg from "@/public/images/service/branding_design.png";
 
 export default function ServiceSection() {
   // Arrow icon
@@ -36,43 +38,43 @@ export default function ServiceSection() {
       title: "Premium Websites",
       content:
         "Fast, secure, and SEO-optimized web development using modern frameworks like Next.js.",
-      images: [img07, img07, img07, img07],
-      link: "/contact",
+      images: [premiumImg, premiumImg, premiumImg, premiumImg],
+      link: "/service/premium-websites",
     },
     {
       title: "E-Commerce Solutions",
       content:
         "High-converting online stores with payment gateway integrations and automated WhatsApp order processing.",
-      images: [img08, img08, img08, img08],
-      link: "/contact",
+      images: [ecommerceImg, ecommerceImg, ecommerceImg, ecommerceImg],
+      link: "/service/e-commerce-solutions",
     },
     {
       title: "AI Automation",
       content:
         "Intelligent chatbots, customer support bots, and WhatsApp automation to scale your operations 24/7.",
-      images: [img09, img09, img09, img09],
-      link: "/contact",
+      images: [aiAutoImg, aiAutoImg, aiAutoImg, aiAutoImg],
+      link: "/service/ai-automation",
     },
     {
       title: "n8n Development",
       content:
         "Custom workflow designs, API integrations, and system synchronizations to eliminate manual repetitive work.",
-      images: [img11, img11, img11, img11],
-      link: "/contact",
+      images: [n8nImg, n8nImg, n8nImg, n8nImg],
+      link: "/service/n8n-development",
     },
     {
       title: "SaaS Development",
       content:
         "Custom cloud software, inventory systems, CRM, and ERP dashboards built on robust and scalable tech stacks.",
-      images: [img11, img11, img11, img11],
-      link: "/contact",
+      images: [saasImg, saasImg, saasImg, saasImg],
+      link: "/service/saas-development",
     },
     {
       title: "Branding & Design",
       content:
         "Premium brand identity, UI/UX design, labels, packaging, and digital marketing materials that convert.",
-      images: [img07, img07, img07, img07],
-      link: "/contact",
+      images: [brandingImg, brandingImg, brandingImg, brandingImg],
+      link: "/service/branding-design",
     },
   ];
 
