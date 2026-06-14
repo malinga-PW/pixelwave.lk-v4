@@ -15,9 +15,9 @@ import Footer from "@/components/footer/Footer";
 import Scrollbar from "@/components/scrollbar/scrollbar";
 
 export const metadata = {
-  title: "Home | AI Agency & Technology Next.js Template",
+  title: "PixelWave AI Solutions | Intelligent Automation & Growth",
   description:
-    "A modern AI Agency & Technology landing page built with Next.js App Router.",
+    "End-to-end business solutions, including AI Automation, Website Development, n8n Systems, SaaS, and Digital Transformation.",
 };
 
 export default function HomePage() {

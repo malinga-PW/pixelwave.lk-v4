@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +12,6 @@ import iconLeft from "@/public/images/icon/sub-left-icon.png";
 import iconRight from "@/public/images/icon/sub-right-icon.png";
 import moneyGif from "@/public/images/icon/money-icegif-22-unscreen.gif";
 import icon1 from "@/public/images/icon/pricing-icon01.svg";
-import icon2 from "@/public/images/icon/pricing-icon02.svg";
 
 /* ================================
    Static Constants
@@ -47,33 +45,35 @@ const CheckIcon = (
   </svg>
 );
 
-const FREE_FEATURES = [
-  "Basic AI chatbot.",
-  "Up to 1,000 conversations/month.",
-  "Single language support.",
-  "Basic integrations (website widget only).",
-  "Standard response speed.",
+const DIGITAL_PRESENCE = [
+  "Premium Website",
+  "High-Speed Hosting",
+  "Business Email setup",
+  "SSL Certificate",
+  "Ongoing Maintenance",
 ];
 
-const PREMIUM_LEFT = [
-  "Everything in Free Plan +.",
-  "Unlimited conversations/month.",
-  "AI NLP training & smarter detection.",
-  "Priority customer support.",
-  "Multi-language chatbot (20+ languages).",
+const GROWTH_ENGINE = [
+  "Everything in Digital Presence",
+  "SEO Optimization",
+  "Workflow Automation",
+  "Custom AI Chatbot",
+  "CRM Integration",
+  "Analytics Dashboard",
 ];
 
-const PREMIUM_RIGHT = [
-  "Advanced analytics & conversation insights.",
-  "Integrations with WhatsApp, Messenger, Shopify, Zapier.",
-  "Enterprise-level security.",
+const ENTERPRISE_AI = [
+  "Custom SaaS Development",
+  "Advanced AI Automation",
+  "Production Dashboards",
+  "Multi-User System",
+  "Complex API Integrations",
+  "Priority 24/7 Support",
 ];
 
 /* ================================ */
 
 export default function PricingSection() {
-  const [yearly, setYearly] = useState(false);
-
   return (
     <section id="pricing" className="pricing pt-145 pb-150 bg_img" style={BG_STYLE}>
       <div className="container">
@@ -87,92 +87,91 @@ export default function PricingSection() {
           </span>
 
           <h2 className="title">
-            Simple & <Image src={moneyGif} alt="shape" width={40} height={40} /> flexible pricing
+            Simple & <Image src={moneyGif} alt="shape" width={40} height={40} /> scalable pricing
           </h2>
         </div>
 
-        <div className="row mt-none-30">
+        <div className="row mt-none-30 justify-content-center">
 
-          {/* FREE PLAN */}
-          <div className="col-lg-5 mt-30">
-            <div className="pricing-item xb-border bg_img" style={BG_ITEM_STYLE}>
+          {/* PACKAGE 1 */}
+          <div className="col-lg-4 col-md-6 mt-30">
+            <div className="pricing-item xb-border bg_img h-100 d-flex flex-column" style={BG_ITEM_STYLE}>
               <div className="xb-icon">
                 <Image src={icon1} alt="icon" width={50} height={50} />
               </div>
 
-              <h2 className="xb-dollar">$0 <sub>/1-Month Trial</sub></h2>
+              <h3 className="mb-10 text-white">Digital Presence</h3>
+              <h2 className="xb-dollar mb-20">$399 <sub>/Year</sub></h2>
 
-              <div className="pricing-btn mb-25">
-                <Link className="thm-btn chatbot-btn" href="/contact">
-                  <span className="text">get started free</span>
+              <div className="pricing-btn mb-25 mt-auto">
+                <Link className="thm-btn chatbot-btn w-100 text-center" href="/contact">
+                  <span className="text">Choose Plan</span>
                 </Link>
               </div>
 
-              <ul className="pricing-list list-unstyled">
-                {FREE_FEATURES.map((item, i) => (
+              <ul className="pricing-list list-unstyled mt-3">
+                {DIGITAL_PRESENCE.map((item, i) => (
                   <li key={i}>
                     <span>{CheckIcon}</span>
                     {item}
                   </li>
                 ))}
               </ul>
-
-              <span className="xb-tag xb-border">Free Plan</span>
             </div>
           </div>
 
-          {/* PREMIUM PLAN */}
-          <div className="col-lg-7 mt-30">
-            <div className="pricing-item xb-border bg_img" style={BG_ITEM_STYLE}>
+          {/* PACKAGE 2 */}
+          <div className="col-lg-4 col-md-6 mt-30">
+            <div className="pricing-item xb-border bg_img h-100 d-flex flex-column" style={BG_ITEM_STYLE}>
               <div className="xb-icon">
-                <Image src={icon2} alt="icon" width={50} height={50} />
+                <Image src={icon1} alt="icon" width={50} height={50} />
               </div>
 
-              <div className="ul_li_between">
-                <h2 className="xb-dollar">
-                  ${yearly ? "529" : "49"}
-                  <sub>{yearly ? "/Per-Year" : "/Per-Month"}</sub>
-                </h2>
+              <h3 className="mb-10 text-white">Growth Engine</h3>
+              <h2 className="xb-dollar mb-20">$999 <sub>/Year</sub></h2>
 
-                <div className="xb-price-chagne-btn">
-                  <p>
-                    Monthly{" "}
-                    <span
-                      className={`toggle ${yearly ? "active" : ""}`}
-                      onClick={() => setYearly((p) => !p)}
-                    ></span>{" "}
-                    Yearly 10% off
-                  </p>
-                </div>
-              </div>
-
-              <div className="pricing-btn mb-25">
-                <Link className="thm-btn chatbot-btn" href="/contact">
-                  <span className="text">subscribe to pro</span>
+              <div className="pricing-btn mb-25 mt-auto">
+                <Link className="thm-btn chatbot-btn w-100 text-center" href="/contact">
+                  <span className="text">Choose Plan</span>
                 </Link>
               </div>
 
-              <div className="pricing-list-wrap ul_li_between align-items-start">
-                <ul className="pricing-list list-unstyled">
-                  {PREMIUM_LEFT.map((item, i) => (
-                    <li key={i}>
-                      <span>{CheckIcon}</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+              <ul className="pricing-list list-unstyled mt-3">
+                {GROWTH_ENGINE.map((item, i) => (
+                  <li key={i}>
+                    <span>{CheckIcon}</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <span className="xb-tag premium-plan">Most Popular</span>
+            </div>
+          </div>
 
-                <ul className="pricing-list pricing-list--right list-unstyled">
-                  {PREMIUM_RIGHT.map((item, i) => (
-                    <li key={i}>
-                      <span>{CheckIcon}</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+          {/* PACKAGE 3 */}
+          <div className="col-lg-4 col-md-6 mt-30">
+            <div className="pricing-item xb-border bg_img h-100 d-flex flex-column" style={BG_ITEM_STYLE}>
+              <div className="xb-icon">
+                <Image src={icon1} alt="icon" width={50} height={50} />
               </div>
 
-              <span className="xb-tag premium-plan">Premium Plan</span>
+              <h3 className="mb-10 text-white">Enterprise AI</h3>
+              <h2 className="xb-dollar mb-20">$1999 <sub>/Year</sub></h2>
+
+              <div className="pricing-btn mb-25 mt-auto">
+                <Link className="thm-btn chatbot-btn w-100 text-center" href="/contact">
+                  <span className="text">Choose Plan</span>
+                </Link>
+              </div>
+
+              <ul className="pricing-list list-unstyled mt-3">
+                {ENTERPRISE_AI.map((item, i) => (
+                  <li key={i}>
+                    <span>{CheckIcon}</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 

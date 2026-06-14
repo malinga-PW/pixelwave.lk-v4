@@ -67,11 +67,11 @@ export default function Footer() {
 
         {/* Heading */}
         <div className="xb-footer-heading wow zoomIn" data-wow-duration="600ms">
-          <h1 className="title">Aivora</h1>
-
-          <a className="mail" href="mailto:aivora@domain.com">
+          <h1 className="title" style={{ fontSize: "clamp(36px, 5vw, 64px)", marginBottom: 20 }}>PixelWave</h1>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.7)", marginBottom: 30 }}>Transforming Businesses Through Intelligent Automation</p>
+          <a className="mail" href="mailto:hello@pixelwave.lk">
             <Image src={emailIcon} alt="email" />
-            aivora@domain.com
+            hello@pixelwave.lk
           </a>
         </div>
 
@@ -81,8 +81,8 @@ export default function Footer() {
             { label: "What we do?", title: "Services", href: "/service" },
             { label: "Who we are?", title: "About us", href: "/about" },
             { label: "How we deliver", title: "Contact us", href: "/contact" },
-            { label: "What we're good at?", title: "Our project", href: "/project" },
-            { label: "News?", title: "News", href: "/blog" },
+            { label: "Our work", title: "Portfolio", href: "/project" },
+            { label: "Industry solutions", title: "Solutions", href: "/solutions" },
           ].map((item, i) => (
             <div className="xb-footer-nav-item" key={i}>
               <span className="sub-title">{item.label}</span>
@@ -121,22 +121,22 @@ export default function Footer() {
         <div className="xb-footer-bottom">
           <div className="contact-item">
             <Image src={locationIcon} alt="location" />
-            <span className="contact-method">4517 Washington, USA</span>
+            <span className="contact-method">Mulleriyawa, Colombo, Sri Lanka</span>
           </div>
 
           <div className="contact-item copyright-item">
             <p>
-              Copyright © 2025{" "}
-              <Link href="/">Aivora</Link>, All rights reserved.
+              Copyright © 2024{" "}
+              <Link href="/">PixelWave AI Solutions</Link>, All rights reserved.
             </p>
           </div>
 
           <div className="contact-item">
-            <a href="tel:+112304528597">
+            <a href="tel:+94719739734">
               <Image src={callIcon} alt="call" />
             </a>
-            <a className="contact-method" href="tel:+112304528597">
-              +(1) 1230 452 8597
+            <a className="contact-method" href="tel:+94719739734">
+              +94 71 973 973 4
             </a>
           </div>
         </div>

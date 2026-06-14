@@ -14,10 +14,14 @@ import MegaMenuServices from "./MegaMenu2";
 const NAV_LINKS = [
   { href: "/",           label: "Home",       exact: true },
   { href: "/about",      label: "About Us",   exact: false },
-  { href: "/contact",    label: "Contact Us", exact: false },
-  { href: "/elena-ai",   label: "Elena.AI",   exact: false },
-  { href: "/blog",       label: "Blog",       exact: false },
   { href: "/service",    label: "Services",   exact: false },
+  { href: "/solutions",  label: "Solutions",  exact: false },
+  { href: "/#pricing",   label: "Pricing",    exact: false },
+  { href: "/project",    label: "Portfolio",  exact: false },
+  { href: "/blog",       label: "Blog",       exact: false },
+  { href: "/resources",  label: "Resources",  exact: false },
+  { href: "/elena-ai",   label: "Elena.AI",   exact: false },
+  { href: "/contact",    label: "Contact Us", exact: false },
 ];
 
 export default function HeaderClient() {
@@ -87,8 +91,7 @@ export default function HeaderClient() {
             <div className="main-menu__wrap navbar navbar-expand-lg p-0">
               <nav className="main-menu collapse navbar-collapse">
                 <ul>
-                  {/* Home — has submenu */}
-                  <li className={`menu-item-has-children ${isActive("/", true) ? "pw-active" : ""}`}>
+                  <li className={isActive("/", true) ? "pw-active" : ""}>
                     <Link href="/">Home</Link>
                   </li>
 
@@ -97,23 +100,22 @@ export default function HeaderClient() {
                   </li>
 
                   <li className={`menu-item-has-children megamenu ${
-                    ["/project", "/career", "/team", "/blog"].some(p => pathname.startsWith(p)) ? "pw-active" : ""
-                  }`}>
-                    <Link href="#" onClick={preventDefault}>Pages</Link>
-                    <MegaMenu1 />
-                  </li>
-
-                  <li className={`menu-item-has-children megamenu ${
                     pathname.startsWith("/service") ? "pw-active" : ""
                   }`}>
-                    <Link href="#" onClick={preventDefault}>Services</Link>
+                    <Link href="/service">Services</Link>
                     <MegaMenuServices />
                   </li>
 
-                  <li className={isActive("/elena-ai", false) ? "pw-active" : ""}>
-                    <Link href="/elena-ai">
-                      Elena.AI
-                    </Link>
+                  <li className={isActive("/solutions", false) ? "pw-active" : ""}>
+                    <Link href="/solutions">Solutions</Link>
+                  </li>
+
+                  <li className={isActive("/#pricing", false) ? "pw-active" : ""}>
+                    <Link href="/#pricing">Pricing</Link>
+                  </li>
+
+                  <li className={isActive("/project", false) ? "pw-active" : ""}>
+                    <Link href="/project">Portfolio</Link>
                   </li>
 
                   <li className={`menu-item-has-children ${
@@ -126,6 +128,14 @@ export default function HeaderClient() {
                     </ul>
                   </li>
 
+                  <li className={isActive("/resources", false) ? "pw-active" : ""}>
+                    <Link href="/resources">Resources</Link>
+                  </li>
+
+                  <li className={isActive("/elena-ai", false) ? "pw-active" : ""}>
+                    <Link href="/elena-ai">Elena.AI</Link>
+                  </li>
+
                   <li className={isActive("/contact", false) ? "pw-active" : ""}>
                     <Link href="/contact">Contact Us</Link>
                   </li>
@@ -136,7 +146,7 @@ export default function HeaderClient() {
             {/* Header Button */}
             <div className="header-btn">
               <Link href="/contact" className="thm-btn">
-                Join Now
+                Get a Quote
               </Link>
             </div>
 

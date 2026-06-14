@@ -46,19 +46,17 @@ export default function HeroSection() {
           <div className="col-lg-9 col-md-9">
             <div className="hero-content">
               <h2 className="title scale-animation wow">
-                Empower your business with smarter AI agency
+                Build Smarter.<br />Grow Faster.
               </h2>
 
               <p className="sub-title scale-animation wow">
-                Unlock growth and efficiency with tailored AI solutions. We use
-                automation and data-driven strategies to help you innovate and
-                scale.
+                Transforming Sri Lankan businesses and global startups through intelligent automation, premium web development, and custom SaaS solutions.
               </p>
 
               {/* BUTTON */}
               <div className="hero-btn scale-animation wow">
-                <Link className="thm-btn agency-btn" href="/about">
-                  <span className="text">Begin Today with us</span>
+                <Link className="thm-btn agency-btn" href="/contact">
+                  <span className="text">Book a Free Consultation</span>
                   <span className="arrow">
                     <span className="arrow-icon">
                       <ArrowIcon />
@@ -89,11 +87,11 @@ export default function HeroSection() {
             <div className="xb-feature-item wow fadeInUp" data-wow-delay="700ms">
               <div className="xb-item--inner xb-border">
                 <span className="xb-item--icon">
-                  <Image src={featureIcon1} alt="Smarter insights" />
+                  <Image src={featureIcon1} alt="AI Automation" />
                 </span>
-                <h2 className="xb-item--title">Smarter insights</h2>
+                <h2 className="xb-item--title">AI Automation</h2>
                 <p className="xb-item--content">
-                  Make faster, data-driven decisions powered by real-time AI analysis.
+                  Automate workflows with intelligent chatbots, n8n systems, and customer support agents.
                 </p>
               </div>
             </div>
@@ -104,11 +102,11 @@ export default function HeroSection() {
             <div className="xb-feature-item wow fadeInUp" data-wow-delay="800ms">
               <div className="xb-item--inner xb-border">
                 <span className="xb-item--icon">
-                  <Image src={featureIcon2} alt="Integrated AI solutions" />
+                  <Image src={featureIcon2} alt="Premium Web Development" />
                 </span>
-                <h2 className="xb-item--title">Integrated AI solutions</h2>
+                <h2 className="xb-item--title">Premium Websites</h2>
                 <p className="xb-item--content">
-                  No extra tools needed — scalable AI from day one.
+                  Fast, secure, and SEO-optimized web development and custom SaaS platforms.
                 </p>
               </div>
             </div>
@@ -119,11 +117,11 @@ export default function HeroSection() {
             <div className="xb-feature-item wow fadeInUp" data-wow-delay="900ms">
               <div className="xb-item--inner xb-border">
                 <span className="xb-item--icon">
-                  <Image src={featureIcon3} alt="End-to-end automation" />
+                  <Image src={featureIcon3} alt="Digital Transformation" />
                 </span>
-                <h2 className="xb-item--title">End-to-end automation</h2>
+                <h2 className="xb-item--title">Digital Growth</h2>
                 <p className="xb-item--content">
-                  Automate workflows with intelligent systems built for efficiency.
+                  End-to-end business solutions from branding to advanced system integrations.
                 </p>
               </div>
             </div>
