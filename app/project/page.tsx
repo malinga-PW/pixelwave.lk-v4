@@ -5,9 +5,9 @@ import Footer from "@/components/footer/Footer";
 import ProjectSection from "./ProjectSection";
 
 export const metadata = {
-  title: "Our Projects | Aivora – AI Agency & Technology",
+  title: "Our Portfolio | PixelWave AI Solutions",
   description:
-    "Explore Aivora's featured AI, automation, and machine learning projects showcasing innovation and real business impact.",
+    "Explore PixelWave's featured case studies, highlighting our expertise in AI automation, premium web development, and SaaS solutions.",
 };
 
 export default function ProjectPage() {

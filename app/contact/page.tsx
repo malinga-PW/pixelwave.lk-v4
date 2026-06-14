@@ -7,9 +7,9 @@ import ContactForm from "@/components/ContactFrom/ContactForm";
 import contactBg from "@/public/images/bg/contact-bg02.png";
 
 export const metadata = {
-  title: "Contact Us | Aivora – AI Agency & Technology",
+  title: "Contact Us | PixelWave AI Solutions",
   description:
-    "Get in touch with Aivora for AI solutions, automation services, consultations, and business inquiries.",
+    "Get in touch with PixelWave AI Solutions for AI automation, premium web development, and business growth consultations.",
 };
 
 export default function ContactPage() {
@@ -45,7 +45,7 @@ export default function ContactPage() {
                 {/* GOOGLE MAP */}
                 <div className="google-map">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14602.254272231177!2d90.3654215!3d23.7985508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1592852423971!5m2!1sen!2sbd"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585978184!2d79.77380312061486!3d6.921922084534796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1718386400123!5m2!1sen!2sus"
                     loading="lazy"
                     title="Google Map"
                     referrerPolicy="no-referrer-when-downgrade"

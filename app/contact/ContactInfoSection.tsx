@@ -13,23 +13,11 @@ import arrowBlack from "@/public/images/icon/rotate-arrow-black03.svg";
 // ---- contact items data ----
 const contactData = [
   {
-    location: "San Francisco, USA",
-    phone: "+(1) 561 555 7689",
-    email: "aivora@usadomain.com",
+    location: "Mulleriyawa, Colombo",
+    phone: "+94 71 973 973 4",
+    email: "hello@pixelwave.lk",
     img: img01,
-  },
-  {
-    location: "London, United Kingdom",
-    phone: "+1 (416) 123-4567",
-    email: "aivora@ukdomain.com",
-    img: img02,
-  },
-  {
-    location: "Toronto, Canada",
-    phone: "+1 (416) 123-4567",
-    email: "aivora@cadomain.com",
-    img: img03,
-  },
+  }
 ];
 
 export default function ContactInfoSection() {
@@ -39,8 +27,8 @@ export default function ContactInfoSection() {
         <div className="row mt-none-30">
 
           {contactData.map((item, index) => (
-            <div className="col-lg-4 col-md-6 mt-30" key={index}>
-              <div className="xb-contact-items img-hove-effect xb-border">
+            <div className="col-lg-6 col-md-8 mx-auto mt-30" key={index}>
+              <div className="xb-contact-items img-hove-effect xb-border text-center" style={{ padding: "40px" }}>
                 <div className="xb-item--inner">
 
                   {/* Hover images */}
@@ -56,14 +44,14 @@ export default function ContactInfoSection() {
                   </div>
 
                   {/* Content */}
-                  <div className="xb-item--holder">
-                    <p className="xb-item--location">{item.location}</p>
+                  <div className="xb-item--holder mt-30">
+                    <p className="xb-item--location" style={{ fontSize: "24px" }}>{item.location}</p>
 
-                    <span className="xb-item--contact_info">{item.phone}</span>
-                    <span className="xb-item--contact_info">{item.email}</span>
+                    <span className="xb-item--contact_info" style={{ display: "block", marginBottom: "10px" }}>{item.phone}</span>
+                    <span className="xb-item--contact_info" style={{ display: "block", marginBottom: "10px" }}>{item.email}</span>
 
-                    <Link href="/contact" className="thm-btn form-btn mt-45">
-                      VIEW LOCATION
+                    <Link href="mailto:hello@pixelwave.lk" className="thm-btn form-btn mt-30">
+                      EMAIL US
                       <span className="xb-icon">
                         <Image src={arrowWhite} alt="arrow icon" />
                         <Image src={arrowBlack} alt="arrow icon" />

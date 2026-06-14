@@ -2,11 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 // IMPORT IMAGES
-import img02 from "@/public/images/project/img02.jpg";
-import img03 from "@/public/images/project/img03.jpg";
-import img04 from "@/public/images/project/img04.jpg";
-import img05 from "@/public/images/project/img05.jpg";
-import img06 from "@/public/images/project/img06.jpg";
+import premiumImg from "@/public/images/service/premium_websites.png";
+import ecommerceImg from "@/public/images/service/ecommerce_service.png";
+import aiAutoImg from "@/public/images/service/ai_automation.png";
+import n8nImg from "@/public/images/service/n8n_development.png";
+import saasImg from "@/public/images/service/saas_development.png";
 
 // Arrow Icon
 const ArrowIcon = () => (
@@ -36,39 +36,44 @@ const ArrowIcon = () => (
 // PROJECT DATA
 const projectData = [
   {
-    title: "Chatbot and NLP projects..",
+    title: "Enterprise E-Commerce Platform",
     content:
-      "We build smart chatbots and NLP tools that understand and respond naturally. From customer support to document analysis, our AI solutions automate communication, save time, and improve user experience.",
-    images: [img02, img02, img02, img02],
+      "We engineered a high-converting, fully custom Next.js e-commerce storefront. The platform features dynamic AI-driven pricing, automated inventory management, and a seamless checkout experience that increased our client's online revenue by 45% in the first quarter.",
+    images: [ecommerceImg, ecommerceImg, ecommerceImg, ecommerceImg],
     reverse: false,
+    link: "/service/e-commerce-solutions",
   },
   {
-    title: "General AI projects..",
+    title: "Automated WhatsApp Support AI",
     content:
-      "We deliver AI solutions that streamline operations, boost efficiency, and enable smarter decisions.",
-    images: [img03, img03, img03, img03],
+      "To handle overwhelming customer inquiries, we deployed an intelligent WhatsApp chatbot trained on the client's knowledge base. It now successfully resolves 82% of routine queries autonomously 24/7, freeing up human agents for high-value tasks.",
+    images: [aiAutoImg, aiAutoImg, aiAutoImg, aiAutoImg],
     reverse: true,
+    link: "/service/ai-automation",
   },
   {
-    title: "Computer vision projects..",
+    title: "Global Supply Chain SaaS",
     content:
-      "We develop AI systems that see and understand visual data—detecting objects, recognizing patterns, and automating inspections.",
-    images: [img04, img04, img04, img04],
+      "We built a robust, cloud-based B2B SaaS dashboard tailored for global logistics tracking. Featuring real-time data visualization, predictive delay modeling, and multi-tenant user architecture for over 1,000 active enterprise users.",
+    images: [saasImg, saasImg, saasImg, saasImg],
     reverse: false,
+    link: "/service/saas-development",
   },
   {
-    title: "E-commerce and marketing..",
+    title: "n8n Data Pipeline Integration",
     content:
-      "We create AI solutions that boost sales and customer engagement with recommendations and dynamic pricing.",
-    images: [img05, img05, img05, img05],
+      "A complete operational overhaul for a fast-growing startup. We used n8n to synchronize data across Salesforce, Mailchimp, and internal databases, eliminating manual data entry and reducing operational overhead by 120 hours per month.",
+    images: [n8nImg, n8nImg, n8nImg, n8nImg],
     reverse: true,
+    link: "/service/n8n-development",
   },
   {
-    title: "Data science analytics..",
+    title: "Premium Corporate Web Experience",
     content:
-      "We turn complex data into clear, actionable insights through predictive models and real-time dashboards.",
-    images: [img06, img06, img06, img06],
+      "A complete digital transformation for a leading financial firm. We delivered a sleek, lightning-fast Next.js corporate website with glowing glassmorphism aesthetics, advanced SEO architecture, and a modern headless CMS.",
+    images: [premiumImg, premiumImg, premiumImg, premiumImg],
     reverse: false,
+    link: "/service/premium-websites",
   },
 ];
 
@@ -89,7 +94,7 @@ export default function ProjectSection() {
                       <p className="xb-item--content clr-white">{item.content}</p>
 
                       <div className="xb-item--btn mt-40">
-                        <Link className="thm-btn agency-btn" href="/project-details">
+                        <Link className="thm-btn agency-btn" href={item.link}>
                           <span className="text">read more</span>
                           <span className="arrow">
                             <span className="arrow-icon"><ArrowIcon /></span>
@@ -102,7 +107,7 @@ export default function ProjectSection() {
                   <div className="xb-project-img img-hove-effect">
                     <div className="xb-img">
                       {item.images.map((img, i) => (
-                        <Link href="/project-details" key={i}>
+                        <Link href={item.link} key={i}>
                           <Image
                             src={img}
                             alt={item.title}
@@ -117,7 +122,7 @@ export default function ProjectSection() {
                   <div className="xb-project-img img-hove-effect">
                     <div className="xb-img">
                       {item.images.map((img, i) => (
-                        <Link href="/project-details" key={i}>
+                        <Link href={item.link} key={i}>
                           <Image
                             src={img}
                             alt={item.title}
@@ -133,7 +138,7 @@ export default function ProjectSection() {
                       <p className="xb-item--content clr-white">{item.content}</p>
 
                       <div className="xb-item--btn mt-40">
-                        <Link className="thm-btn agency-btn" href="/project-details">
+                        <Link className="thm-btn agency-btn" href={item.link}>
                           <span className="text">read more</span>
                           <span className="arrow">
                             <span className="arrow-icon"><ArrowIcon /></span>
