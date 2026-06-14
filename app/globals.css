@@ -331,3 +331,62 @@
   align-items: center;
   justify-content: center;
 }
+
+/* ── 8. MOBILE RESPONSIVENESS FIXES ─────────────────── */
+@media (max-width: 768px) {
+  /* Global Widget Overlaps */
+  .elena-widget-container {
+    bottom: 10px !important;
+    left: 10px !important;
+    transform: scale(0.8) !important;
+    transform-origin: bottom left !important;
+    z-index: 9999 !important;
+  }
+  
+  /* Footer adjustments */
+  .footer-brand-text {
+    font-size: 40px !important;
+    line-height: 1.2 !important;
+    opacity: 0.1 !important;
+  }
+
+  /* Typography Scaling */
+  .xb-item--title, .sec-title .title, .hero-title {
+    font-size: 32px !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Projects Section button overlap fix */
+  .xb-project-content .xb-item--btn {
+    margin-top: 20px !important;
+    position: relative !important;
+  }
+
+  /* FAQ fixed height fix */
+  .xb-faq .accordion-collapse {
+    height: auto !important;
+  }
+  .xb-faq .accordion-body {
+    padding: 15px 0 !important;
+  }
+
+  /* Statistics Circle overflow */
+  .xb-about-number {
+    width: 250px !important;
+    height: 250px !important;
+  }
+  .xb-about-number .number {
+    font-size: 40px !important;
+  }
+
+  /* Brand logos */
+  .xb-brand-item img {
+    max-width: 120px !important;
+    height: auto !important;
+  }
+
+  /* Elena AI "Book Consultation" contrast fix */
+  .btn-book-consultation {
+    color: #ffffff !important;
+  }
+}

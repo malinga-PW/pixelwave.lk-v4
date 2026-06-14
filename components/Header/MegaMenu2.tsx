@@ -33,7 +33,7 @@ export default function MegaMenuServices() {
                                 "AI consulting."
                               ].map((text, i) => (
                                 <li key={i}>
-                                  <Link href="/service-details">
+                                  <Link href="/service/saas-development">
                                     <span className="icon_list_text">{text}</span>
                                   </Link>
                                 </li>
@@ -53,7 +53,7 @@ export default function MegaMenuServices() {
                                 "AI integration."
                               ].map((text, i) => (
                                 <li key={i}>
-                                  <Link href="/service-details">
+                                  <Link href="/service/saas-development">
                                     <span className="icon_list_text">{text}</span>
                                   </Link>
                                 </li>

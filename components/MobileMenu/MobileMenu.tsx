@@ -34,7 +34,7 @@ const menus: MenuItem[] = [
     link: "#",
     submenu: [
       { id: 31, title: "Services", link: "/service" },
-      { id: 32, title: "Service Details", link: "/service-details" },
+      { id: 32, title: "Service Details", link: "/service/premium-websites" },
       { id: 33, title: "Career", link: "/career" },
       { id: 34, title: "Career Details", link: "/career-details" },
       { id: 35, title: "Projects", link: "/project" },
@@ -47,10 +47,10 @@ const menus: MenuItem[] = [
     title: "Services",
     link: "#",
     submenu: [
-      { id: 41, title: "AI SaaS Product", link: "/service-details" },
-      { id: 42, title: "Data & Intelligence", link: "/service-details" },
-      { id: 43, title: "AI for E-commerce", link: "/service-details" },
-      { id: 44, title: "AI Consulting", link: "/service-details" },
+      { id: 41, title: "SaaS Development", link: "/service/saas-development" },
+      { id: 42, title: "n8n Development", link: "/service/n8n-development" },
+      { id: 43, title: "E-Commerce", link: "/service/e-commerce-solutions" },
+      { id: 44, title: "AI Automation", link: "/service/ai-automation" },
     ],
   },
   {

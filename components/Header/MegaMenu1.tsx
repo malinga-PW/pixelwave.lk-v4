@@ -40,7 +40,7 @@ export default function MegaMenu1() {
                       </div>
 
                       <div className="col-xl-4 col-lg-4">
-                        <Link className="iconbox_block_2" href="/service-details">
+                        <Link className="iconbox_block_2" href="/service/premium-websites">
                           <span className="icon_title_wrap">
                             <small className="iconbox_icon">
                               <Image src={icon1} alt="Service Details Icon" />

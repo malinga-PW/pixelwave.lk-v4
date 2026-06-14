@@ -69,7 +69,7 @@ export default function AboutSection() {
             >
               <div className="xb-img">
                 {REPEAT.map((_, i) => (
-                  <Link href="/service-details" key={i}>
+                  <Link href="/service/premium-websites" key={i}>
                     <Image src={img} alt="About Image" />
                   </Link>
                 ))}
