@@ -110,12 +110,8 @@ export default function HeaderClient() {
                     <MegaMenuServices />
                   </li>
 
-                  {/* Elena.AI — highlighted */}
                   <li className={isActive("/elena-ai", false) ? "pw-active" : ""}>
-                    <Link
-                      href="/elena-ai"
-                      style={{ color: "var(--color-primary)" }}
-                    >
+                    <Link href="/elena-ai">
                       Elena.AI
                     </Link>
                   </li>

@@ -67,13 +67,13 @@
 }
 
 .xb-feature-item .xb-item--title {
-  font-size: 17px !important;
-  margin: 22px 0 4px !important;
+  font-size: 20px !important;
+  margin: 22px 0 6px !important;
 }
 
 .xb-feature-item .xb-item--content {
-  font-size: 14px !important;
-  line-height: 1.5 !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
 }
 
 @media (max-width: 1199px) {
@@ -94,9 +94,9 @@
   position: relative;
   z-index: 1;
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  height: 100% !important; /* Make all tiles same height */
 }
 
-/* Glowing layer behind the card */
 /* Glow shadow layer — lives UNDER the card as a shadow, not behind */
 .xb-feature-item .xb-item--inner {
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
@@ -104,16 +104,26 @@
   z-index: 2;
   border: 1px solid rgba(255, 255, 255, 0.07) !important;
   border-radius: 10px;
+  height: 100% !important; /* Stretch to fill container */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Glowing border ring — CSS mask trick */
+/* Glowing border ring — CSS mask trick with thicker border & animation */
+@keyframes border-spin {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .xb-feature-item .xb-item--inner::after {
   content: '';
   position: absolute;
-  inset: -1px;
+  inset: -2px; /* Pull out slightly to accommodate thicker border */
   border-radius: 11px;
-  border: 1.5px solid transparent;
-  background: linear-gradient(135deg, #00f0ff80, #0057ff80, #bd00ff80, #00f0ff80) border-box;
+  border: 3px solid transparent; /* Thicker border */
+  background: linear-gradient(135deg, #00f0ff, #0057ff, #bd00ff, #00f0ff) border-box;
+  background-size: 200% 200%;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
@@ -130,13 +140,14 @@
   /* Ambient glow as a CARD SHADOW — spreads from beneath */
   box-shadow:
     0 8px 16px -4px rgba(0, 0, 0, 0.5),
-    0 20px 50px -8px rgba(0, 87, 255, 0.35),
-    0 30px 60px -12px rgba(0, 240, 255, 0.2),
-    0 0 0 1px rgba(0, 240, 255, 0.12) !important;
+    0 25px 60px -10px rgba(0, 87, 255, 0.4),
+    0 40px 80px -15px rgba(0, 240, 255, 0.3),
+    0 0 0 1px rgba(0, 240, 255, 0.15) !important;
 }
 
 .xb-feature-item:hover .xb-item--inner::after {
   opacity: 1;
+  animation: border-spin 3s linear infinite; /* Add gradient animation */
 }
 
 /* ── 4. MAIN MENU NAV — HOVER & ACTIVE (PILL BORDER) ────────── */
@@ -149,19 +160,19 @@
   transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease !important;
 }
 
-/* Hover: subtle pill bg */
+/* Hover: subtle pill bg and primary color text */
 .main-menu ul > li:hover > a {
-  color: var(--color-white) !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
-  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--color-primary) !important;
+  border-color: rgba(0, 255, 151, 0.3) !important;
+  background: rgba(0, 255, 151, 0.05) !important;
 }
 
 /* Active page: glowing pill border */
 .main-menu ul > li.pw-active > a {
-  color: var(--color-white) !important;
-  border-color: rgba(255, 255, 255, 0.35) !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 0 12px rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-primary) !important;
+  border-color: rgba(0, 255, 151, 0.4) !important;
+  background: rgba(0, 255, 151, 0.08) !important;
+  box-shadow: 0 0 0 1px rgba(0, 255, 151, 0.1), inset 0 0 12px rgba(0, 255, 151, 0.04) !important;
 }
 
 /* ── 5. FLOATING HEADER — COMPACT HEIGHT ON STICKY ───────────── */
