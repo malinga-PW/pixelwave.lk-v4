@@ -4,7 +4,7 @@ import Image from "next/image";
 
 // Images
 import m05 from "@/public/images/icon/m_05.svg";
-import serviceImg from "@/public/images/service/img21.png";
+import serviceImg from "@/public/images/solutions/solution-corporate.png";
 
 export default function MegaMenuServices() {
   return (
@@ -27,14 +27,13 @@ export default function MegaMenuServices() {
                           <div className="megamenu_widget">
                             <ul className="icon_list unordered_list_block">
                               {[
-                                "AI saas product.",
-                                "Data and intelligence.",
-                                "AI for E-commerce.",
-                                "AI consulting."
-                              ].map((text, i) => (
+                                { title: "Premium Websites", link: "/service/premium-websites" },
+                                { title: "E-Commerce Solutions", link: "/service/e-commerce-solutions" },
+                                { title: "AI Automation", link: "/service/ai-automation" }
+                              ].map((item, i) => (
                                 <li key={i}>
-                                  <Link href="/service/saas-development">
-                                    <span className="icon_list_text">{text}</span>
+                                  <Link href={item.link}>
+                                    <span className="icon_list_text">{item.title}</span>
                                   </Link>
                                 </li>
                               ))}
@@ -47,14 +46,13 @@ export default function MegaMenuServices() {
                           <div className="megamenu_widget">
                             <ul className="icon_list unordered_list_block">
                               {[
-                                "AI chatbot virtual.",
-                                "AI - marketing.",
-                                "Machine learning.",
-                                "AI integration."
-                              ].map((text, i) => (
+                                { title: "n8n Development", link: "/service/n8n-development" },
+                                { title: "SaaS Development", link: "/service/saas-development" },
+                                { title: "Branding & Design", link: "/service/branding-design" }
+                              ].map((item, i) => (
                                 <li key={i}>
-                                  <Link href="/service/saas-development">
-                                    <span className="icon_list_text">{text}</span>
+                                  <Link href={item.link}>
+                                    <span className="icon_list_text">{item.title}</span>
                                   </Link>
                                 </li>
                               ))}
@@ -107,12 +105,12 @@ export default function MegaMenuServices() {
                                 </span>
                                 <h3 className="xb-item--title">
                                   <Link href="/contact">
-                                    Need any custom AI services.
+                                    Need a Custom AI Service?
                                   </Link>
                                 </h3>
                               </div>
                               <p className="xb-item--text">
-                                Discover our core offerings.
+                                Get a free consultation today.
                               </p>
                             </div>
 
