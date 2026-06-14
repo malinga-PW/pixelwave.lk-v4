@@ -11,6 +11,7 @@ import "../styles/mousecursor.css";
 import "../styles/imageRevealHover.css";
 import "../styles/custom-fonts.css";
 import "../styles/main.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Aivora - AI Agency & Technology Next Js Template",

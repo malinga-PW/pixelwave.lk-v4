@@ -1,0 +1,77 @@
+/* Custom Overrides for Heading Font Sizes */
+
+/* Hero Titles */
+.hero-content .title {
+  font-size: clamp(36px, 5vw, 56px) !important;
+  line-height: 1.2 !important;
+}
+
+.hero-content--three .title {
+  font-size: clamp(40px, 6vw, 64px) !important;
+  line-height: 1.2 !important;
+}
+
+/* Subtitles for Hero */
+.hero-content .sub-title {
+  font-size: clamp(16px, 2vw, 18px) !important;
+}
+
+/* General Section Titles */
+.sec-title .title {
+  font-size: clamp(32px, 4.5vw, 48px) !important;
+  line-height: 1.3 !important;
+}
+
+.about-sec-title .title {
+  font-size: clamp(32px, 4vw, 44px) !important;
+  line-height: 1.3 !important;
+}
+
+.sec-title-three .title {
+  font-size: clamp(26px, 3.5vw, 38px) !important;
+  line-height: 1.3 !important;
+}
+
+.sec-title--two .title {
+  font-size: clamp(30px, 4vw, 46px) !important;
+  line-height: 1.3 !important;
+}
+
+/* Specific Section Titles */
+.custom-sec-title .title,
+.pricing-sec-title .title,
+.download-sec-title .title {
+  font-size: clamp(32px, 4vw, 48px) !important;
+  line-height: 1.3 !important;
+}
+
+/* Feature Item Hover Effect */
+.xb-feature-item .xb-item--inner {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.xb-feature-item .xb-item--inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition: all 0.4s ease-in-out;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(76, 103, 255, 0.15) 0%, transparent 70%);
+}
+
+.xb-feature-item:hover .xb-item--inner {
+  transform: translateY(-8px) !important;
+  border-color: rgba(76, 103, 255, 0.5) !important;
+  box-shadow: 0 15px 35px -5px rgba(0, 195, 255, 0.15), 
+              0 0 20px rgba(76, 103, 255, 0.2) !important;
+}
+
+.xb-feature-item:hover .xb-item--inner::before {
+  opacity: 1;
+}
