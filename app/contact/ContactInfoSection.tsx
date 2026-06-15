@@ -34,18 +34,22 @@ export default function ContactInfoSection() {
                   {/* Hover images */}
                   <div className="xb-img">
                     {[1, 2, 3, 4].map((i) => (
-                      <Link href="/contact" key={i}>
+                      <a href="https://maps.app.goo.gl/oo3yr24kDV9LhXo28" target="_blank" rel="noopener noreferrer" key={i}>
                         <Image
                           src={item.img}
                           alt={`Office location ${item.location}`}
                         />
-                      </Link>
+                      </a>
                     ))}
                   </div>
 
                   {/* Content */}
                   <div className="xb-item--holder mt-30">
-                    <p className="xb-item--location" style={{ fontSize: "24px" }}>{item.location}</p>
+                    <p className="xb-item--location" style={{ fontSize: "24px" }}>
+                      <a href="https://maps.app.goo.gl/oo3yr24kDV9LhXo28" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>
+                        {item.location}
+                      </a>
+                    </p>
 
                     <span className="xb-item--contact_info" style={{ display: "block", marginBottom: "10px" }}>{item.phone}</span>
                     <span className="xb-item--contact_info" style={{ display: "block", marginBottom: "10px" }}>{item.email}</span>

@@ -82,6 +82,7 @@ export default function ContactForm() {
               type="text"
               value={forms.name}
               onChange={changeHandler}
+              placeholder="Your Name*"
             />
             <label htmlFor="author-name">Your Name*</label>
             <Image src={userIcon} alt="user" />
@@ -98,6 +99,7 @@ export default function ContactForm() {
               type="email"
               value={forms.email}
               onChange={changeHandler}
+              placeholder="Email Address*"
             />
             <label htmlFor="author-email">Email Address*</label>
             <Image src={emailIcon} alt="email" />
@@ -114,6 +116,7 @@ export default function ContactForm() {
               type="tel"
               value={forms.phone}
               onChange={changeHandler}
+              placeholder="Contact No*"
             />
             <label htmlFor="author-phone">Contact No*</label>
             <Image src={phoneIcon} alt="phone" />
@@ -158,6 +161,7 @@ export default function ContactForm() {
               name="message"
               value={forms.message}
               onChange={changeHandler}
+              placeholder="Your Message.."
             />
             <label htmlFor="massage">Your Message..</label>
             <Image src={messageIcon} alt="message" />

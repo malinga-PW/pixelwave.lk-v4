@@ -120,8 +120,10 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="xb-footer-bottom">
           <div className="contact-item">
-            <Image src={locationIcon} alt="location" />
-            <span className="contact-method">Mulleriyawa, Colombo, Sri Lanka</span>
+            <a href="https://maps.app.goo.gl/oo3yr24kDV9LhXo28" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center" }}>
+              <Image src={locationIcon} alt="location" />
+              <span className="contact-method ms-2">Mulleriyawa, Colombo, Sri Lanka</span>
+            </a>
           </div>
 
           <div className="contact-item copyright-item">

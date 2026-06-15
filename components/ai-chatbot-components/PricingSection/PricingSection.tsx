@@ -250,6 +250,15 @@ export default function PricingSection() {
                     {formattedPrice} <sub>/{cycleText}</sub>
                   </h2>
 
+                  <ul className="pricing-list list-unstyled mt-3 mb-40">
+                    {tier.features.map((item, i) => (
+                      <li key={i}>
+                        <span>{CheckIcon}</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
                   <div className="pricing-btn mb-25 mt-auto">
                     <Link
                       className="thm-btn chatbot-btn w-100 text-center"
@@ -258,15 +267,6 @@ export default function PricingSection() {
                       <span className="text">Choose Plan</span>
                     </Link>
                   </div>
-
-                  <ul className="pricing-list list-unstyled mt-3">
-                    {tier.features.map((item, i) => (
-                      <li key={i}>
-                        <span>{CheckIcon}</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
 
                   {tier.popular && (
                     <span className="xb-tag premium-plan">Most Popular</span>

@@ -207,36 +207,27 @@ export default function HeaderClient() {
             {/* Header Buttons and Custom Translator Dropdown */}
             <div className="header-action-group ul_li align-items-center">
               
-              {/* Custom Google Translate Dropdown Selector */}
-              <div className="custom-language-selector notranslate position-relative me-3" ref={selectorRef}>
-                <button
-                  type="button"
-                  className="lang-btn ul_li align-items-center"
-                  onClick={() => setDropdownOpen((prev) => !prev)}
-                >
-                  <span className="lang-flag">{selectedLang.flag}</span>
-                  <span className="lang-label d-none d-xxl-inline ms-1">{selectedLang.label}</span>
-                  <i className="far fa-angle-down ms-2" />
-                </button>
+              {/* Custom Google Translate Flags Bar (hover-expandable) */}
+              <div className="custom-flag-selector notranslate me-3">
+                {/* Active flag */}
+                <div className="active-flag-wrapper">
+                  <span className="flag-icon">{selectedLang.flag}</span>
+                </div>
 
-                {dropdownOpen && (
-                  <ul className="lang-dropdown position-absolute list-unstyled m-0 p-0">
-                    {LANGUAGES.map((lang) => (
-                      <li key={lang.code}>
-                        <button
-                          type="button"
-                          className={`lang-option ul_li align-items-center w-100 ${
-                            selectedLang.code === lang.code ? "active" : ""
-                          }`}
-                          onClick={() => handleLangChange(lang.code)}
-                        >
-                          <span className="lang-flag">{lang.flag}</span>
-                          <span className="lang-label ms-2">{lang.label}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                {/* List of flags (slides out on hover) */}
+                <div className="flags-list ul_li">
+                  {LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      className={`flag-option-btn ${selectedLang.code === lang.code ? "active" : ""}`}
+                      title={lang.label}
+                      onClick={() => handleLangChange(lang.code)}
+                    >
+                      <span className="flag-icon">{lang.flag}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Get a Quote Button */}

@@ -27,7 +27,7 @@ export default function BlogSection() {
   }, []);
 
   return (
-    <section id="blog" className="blog pt-150 bg_img">
+    <section id="blog" className="blog pt-150 pb-150 bg_img">
       <div className="container">
         <div className="row mt-none-30">
 
