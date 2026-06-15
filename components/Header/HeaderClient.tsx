@@ -208,13 +208,17 @@ export default function HeaderClient() {
               
               {/* Custom Google Translate Dropdown */}
               <div className="custom-language-dropdown notranslate me-3" ref={selectorRef}>
-                {/* Trigger stays fixed as "Language" as requested */}
+                {/* Trigger shows the active language and flag */}
                 <div 
                   className="dropdown-trigger ul_li align-items-center"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  <i className="far fa-globe" style={{ fontSize: "18px" }}></i>
-                  <span className="lang-label ms-2">Language</span>
+                  <img 
+                    src={`https://flagcdn.com/w20/${selectedLang.country}.png`} 
+                    alt={selectedLang.label} 
+                    style={{ width: "20px", height: "auto", borderRadius: "2px" }} 
+                  />
+                  <span className="lang-label ms-2">{selectedLang.label}</span>
                   <i className={`far fa-angle-down ms-2 transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
                 </div>
                 

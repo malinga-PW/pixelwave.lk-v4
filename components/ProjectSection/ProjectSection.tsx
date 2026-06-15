@@ -89,18 +89,18 @@ export default function ProjectSection() {
   const projects = [
     {
       img: projectImg01,
-      title: "Chatbot and NLP projects..",
-      desc: "We build smart chatbots and NLP tools that understand and respond naturally. From customer support to document analysis, our AI solutions automate communication, save time, and improve user experience.",
-      industry: "Data Processing",
-      country: "Germany, Issum",
+      title: "cupzotea.com",
+      desc: "A premium tea exporter website designed to showcase high-quality Ceylon tea products to the global market, featuring an elegant catalog and international trade inquiry system.",
+      industry: "Export & E-Commerce",
+      country: "Sri Lanka",
       techs: [icon01, icon02, icon03],
     },
     {
       img: projectImg02,
-      title: "E-commerce & marketing..",
-      desc: "We create AI solutions that boost sales and customer engagement—like smart product recommendations, dynamic pricing, and behavior-based targeting.",
-      industry: "Artificial Intelligence",
-      country: "Singapore",
+      title: "maxwelllanka.com",
+      desc: "A comprehensive household item business website, providing a seamless browsing experience for home appliances and everyday essentials.",
+      industry: "Retail & Household",
+      country: "Sri Lanka",
       techs: [icon01, icon08, icon09],
     },
     {
