@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/images/logo/logo.svg";
@@ -9,17 +9,38 @@ interface SpherePoint {
   theta: number; // Polar angle
   phi: number;   // Azimuthal angle
   baseColor: string;
-  layer: number; // 0: Outer, 1: Middle, 2: Core
+  layer: number; // 0: Outer, 1: Core
 }
 
 export default function ElenaAgentOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+  const [isInView, setIsInView] = useState(true);
+
+  useEffect(() => {
+    // 1. Set up Intersection Observer to pause animation when off-screen
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) observer.unobserve(containerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !isInView) return; // Pause execution if not in view
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -69,7 +90,7 @@ export default function ElenaAgentOrb() {
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 8000; // High Density
+    const numPoints = 3500; // Drastically reduced density for smooth 60fps scrolling
 
     const getSphereColor = (ratio: number) => {
       if (ratio < 0.5) {
@@ -96,14 +117,12 @@ export default function ElenaAgentOrb() {
       const ratio = (y + 1) / 2; 
       const baseColor = getSphereColor(ratio);
       
-      // Assign particles to 3 distinct concentric layers for perfect geometric symmetry
+      // Assign particles to 2 distinct layers for a cleaner, high-performance geometry
       let layer = 0;
-      if (i % 6 === 0) {
-        layer = 2; // Core sphere
-      } else if (i % 6 === 1 || i % 6 === 2) {
-        layer = 1; // Middle sphere
+      if (i % 4 === 0) {
+        layer = 1; // Core sphere (25% of points)
       } else {
-        layer = 0; // Outer sphere
+        layer = 0; // Outer sphere (75% of points)
       }
       
       points.push({ theta, phi, baseColor, layer });
@@ -155,15 +174,13 @@ export default function ElenaAgentOrb() {
 
       points.forEach((p) => {
         // 1. PERFECT SYMMETRICAL GEOMETRY
-        // No displacement waves, just 3 perfect concentric spheres
+        // Reduced to 2 layers to remove the heavy middle circle
         let radius = baseRadius;
         
         if (p.layer === 0) {
           radius = baseRadius; // Outer
-        } else if (p.layer === 1) {
-          radius = baseRadius * 0.65; // Middle
         } else {
-          radius = baseRadius * 0.3; // Core
+          radius = baseRadius * 0.35; // Core
         }
 
         // Apply opposing rotations to inner layers for dynamic geometric mechanism
@@ -171,11 +188,8 @@ export default function ElenaAgentOrb() {
         let layerRotY = currentRotY;
 
         if (p.layer === 1) {
-          layerRotX = -currentRotX * 1.2;
-          layerRotY = -currentRotY * 1.2;
-        } else if (p.layer === 2) {
-          layerRotX = currentRotX * 2.5;
-          layerRotY = currentRotY * 2.5 + time; // core spins slightly on its own
+          layerRotX = -currentRotX * 2.5;
+          layerRotY = -currentRotY * 2.5 + time; // core spins slightly on its own
         }
 
         // 2. CONVERT TO 3D CARTESIAN
@@ -240,14 +254,14 @@ export default function ElenaAgentOrb() {
 
       // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
       const lineConnectionDist = width * 0.12;
-      const lineRenderLimit = width * 0.04;
+      const lineRenderLimit = width * 0.05; // Slightly longer reach to compensate for fewer points
       
       projectedPoints.forEach((p, idx) => {
         // Line connection effect also reacts to global mouse position
         if (mouseRef.current.x !== null && mouseRef.current.y !== null && p.alpha > 0.4) {
           const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
           if (mDist < lineConnectionDist) {
-            const maxChecks = Math.min(idx + 15, projectedPoints.length);
+            const maxChecks = Math.min(idx + 10, projectedPoints.length); // Optimized from 15 to 10 checks
             for (let j = idx + 1; j < maxChecks; j++) {
               const other = projectedPoints[j];
               const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
@@ -282,7 +296,7 @@ export default function ElenaAgentOrb() {
       window.removeEventListener("mousemove", handleGlobalMouseMove);
       window.removeEventListener("mouseleave", handleGlobalMouseLeave);
     };
-  }, []);
+  }, [isInView]);
 
   return (
     <div className="w-full flex justify-center items-center">
