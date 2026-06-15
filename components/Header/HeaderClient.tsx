@@ -45,22 +45,11 @@ export default function HeaderClient() {
   /* ── Sticky Header & Click Outside & Translation Loader ── */
   useEffect(() => {
     const handleScroll = () => {
-      const currentScroll = window.scrollY;
-
-      if (currentScroll < lastScrollY.current && currentScroll > 100) {
+      if (window.scrollY > 100) {
         setIsSticky(true);
-        setTimeout(() => setIsVisible(true), 10);
-      } else if (currentScroll > lastScrollY.current) {
-        setIsVisible(false);
-        setTimeout(() => setIsSticky(false), 100);
-      }
-
-      if (currentScroll <= 100) {
+      } else {
         setIsSticky(false);
-        setIsVisible(false);
       }
-
-      lastScrollY.current = currentScroll;
     };
 
     const handleOutsideClick = (e: MouseEvent) => {
@@ -142,9 +131,7 @@ export default function HeaderClient() {
       <div id="google_translate_element" style={{ display: "none" }} />
 
       <div
-        className={`xb-header xb-sticky-stt
-          ${isSticky ? "xb-header-area-sticky" : ""}
-          ${isVisible ? "xb-header-fixed" : "xb-header-hidden"}`}
+        className={`xb-header xb-sticky-stt ${isSticky ? "xb-header-area-sticky xb-header-fixed" : ""}`}
       >
         <div className="container mxw-1650">
           <div className="header__wrap ul_li_between">

@@ -852,7 +852,7 @@
   transform: translateX(-50%) translateY(10px);
   background: #222746;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  border-radius: 24px; /* Matches mega menu radius */
   padding: 8px 0;
   min-width: 140px;
   opacity: 0;
