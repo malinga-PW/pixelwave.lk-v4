@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 
 interface SpherePoint {
@@ -13,26 +13,6 @@ export default function ElenaAgentOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
-  const isHoveredRef = useRef(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    mouseRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-  };
-
-  const handleMouseLeave = () => {
-    mouseRef.current = { x: null, y: null };
-    isHoveredRef.current = false;
-  };
-
-  const handleMouseEnter = () => {
-    isHoveredRef.current = true;
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -57,6 +37,24 @@ export default function ElenaAgentOrb() {
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
+
+    // Global Mouse Listener to track anywhere in the window
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      // Store mouse position relative to the center of the canvas
+      mouseRef.current = {
+        x: e.clientX - (rect.left + rect.width / 2),
+        y: e.clientY - (rect.top + rect.height / 2),
+      };
+    };
+
+    const handleGlobalMouseLeave = () => {
+      mouseRef.current = { x: null, y: null };
+    };
+
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+    window.addEventListener("mouseleave", handleGlobalMouseLeave);
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
@@ -92,12 +90,10 @@ export default function ElenaAgentOrb() {
       points.push({ theta, phi, baseColor });
     }
 
-
-
     // Animation variables
     let time = 0;
-    let rotY = 0;
-    let rotX = 0;
+    let currentRotY = 0;
+    let currentRotX = 0;
 
     const baseRadius = 124; // Reduced sphere base radius by 20% to prevent cropping
     const focalLength = 320;
@@ -108,12 +104,27 @@ export default function ElenaAgentOrb() {
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Slowly increment rotation angles (slow, majestic motion)
-      rotY += isHoveredRef.current ? 0.004 : 0.002;
-      rotX += isHoveredRef.current ? 0.003 : 0.0015;
+      // Mouse tracking target rotation
+      let targetRotX = 0;
+      let targetRotY = 0;
+
+      if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
+        // Focus on mouse: calculate rotation based on distance from center
+        // Using window inner dimensions to make it track smoothly across the whole screen
+        targetRotY = (mouseRef.current.x / (window.innerWidth / 2)) * Math.PI * 0.8; 
+        targetRotX = -(mouseRef.current.y / (window.innerHeight / 2)) * Math.PI * 0.8;
+      } else {
+        // Idle ambient rotation when mouse is outside window
+        targetRotY = Math.sin(time * 0.5) * 0.2;
+        targetRotX = Math.cos(time * 0.3) * 0.1;
+      }
+
+      // Smooth Lerp towards target rotation
+      currentRotX += (targetRotX - currentRotX) * 0.05;
+      currentRotY += (targetRotY - currentRotY) * 0.05;
       
-      // Wave progress over time (slow animation)
-      time += isHoveredRef.current ? 0.025 : 0.01;
+      // Wave progress over time (slow ambient animation)
+      time += 0.015;
 
       // Project points to 3D and store in an array for depth sorting
       interface ProjectedPoint {
@@ -123,7 +134,6 @@ export default function ElenaAgentOrb() {
         color: string;
         size: number;
         alpha: number;
-        rawZ: number;
       }
 
       const projectedPoints: ProjectedPoint[] = [];
@@ -141,13 +151,13 @@ export default function ElenaAgentOrb() {
 
         // 3. APPLY ROTATION MATRIX
         // Rotate around Y axis
-        let x1 = x3d * Math.cos(rotY) - z3d * Math.sin(rotY);
-        let z1 = x3d * Math.sin(rotY) + z3d * Math.cos(rotY);
+        let x1 = x3d * Math.cos(currentRotY) - z3d * Math.sin(currentRotY);
+        let z1 = x3d * Math.sin(currentRotY) + z3d * Math.cos(currentRotY);
         let y1 = y3d;
 
         // Rotate around X axis
-        let y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
-        let z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
+        let y2 = y1 * Math.cos(currentRotX) - z1 * Math.sin(currentRotX);
+        let z2 = y1 * Math.sin(currentRotX) + z1 * Math.cos(currentRotX);
         let x2 = x1;
 
         // 4. PERSPECTIVE PROJECT TO 2D SCREEN
@@ -155,24 +165,7 @@ export default function ElenaAgentOrb() {
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // 5. MOUSE INTERACTION (FLUID REPULSION VECTORS)
-        if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-          const dx = screenX - mouseRef.current.x;
-          const dy = screenY - mouseRef.current.y;
-          const dist = Math.hypot(dx, dy);
-          
-          if (dist < 85) {
-            // Push particles away relative to distance
-            const force = (85 - dist) / 85;
-            const angle = Math.atan2(dy, dx);
-            
-            // Warp coordinates
-            screenX += Math.cos(angle) * force * 20;
-            screenY += Math.sin(angle) * force * 20;
-          }
-        }
-
-        // 6. DEPTH Normalization & Alpha Fade
+        // 5. DEPTH Normalization & Alpha Fade
         const maxDepth = baseRadius + 15; // Max z range
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
         const alpha = Math.max(0.08, (1 - depthRatio) * 0.82 + 0.12); // fade back particles
@@ -185,49 +178,20 @@ export default function ElenaAgentOrb() {
           color: p.baseColor,
           size,
           alpha,
-          rawZ: z2,
         });
       });
 
-      // 7. DEPTH SORTING (Back to Front)
+      // 6. DEPTH SORTING (Back to Front)
       // Sort in descending order of z coordinate so back particles render first
       projectedPoints.sort((a, b) => b.z - a.z);
 
-      // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
-      projectedPoints.forEach((p, idx) => {
-        // Draw particle dot (No shadow/glow on hover as requested)
+      // 7. RENDER PARTICLES ONLY (Removed laggy neural web lines)
+      projectedPoints.forEach((p) => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        ctx.shadowBlur = 0; // Explicitly remove glow
         ctx.fill();
-
-        // Render neural web connection lines when mouse is active and near particles
-        if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-          const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
-          if (mDist < 70) {
-            // Check nearest neighbor particles to draw lines
-            for (let j = idx + 1; j < projectedPoints.length; j++) {
-              const other = projectedPoints[j];
-              const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
-              
-              if (otherDistToMouse < 70) {
-                const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
-                if (linkDist < 25) {
-                  ctx.beginPath();
-                  ctx.moveTo(p.x, p.y);
-                  ctx.lineTo(other.x, other.y);
-                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 25) * 0.25})`;
-                  ctx.lineWidth = 0.4;
-                  ctx.stroke();
-                }
-              }
-            }
-          }
-        }
       });
-
-
 
       animationId = requestAnimationFrame(draw);
     };
@@ -237,6 +201,8 @@ export default function ElenaAgentOrb() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("mousemove", handleGlobalMouseMove);
+      window.removeEventListener("mouseleave", handleGlobalMouseLeave);
     };
   }, []);
 
@@ -245,9 +211,6 @@ export default function ElenaAgentOrb() {
       <div
         ref={containerRef}
         className="elena-orb-container"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
       >
         <canvas ref={canvasRef} className="elena-orb-canvas" />
       </div>
