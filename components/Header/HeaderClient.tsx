@@ -16,12 +16,12 @@ import MegaMenuContact from "./MegaMenuContact";
 
 /* ── Custom Language Select Options ── */
 const LANGUAGES = [
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "si", label: "සිංහල", flag: "🇱🇰" },
-  { code: "ta", label: "தமிழ்", flag: "🇱🇰" },
-  { code: "ja", label: "日本語", flag: "🇯🇵" },
-  { code: "de", label: "Deutsch", flag: "🇩🇪" },
-  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "en", label: "English", country: "gb" },
+  { code: "si", label: "සිංහල", country: "lk" },
+  { code: "ta", label: "தமிழ்", country: "lk" },
+  { code: "ja", label: "日本語", country: "jp" },
+  { code: "de", label: "Deutsch", country: "de" },
+  { code: "es", label: "Español", country: "es" },
 ];
 
 export default function HeaderClient() {
@@ -120,25 +120,13 @@ export default function HeaderClient() {
   }, []);
 
   const handleLangChange = (langCode: string) => {
-    // 1. Find the hidden Google Translate select element
-    const selectEl = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-    
-    if (selectEl) {
-      // 2. Change its value to the selected language
-      selectEl.value = langCode;
-      
-      // 3. IMPORTANT: Dispatch a bubbling change event so Google's listener catches it
-      selectEl.dispatchEvent(new Event("change", { bubbles: true }));
+    // Force the Google Translate cookie to guarantee reliable translation on all browsers
+    document.cookie = `googtrans=/en/${langCode}; path=/;`;
+    if (typeof window !== "undefined") {
+      document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname}`;
+      // Reload the page to instantly apply the translation without flaky script triggers
+      window.location.reload();
     }
-    
-    // 4. Update our custom UI state regardless
-    const matched = LANGUAGES.find((l) => l.code === langCode);
-    if (matched) {
-      setSelectedLang(matched);
-      // Set a cookie so it persists on reload just like Google's own cookie
-      document.cookie = `googtrans=/en/${langCode}; path=/;`;
-    }
-    setDropdownOpen(false);
   };
 
   const toggleMobileMenu = useCallback(() => setMobileActive((p) => !p), []);
@@ -220,16 +208,17 @@ export default function HeaderClient() {
               
               {/* Custom Google Translate Dropdown */}
               <div className="custom-language-dropdown notranslate me-3" ref={selectorRef}>
+                {/* Trigger stays fixed as "Language" as requested */}
                 <div 
                   className="dropdown-trigger ul_li align-items-center"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  <span className="flag-icon">{selectedLang.flag}</span>
-                  <span className="lang-label ms-2">{selectedLang.label}</span>
+                  <i className="far fa-globe" style={{ fontSize: "18px" }}></i>
+                  <span className="lang-label ms-2">Language</span>
                   <i className={`far fa-angle-down ms-2 transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
                 </div>
                 
-                {/* Dropdown Menu - Conditionally Rendered with CSS transition classes */}
+                {/* Dropdown Menu - Loads high-res flag images instead of Windows-unsupported emojis */}
                 <div className={`dropdown-menu-list ${dropdownOpen ? "active" : ""}`}>
                   {LANGUAGES.map((lang) => (
                     <button
@@ -240,7 +229,11 @@ export default function HeaderClient() {
                       }`}
                       onClick={() => handleLangChange(lang.code)}
                     >
-                      <span className="flag-icon">{lang.flag}</span>
+                      <img 
+                        src={`https://flagcdn.com/w20/${lang.country}.png`} 
+                        alt={lang.label} 
+                        style={{ width: "20px", height: "auto", borderRadius: "2px" }} 
+                      />
                       <span className="lang-name ms-2">{lang.label}</span>
                     </button>
                   ))}
