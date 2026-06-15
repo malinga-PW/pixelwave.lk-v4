@@ -207,24 +207,25 @@ export default function HeaderClient() {
             {/* Header Buttons and Custom Translator Dropdown */}
             <div className="header-action-group ul_li align-items-center">
               
-              {/* Custom Google Translate Flags Bar (hover-expandable) */}
-              <div className="custom-flag-selector notranslate me-3">
-                {/* Active flag */}
-                <div className="active-flag-wrapper">
+              {/* Custom Google Translate Dropdown (hover-expandable) */}
+              <div className="custom-language-dropdown notranslate me-3">
+                <div className="dropdown-trigger ul_li align-items-center">
                   <span className="flag-icon">{selectedLang.flag}</span>
+                  <span className="lang-label ms-2">{selectedLang.label}</span>
+                  <i className="far fa-angle-down ms-2" />
                 </div>
-
-                {/* List of flags (slides out on hover) */}
-                <div className="flags-list ul_li">
+                <div className="dropdown-menu-list">
                   {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
                       type="button"
-                      className={`flag-option-btn ${selectedLang.code === lang.code ? "active" : ""}`}
-                      title={lang.label}
+                      className={`dropdown-item-btn ul_li align-items-center ${
+                        selectedLang.code === lang.code ? "active" : ""
+                      }`}
                       onClick={() => handleLangChange(lang.code)}
                     >
                       <span className="flag-icon">{lang.flag}</span>
+                      <span className="lang-name ms-2">{lang.label}</span>
                     </button>
                   ))}
                 </div>
