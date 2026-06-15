@@ -855,4 +855,34 @@
   opacity: 0.8 !important;
 }
 
+/* ── 15. WHO WE ARE SECTION IMAGE CORNER ROUNDNESS & ASPECT RATIO ── */
+.about .xb-about-img-item {
+  aspect-ratio: 633 / 455 !important;
+  width: 580px !important; /* Premium size */
+  max-width: 90vw !important;
+  border-radius: 20px !important; /* Reduced corner roundness (rectangles) instead of 500px capsules */
+}
 
+.about .xb-about-img-item,
+.about .xb-about-img-item .xb-img,
+.about .xb-about-img-item .xb-img a,
+.about .xb-about-img-item .xb-img img {
+  border-radius: 20px !important; /* Match container */
+}
+
+.about .img-hove-effect .xb-img a:nth-child(2),
+.about .img-hove-effect .xb-img a:nth-child(3),
+.about .img-hove-effect .xb-img a:nth-child(4) {
+  border-radius: 20px !important; /* Override theme's 50% circle overlays on hover */
+}
+
+@media (max-width: 991px) {
+  .about .xb-about-img-item {
+    width: 420px !important;
+  }
+}
+@media (max-width: 767px) {
+  .about .xb-about-img-item {
+    width: 320px !important;
+  }
+}
