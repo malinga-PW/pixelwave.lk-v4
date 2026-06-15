@@ -42,22 +42,33 @@ export default function ElenaAgentOrb() {
     if (!ctx) return;
 
     let animationId: number;
-    // Base size significantly increased
-    let width = 550;
-    let height = 550;
+    let width = 500;
+    let height = 500;
+
+    // Mathematical parameters mapped to viewport size for perfect responsiveness without clipping
+    let baseRadius = 120;
+    let waveAmplitude = 20;
+    let focalLength = 375;
 
     const resizeCanvas = () => {
       const container = containerRef.current;
       if (container) {
-        width = container.clientWidth || 550;
-        height = container.clientHeight || 550;
-        
-        // Force minimum size of 550px to prevent canvas from shrinking and cropping the enlarged orbit
-        if (width < 550) width = 550;
-        if (height < 550) height = 550;
+        // Use client width to make it perfectly responsive
+        width = container.clientWidth || 500;
+        height = container.clientHeight || 500;
       }
+      
       canvas.width = width;
       canvas.height = height;
+
+      // Recalculate 3D bounds to guarantee it fits 90% of the canvas width
+      // R_max = baseRadius + waveAmplitude = 0.28 * width
+      // Focal length = 0.75 * width
+      // This results in an apparent projected radius of ~0.45 * width, safely inside the 0.5 * width boundary.
+      const sizeRef = Math.min(width, height);
+      baseRadius = 0.24 * sizeRef;
+      waveAmplitude = 0.04 * sizeRef;
+      focalLength = 0.75 * sizeRef;
     };
 
     resizeCanvas();
@@ -65,19 +76,18 @@ export default function ElenaAgentOrb() {
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 8000; // INCREASED DENSITY
+    const numPoints = 8000; // High Density
 
     // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
       if (ratio < 0.5) {
-        // Interpolate between Green (0, 255, 151) and Cyan (0, 164, 175)
+        // Green to Cyan
         const t = ratio * 2;
-        const r = 0;
         const g = Math.round(255 * (1 - t) + 164 * t);
         const b = Math.round(151 * (1 - t) + 175 * t);
-        return `${r}, ${g}, ${b}`;
+        return `0, ${g}, ${b}`;
       } else {
-        // Interpolate between Cyan (0, 164, 175) and Blue (44, 50, 254)
+        // Cyan to Blue
         const t = (ratio - 0.5) * 2;
         const r = Math.round(0 * (1 - t) + 44 * t);
         const g = Math.round(164 * (1 - t) + 50 * t);
@@ -87,11 +97,11 @@ export default function ElenaAgentOrb() {
     };
 
     for (let i = 0; i < numPoints; i++) {
-      const y = 1 - (i / (numPoints - 1)) * 2; // range: -1 to 1
-      const theta = Math.acos(y); // polar angle
-      const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle spiral
+      const y = 1 - (i / (numPoints - 1)) * 2; 
+      const theta = Math.acos(y); 
+      const phi = i * Math.PI * (3 - Math.sqrt(5)); 
       
-      const ratio = (y + 1) / 2; // 0 at bottom pole, 1 at top pole
+      const ratio = (y + 1) / 2; 
       const baseColor = getSphereColor(ratio);
       
       points.push({ theta, phi, baseColor });
@@ -102,24 +112,19 @@ export default function ElenaAgentOrb() {
     let rotY = 0;
     let rotX = 0;
 
-    // Massively enlarged base radius for a big impressive sphere
-    const baseRadius = 135; 
-    const focalLength = 280; 
-
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Slowly increment rotation angles (slow, majestic motion)
+      // Slowly increment rotation angles
       rotY += isHoveredRef.current ? 0.005 : 0.003;
       rotX += isHoveredRef.current ? 0.004 : 0.002;
       
-      // Wave progress over time (slow animation)
+      // Wave progress over time
       time += isHoveredRef.current ? 0.03 : 0.015;
 
-      // Project points to 3D and store in an array for depth sorting
       interface ProjectedPoint {
         x: number;
         y: number;
@@ -127,14 +132,13 @@ export default function ElenaAgentOrb() {
         color: string;
         size: number;
         alpha: number;
-        rawZ: number;
       }
 
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
         // 1. WAVE DISPLACEMENT
-        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
+        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * waveAmplitude;
         const radius = baseRadius + wave;
 
         // 2. CONVERT TO 3D CARTESIAN
@@ -156,29 +160,32 @@ export default function ElenaAgentOrb() {
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // 5. MOUSE INTERACTION (FLUID REPULSION VECTORS)
+        // 5. MOUSE INTERACTION
         if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const dx = screenX - mouseRef.current.x;
           const dy = screenY - mouseRef.current.y;
           const dist = Math.hypot(dx, dy);
           
-          if (dist < 85) {
-            // Push particles away relative to distance
-            const force = (85 - dist) / 85;
+          const interactionRadius = width * 0.15; // responsive interaction radius
+          if (dist < interactionRadius) {
+            const force = (interactionRadius - dist) / interactionRadius;
             const angle = Math.atan2(dy, dx);
             
-            screenX += Math.cos(angle) * force * 20;
-            screenY += Math.sin(angle) * force * 20;
+            screenX += Math.cos(angle) * force * (width * 0.04);
+            screenY += Math.sin(angle) * force * (width * 0.04);
           }
         }
 
         // 6. DEPTH Normalization & Alpha Fade
-        const maxDepth = baseRadius + 20; // Max z range
+        const maxDepth = baseRadius + waveAmplitude; 
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
         
-        // ENHANCED 3D: High contrast in alpha and size
+        // Dynamic sizing based on canvas width to keep particles relative
+        const baseParticleSize = width * 0.001;
+        
+        // High contrast in alpha and size
         const alpha = Math.max(0.02, (1 - depthRatio) * 0.9 + 0.1); 
-        const size = Math.max(0.2, (1 - depthRatio) * 2.5 + 0.2);   
+        const size = Math.max(baseParticleSize, (1 - depthRatio) * (baseParticleSize * 10) + baseParticleSize);   
 
         projectedPoints.push({
           x: screenX,
@@ -187,7 +194,6 @@ export default function ElenaAgentOrb() {
           color: p.baseColor,
           size,
           alpha,
-          rawZ: z2,
         });
       });
 
@@ -195,23 +201,25 @@ export default function ElenaAgentOrb() {
       projectedPoints.sort((a, b) => b.z - a.z);
 
       // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
+      const lineConnectionDist = width * 0.12;
+      const lineRenderLimit = width * 0.04;
+      
       projectedPoints.forEach((p, idx) => {
-        // Render neural web connection lines when mouse is active and near particles
         if (mouseRef.current.x !== null && mouseRef.current.y !== null && p.alpha > 0.4) {
           const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
-          if (mDist < 70) {
+          if (mDist < lineConnectionDist) {
             const maxChecks = Math.min(idx + 15, projectedPoints.length);
             for (let j = idx + 1; j < maxChecks; j++) {
               const other = projectedPoints[j];
               const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
               
-              if (otherDistToMouse < 70) {
+              if (otherDistToMouse < lineConnectionDist) {
                 const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
-                if (linkDist < 25) {
+                if (linkDist < lineRenderLimit) {
                   ctx.beginPath();
                   ctx.moveTo(p.x, p.y);
                   ctx.lineTo(other.x, other.y);
-                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 25) * 0.25})`;
+                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / lineRenderLimit) * 0.25})`;
                   ctx.lineWidth = 0.4;
                   ctx.stroke();
                 }
@@ -220,7 +228,6 @@ export default function ElenaAgentOrb() {
           }
         }
 
-        // Use fillRect instead of arc for massive performance boost
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
         ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
       });
@@ -237,16 +244,18 @@ export default function ElenaAgentOrb() {
   }, []);
 
   return (
-    <Link href="/elena-ai" className="elena-orb-portal-link block relative" style={{ minHeight: '550px' }}>
-      <div
-        ref={containerRef}
-        className="elena-orb-container w-full h-full flex items-center justify-center absolute inset-0 overflow-visible"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <canvas ref={canvasRef} className="elena-orb-canvas max-w-none" style={{ marginLeft: '-100px' }} />
-      </div>
-    </Link>
+    <div className="w-full flex justify-center items-center">
+      <Link href="/elena-ai" className="elena-orb-portal-link relative w-full aspect-square max-w-[600px]">
+        <div
+          ref={containerRef}
+          className="elena-orb-container w-full h-full absolute inset-0 overflow-visible"
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full block" />
+        </div>
+      </Link>
+    </div>
   );
 }
