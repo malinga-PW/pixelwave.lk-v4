@@ -42,14 +42,14 @@ export default function ElenaAgentOrb() {
     if (!ctx) return;
 
     let animationId: number;
-    let width = 300;
-    let height = 300;
+    let width = 340;
+    let height = 340;
 
     const resizeCanvas = () => {
       const container = containerRef.current;
       if (container) {
-        width = container.clientWidth || 300;
-        height = container.clientHeight || 300;
+        width = container.clientWidth || 340;
+        height = container.clientHeight || 340;
       }
       canvas.width = width;
       canvas.height = height;
@@ -60,7 +60,7 @@ export default function ElenaAgentOrb() {
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 400; // Dense colorful shell
+    const numPoints = 900; // Increased particle density for high resolution smoothness
 
     // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
@@ -97,7 +97,7 @@ export default function ElenaAgentOrb() {
     let rotY = 0;
     let rotX = 0;
 
-    const baseRadius = 80;
+    const baseRadius = 105; // Enlarged sphere base radius
     const focalLength = 320;
 
     const draw = () => {
@@ -106,12 +106,12 @@ export default function ElenaAgentOrb() {
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Slowly increment rotation angles
-      rotY += isHovered ? 0.006 : 0.003;
-      rotX += isHovered ? 0.004 : 0.002;
+      // Slowly increment rotation angles (slow, majestic motion)
+      rotY += isHovered ? 0.004 : 0.002;
+      rotX += isHovered ? 0.003 : 0.0015;
       
       // Wave progress over time (slow animation)
-      time += isHovered ? 0.04 : 0.015;
+      time += isHovered ? 0.025 : 0.01;
 
       // Project points to 3D and store in an array for depth sorting
       interface ProjectedPoint {
@@ -159,22 +159,22 @@ export default function ElenaAgentOrb() {
           const dy = screenY - mouse.y;
           const dist = Math.hypot(dx, dy);
           
-          if (dist < 90) {
+          if (dist < 85) {
             // Push particles away relative to distance
-            const force = (90 - dist) / 90;
+            const force = (85 - dist) / 85;
             const angle = Math.atan2(dy, dx);
             
             // Warp coordinates
-            screenX += Math.cos(angle) * force * 24;
-            screenY += Math.sin(angle) * force * 24;
+            screenX += Math.cos(angle) * force * 20;
+            screenY += Math.sin(angle) * force * 20;
           }
         }
 
         // 6. DEPTH Normalization & Alpha Fade
         const maxDepth = baseRadius + 15; // Max z range
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
-        const alpha = Math.max(0.1, (1 - depthRatio) * 0.85 + 0.15); // fade back particles
-        const size = Math.max(0.7, (1 - depthRatio) * 2.8 + 0.6);   // front particles are larger
+        const alpha = Math.max(0.08, (1 - depthRatio) * 0.82 + 0.12); // fade back particles
+        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.4);   // front particles are slightly larger, but overall smaller for smooth density
 
         projectedPoints.push({
           x: screenX,
@@ -193,39 +193,30 @@ export default function ElenaAgentOrb() {
 
       // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
       projectedPoints.forEach((p, idx) => {
-        // Draw particle dot
+        // Draw particle dot (No shadow/glow on hover as requested)
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        
-        // Front particles get slight neon shadow glows
-        if (p.rawZ < -20 && isHovered) {
-          ctx.shadowColor = `rgb(${p.color})`;
-          ctx.shadowBlur = 8;
-        } else {
-          ctx.shadowBlur = 0;
-        }
-        
+        ctx.shadowBlur = 0; // Explicitly remove glow
         ctx.fill();
-        ctx.shadowBlur = 0; // Reset
 
         // Render neural web connection lines when mouse is active and near particles
         if (mouse.x !== null && mouse.y !== null) {
           const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-          if (mDist < 75) {
+          if (mDist < 70) {
             // Check nearest neighbor particles to draw lines
             for (let j = idx + 1; j < projectedPoints.length; j++) {
               const other = projectedPoints[j];
               const otherDistToMouse = Math.hypot(other.x - mouse.x, other.y - mouse.y);
               
-              if (otherDistToMouse < 75) {
+              if (otherDistToMouse < 70) {
                 const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
-                if (linkDist < 35) {
+                if (linkDist < 25) {
                   ctx.beginPath();
                   ctx.moveTo(p.x, p.y);
                   ctx.lineTo(other.x, other.y);
-                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 35) * 0.35})`;
-                  ctx.lineWidth = 0.5;
+                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 25) * 0.25})`;
+                  ctx.lineWidth = 0.4;
                   ctx.stroke();
                 }
               }
@@ -234,12 +225,12 @@ export default function ElenaAgentOrb() {
         }
       });
 
-      // 9. DRAW TECH CENTRAL LABEL FADEOUT
+      // 9. DRAW CENTRAL LABEL
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 9px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.globalAlpha = isHovered ? 0.3 : 0.8;
+      ctx.globalAlpha = 0.6; // Constant clean transparency
       ctx.fillText("ELENA.AI", centerX, centerY);
 
       animationId = requestAnimationFrame(draw);
@@ -257,7 +248,7 @@ export default function ElenaAgentOrb() {
     <Link href="/elena-ai" className="elena-orb-portal-link">
       <div
         ref={containerRef}
-        className={`elena-orb-container ${isHovered ? "hovered" : ""}`}
+        className="elena-orb-container"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

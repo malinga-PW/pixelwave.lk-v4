@@ -1012,7 +1012,7 @@
 .elena-orb-portal-link {
   display: block;
   width: 100%;
-  max-width: 320px;
+  max-width: 350px; /* Orbit loku karanna - larger sizing */
   margin: 0 auto;
   cursor: pointer;
   text-decoration: none;
@@ -1029,23 +1029,18 @@
   justify-content: center;
 }
 
+/* Stable subtle backdrop halo glow without hover-induced flashes */
 .elena-orb-container::before {
   content: "";
   position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  height: 80%;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 255, 151, 0.04) 0%, rgba(44, 50, 254, 0.04) 50%, transparent 100%);
+  background: radial-gradient(circle, rgba(0, 255, 151, 0.05) 0%, rgba(44, 50, 254, 0.05) 60%, transparent 100%);
   z-index: 0;
-  transition: all 0.4s ease;
-  filter: blur(15px);
-}
-
-.elena-orb-container.hovered::before {
-  background: radial-gradient(circle, rgba(0, 255, 151, 0.12) 0%, rgba(44, 50, 254, 0.12) 50%, transparent 100%);
-  transform: scale(1.2);
+  filter: blur(20px);
 }
 
 .elena-orb-canvas {
