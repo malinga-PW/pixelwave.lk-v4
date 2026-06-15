@@ -3,20 +3,18 @@
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 
-interface SpherePoint {
+interface FacePoint {
   x: number;
   y: number;
   z: number;
   baseColor: string;
-  originalR: number;
-  sizeModifier: number;
+  alphaMod: number;
 }
 
 export default function ElenaAgentOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
-  const isHoveredRef = useRef(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const canvas = canvasRef.current;
@@ -30,11 +28,6 @@ export default function ElenaAgentOrb() {
 
   const handleMouseLeave = () => {
     mouseRef.current = { x: null, y: null };
-    isHoveredRef.current = false;
-  };
-
-  const handleMouseEnter = () => {
-    isHoveredRef.current = true;
   };
 
   useEffect(() => {
@@ -61,65 +54,72 @@ export default function ElenaAgentOrb() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Initialize 3D particles
-    const points: SpherePoint[] = [];
-    const numPoints = 2500; // Dense particle cloud
+    // Initialize 3D particles in horizontal contour lines (like the reference image)
+    const points: FacePoint[] = [];
+    const numSlices = 80; // Horizontal lines
+    const pointsPerSlice = 90; // Points per line
 
-    // Helper to get color based on vertical sphere height
-    const getSphereColor = (ratio: number) => {
-      if (ratio < 0.5) {
-        // Interpolate between Green and Cyan
-        const t = ratio * 2;
-        const g = Math.round(255 * (1 - t) + 164 * t);
-        const b = Math.round(151 * (1 - t) + 175 * t);
-        return `0, ${g}, ${b}`;
-      } else {
-        // Interpolate between Cyan and Blue
-        const t = (ratio - 0.5) * 2;
-        const r = Math.round(0 * (1 - t) + 44 * t);
-        const g = Math.round(164 * (1 - t) + 50 * t);
-        const b = Math.round(175 * (1 - t) + 254 * t);
-        return `${r}, ${g}, ${b}`;
-      }
-    };
-
-    for (let i = 0; i < numPoints; i++) {
-      const y = 1 - (i / (numPoints - 1)) * 2; // -1 to 1
-      const radiusAtY = Math.sqrt(1 - y * y);
-      const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle
+    for (let i = 0; i < numSlices; i++) {
+      // y goes from 1 (top) to -1 (bottom)
+      const y = 1 - (i / (numSlices - 1)) * 2;
       
-      const x = Math.cos(phi) * radiusAtY;
-      const z = Math.sin(phi) * radiusAtY;
+      // Base radius of the head at this y (ellipsoid shape)
+      const headRadius = Math.sqrt(1 - y * y) * 0.85;
       
-      const ratio = (y + 1) / 2;
-      let baseColor = getSphereColor(ratio);
-      let rModifier = 1.0;
-      let sizeModifier = 1.0;
+      for (let j = 0; j < pointsPerSlice; j++) {
+        // theta goes from -PI (left back) to PI (right back)
+        // We focus more points on the front of the face
+        const theta = -Math.PI + (j / (pointsPerSlice - 1)) * (Math.PI * 2);
+        
+        let x = Math.sin(theta) * headRadius;
+        let z = Math.cos(theta) * headRadius;
+        
+        let rModifier = 1.0;
+        let baseColor = "0, 229, 255"; 
+        let alphaMod = 1.0;
 
-      // Draw Face on the front hemisphere (z > 0)
-      if (z > 0) {
-        // Eyes
-        const dLeftEye = Math.hypot(x + 0.35, y - 0.15);
-        const dRightEye = Math.hypot(x - 0.35, y - 0.15);
+        // Front face sculpting (only when pointing forward, z > 0 and |x| < 0.7)
+        if (z > 0 && Math.abs(x) < 0.75) {
+          // Nose: protrudes forward in the middle
+          const nose = Math.exp(-((x * x) / 0.015 + ((y - 0.05) * (y - 0.05)) / 0.08)) * 0.35;
+          
+          // Eye sockets: recessed areas
+          const leftEye = Math.exp(-(((x + 0.25) * (x + 0.25)) / 0.02 + ((y - 0.25) * (y - 0.25)) / 0.015)) * -0.15;
+          const rightEye = Math.exp(-(((x - 0.25) * (x - 0.25)) / 0.02 + ((y - 0.25) * (y - 0.25)) / 0.015)) * -0.15;
+          
+          // Eyebrow ridge: protruding above eyes
+          const brow = Math.exp(-((x * x) / 0.1 + ((y - 0.35) * (y - 0.35)) / 0.01)) * 0.08;
+
+          // Mouth/Lips: protruding slightly
+          const lips = Math.exp(-((x * x) / 0.03 + ((y + 0.25) * (y + 0.25)) / 0.01)) * 0.1;
+          const mouthSlit = Math.exp(-((x * x) / 0.04 + ((y + 0.25) * (y + 0.25)) / 0.002)) * -0.05;
+
+          // Chin
+          const chin = Math.exp(-((x * x) / 0.04 + ((y + 0.45) * (y + 0.45)) / 0.02)) * 0.15;
+
+          // Cheeks
+          const cheeks = Math.exp(-((Math.abs(x) - 0.35)**2 / 0.04 + ((y + 0.1) * (y + 0.1)) / 0.05)) * 0.08;
+
+          rModifier += nose + leftEye + rightEye + brow + lips + mouthSlit + chin + cheeks;
+        } 
         
-        if (dLeftEye < 0.12 || dRightEye < 0.12) {
-          baseColor = "0, 255, 255"; // Glowing Cyan LED eye
-          sizeModifier = 2.5;
-          rModifier = 0.95; // Indent slightly
+        // Elongate head vertically
+        const finalY = y * 1.1;
+        const finalX = x * rModifier;
+        const finalZ = z * rModifier;
+
+        // Color grading (Cyan in front, fading to purple in the back)
+        if (finalZ > 0.4) {
+          baseColor = "0, 255, 255"; // Bright glowing cyan
+        } else if (finalZ > 0) {
+          baseColor = "100, 200, 255"; // Light blue
+        } else {
+          baseColor = "120, 50, 255"; // Deep purple
+          alphaMod = Math.max(0.1, 1.0 + finalZ); // Fade out the back heavily
         }
-        
-        // Mouth (Robot smile)
-        if (y > 0.3 && y < 0.5 && Math.abs(x) < 0.25) {
-           const curveDist = Math.abs((0.4 + x * x * 0.8) - y);
-           if (curveDist < 0.05) {
-             baseColor = "0, 255, 255";
-             sizeModifier = 2.0;
-             rModifier = 0.95;
-           }
-        }
+
+        points.push({ x: finalX, y: finalY, z: finalZ, baseColor, alphaMod });
       }
-
-      points.push({ x, y, z, baseColor, originalR: rModifier, sizeModifier });
     }
 
     // Animation variables
@@ -127,8 +127,8 @@ export default function ElenaAgentOrb() {
     let currentRotX = 0;
     let currentRotY = 0;
 
-    const baseRadius = 124; // 80% size
-    const focalLength = 320;
+    const baseRadius = 135; // Size of the head
+    const focalLength = 350;
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -142,19 +142,19 @@ export default function ElenaAgentOrb() {
       if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const dx = mouseRef.current.x - centerX;
           const dy = mouseRef.current.y - centerY;
-          targetRotY = (dx / width) * Math.PI * 0.7; // Look towards mouse
-          targetRotX = -(dy / height) * Math.PI * 0.7;
+          targetRotY = (dx / width) * Math.PI * 0.6; // Look left/right
+          targetRotX = -(dy / height) * Math.PI * 0.6; // Look up/down
       } else {
-          // Idle rotation
-          targetRotY = Math.sin(time * 0.4) * 0.25;
-          targetRotX = Math.cos(time * 0.3) * 0.15;
+          // Idle ambient rotation
+          targetRotY = Math.sin(time * 0.5) * 0.2;
+          targetRotX = Math.cos(time * 0.3) * 0.1;
       }
 
       // Smooth Lerp
       currentRotX += (targetRotX - currentRotX) * 0.08;
       currentRotY += (targetRotY - currentRotY) * 0.08;
       
-      time += 0.015;
+      time += 0.02;
 
       // Projection array
       interface ProjectedPoint {
@@ -163,9 +163,9 @@ export default function ElenaAgentOrb() {
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
-        // Pulse wave
-        const wave = Math.sin(p.originalR * 5 + time * 2) * 0.02;
-        const currentRadius = baseRadius * p.originalR * (1 + wave);
+        // Subtle breathing wave
+        const wave = Math.sin(p.y * 5 + time) * 0.02;
+        const currentRadius = baseRadius * (1 + wave);
 
         // Scale to radius
         const x3d = p.x * currentRadius;
@@ -187,59 +187,27 @@ export default function ElenaAgentOrb() {
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // Mouse Repulsion
-        if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-          const dx = screenX - mouseRef.current.x;
-          const dy = screenY - mouseRef.current.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 60) {
-            const force = (60 - dist) / 60;
-            const angle = Math.atan2(dy, dx);
-            screenX += Math.cos(angle) * force * 10;
-            screenY += Math.sin(angle) * force * 10;
-          }
-        }
-
-        // Alpha and Size
+        // Depth Alpha and Size
         const maxDepth = baseRadius + 15;
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2);
-        const alpha = Math.max(0.08, (1 - depthRatio) * 0.85 + 0.15);
-        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.5) * p.sizeModifier;
+        const alpha = Math.max(0.05, ((1 - depthRatio) * 0.9 + 0.1) * p.alphaMod);
+        const size = Math.max(0.3, (1 - depthRatio) * 1.5 + 0.3);
 
-        projectedPoints.push({ x: screenX, y: screenY, z: z2, color: p.baseColor, size, alpha });
+        // Only push points that are visible enough to save performance
+        if (alpha > 0.05) {
+          projectedPoints.push({ x: screenX, y: screenY, z: z2, color: p.baseColor, size, alpha });
+        }
       });
 
       // Depth Sort
       projectedPoints.sort((a, b) => b.z - a.z);
 
-      // Render
-      projectedPoints.forEach((p, idx) => {
+      // Render Particles
+      projectedPoints.forEach((p) => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
         ctx.fill();
-
-        // Neural links
-        if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-          const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
-          if (mDist < 60) {
-            for (let j = idx + 1; j < projectedPoints.length; j++) {
-              const other = projectedPoints[j];
-              const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
-              if (otherDistToMouse < 60) {
-                const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
-                if (linkDist < 20) {
-                  ctx.beginPath();
-                  ctx.moveTo(p.x, p.y);
-                  ctx.lineTo(other.x, other.y);
-                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 20) * 0.3})`;
-                  ctx.lineWidth = 0.5;
-                  ctx.stroke();
-                }
-              }
-            }
-          }
-        }
       });
 
       animationId = requestAnimationFrame(draw);
@@ -259,16 +227,15 @@ export default function ElenaAgentOrb() {
       style={{ aspectRatio: '1/1', position: 'relative' }}
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
       
-      {/* Ask Elena Overlay - using inline styles to absolutely prevent layout crashes with global CSS */}
+      {/* Ask Elena Overlay */}
       <div 
         style={{ 
           position: "absolute", 
-          bottom: "10%", 
+          bottom: "5%", 
           left: "50%", 
           transform: "translateX(-50%)", 
           width: "90%", 
@@ -308,7 +275,8 @@ export default function ElenaAgentOrb() {
             cursor: "pointer",
             boxShadow: "0 0 15px rgba(0,229,255,0.4)",
             margin: 0,
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
+            transition: "transform 0.2s"
           }}
           onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
           onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
