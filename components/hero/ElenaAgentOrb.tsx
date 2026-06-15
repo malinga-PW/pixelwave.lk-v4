@@ -147,12 +147,13 @@ export default function ElenaAgentOrb() {
         const globalDx = mouseRef.current.x - centerX;
         const globalDy = mouseRef.current.y - centerY;
         
+        // Mouse influence
         targetRotY = (globalDx / (window.innerWidth / 2)) * Math.PI * 0.8; 
         targetRotX = -(globalDy / (window.innerHeight / 2)) * Math.PI * 0.8;
       } else {
-        // Idle ambient rotation
-        targetRotY = Math.sin(time * 0.5) * 0.2;
-        targetRotX = Math.cos(time * 0.3) * 0.1;
+        // Idle ambient rotation: continuous slow spinning
+        targetRotY = time * 0.2;
+        targetRotX = Math.sin(time * 0.2) * 0.15 + (time * 0.05);
       }
 
       // Smooth Lerp towards target rotation
@@ -173,14 +174,16 @@ export default function ElenaAgentOrb() {
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
-        // 1. PERFECT SYMMETRICAL GEOMETRY
-        // Reduced to 2 layers to remove the heavy middle circle
+        // 1. DYNAMIC ANIMATING GEOMETRY (Spherical Harmonics)
+        // Changes the rigid sphere into a slowly pulsing, quantum-like energy field
         let radius = baseRadius;
         
         if (p.layer === 0) {
-          radius = baseRadius; // Outer
+          // Creates a geometric ribbed effect that slowly shifts and breathes
+          const shapeDistortion = Math.sin(p.theta * 5 + time * 1.2) * Math.cos(p.phi * 5 - time * 1.2) * 0.06;
+          radius = baseRadius * (1 + shapeDistortion); 
         } else {
-          radius = baseRadius * 0.35; // Core
+          radius = baseRadius * 0.35; // Core remains a solid anchor
         }
 
         // Apply opposing rotations to inner layers for dynamic geometric mechanism
