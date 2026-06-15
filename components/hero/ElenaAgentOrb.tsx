@@ -3,20 +3,36 @@
 import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 
-interface Particle {
-  angle: number;
-  speed: number;
-  radiusX: number;
-  radiusY: number;
-  tilt: number;
-  color: string;
-  size: number;
+interface SpherePoint {
+  theta: number; // Polar angle
+  phi: number;   // Azimuthal angle
+  baseColor: string;
 }
 
 export default function ElenaAgentOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    setMouse({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setMouse({ x: null, y: null });
+    setIsHovered(false);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,192 +58,189 @@ export default function ElenaAgentOrb() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Initialize particles for orbits
-    const particles: Particle[] = [];
-    
-    // Ring 1 (Neon Green)
-    for (let i = 0; i < 15; i++) {
-      particles.push({
-        angle: (i / 15) * Math.PI * 2,
-        speed: 0.012,
-        radiusX: 95,
-        radiusY: 30,
-        tilt: Math.PI / 6, // 30 degrees
-        color: "#00ff97",
-        size: 2 + Math.random() * 1.5,
-      });
+    // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
+    const points: SpherePoint[] = [];
+    const numPoints = 400; // Dense colorful shell
+
+    // Helper to get color based on vertical sphere height
+    const getSphereColor = (ratio: number) => {
+      if (ratio < 0.5) {
+        // Interpolate between Green (0, 255, 151) and Cyan (0, 164, 175)
+        const t = ratio * 2;
+        const r = 0;
+        const g = Math.round(255 * (1 - t) + 164 * t);
+        const b = Math.round(151 * (1 - t) + 175 * t);
+        return `${r}, ${g}, ${b}`;
+      } else {
+        // Interpolate between Cyan (0, 164, 175) and Blue (44, 50, 254)
+        const t = (ratio - 0.5) * 2;
+        const r = Math.round(0 * (1 - t) + 44 * t);
+        const g = Math.round(164 * (1 - t) + 50 * t);
+        const b = Math.round(175 * (1 - t) + 254 * t);
+        return `${r}, ${g}, ${b}`;
+      }
+    };
+
+    for (let i = 0; i < numPoints; i++) {
+      const y = 1 - (i / (numPoints - 1)) * 2; // range: -1 to 1
+      const theta = Math.acos(y); // polar angle
+      const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle spiral
+      
+      const ratio = (y + 1) / 2; // 0 at bottom pole, 1 at top pole
+      const baseColor = getSphereColor(ratio);
+      
+      points.push({ theta, phi, baseColor });
     }
 
-    // Ring 2 (Electric Blue)
-    for (let i = 0; i < 12; i++) {
-      particles.push({
-        angle: (i / 12) * Math.PI * 2 + Math.PI / 4,
-        speed: -0.015,
-        radiusX: 85,
-        radiusY: 25,
-        tilt: -Math.PI / 4, // -45 degrees
-        color: "#2c32fe",
-        size: 1.5 + Math.random() * 1.5,
-      });
-    }
+    // Animation variables
+    let time = 0;
+    let rotY = 0;
+    let rotX = 0;
 
-    // Ring 3 (Cyber Cyan)
-    for (let i = 0; i < 18; i++) {
-      particles.push({
-        angle: (i / 18) * Math.PI * 2 + Math.PI / 6,
-        speed: 0.008,
-        radiusX: 110,
-        radiusY: 20,
-        tilt: Math.PI / 2.5, // 72 degrees
-        color: "#00a4af",
-        size: 1.8 + Math.random() * 1.2,
-      });
-    }
-
-    let corePulse = 0;
-    let hudRotation = 0;
+    const baseRadius = 80;
+    const focalLength = 320;
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
       const centerX = width / 2;
       const centerY = height / 2;
-      const speedMultiplier = isHovered ? 2.5 : 1.0;
 
-      // Pulse calculations
-      corePulse += 0.03 * speedMultiplier;
-      hudRotation += 0.005 * speedMultiplier;
-
-      const pulseScale = 1 + Math.sin(corePulse) * 0.08;
-
-      // 1. DRAW OUTER GLOWING ORBIT LINES & HUD RINGS
-      ctx.lineWidth = 1;
+      // Slowly increment rotation angles
+      rotY += isHovered ? 0.006 : 0.003;
+      rotX += isHovered ? 0.004 : 0.002;
       
-      const drawOrbitLine = (rx: number, ry: number, tilt: number, color: string, alpha: number) => {
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(tilt);
-        ctx.beginPath();
-        ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = color;
-        ctx.globalAlpha = alpha;
-        ctx.stroke();
-        ctx.restore();
-      };
+      // Wave progress over time (slow animation)
+      time += isHovered ? 0.04 : 0.015;
 
-      // Draw standard orbit pathways
-      drawOrbitLine(95, 30, Math.PI / 6, "#00ff97", isHovered ? 0.25 : 0.12);
-      drawOrbitLine(85, 25, -Math.PI / 4, "#2c32fe", isHovered ? 0.25 : 0.12);
-      drawOrbitLine(110, 20, Math.PI / 2.5, "#00a4af", isHovered ? 0.25 : 0.12);
+      // Project points to 3D and store in an array for depth sorting
+      interface ProjectedPoint {
+        x: number;
+        y: number;
+        z: number;
+        color: string;
+        size: number;
+        alpha: number;
+        rawZ: number;
+      }
 
-      // Draw Rotating Tech HUD Rings (Jarvis style)
-      ctx.save();
-      ctx.translate(centerX, centerY);
-      ctx.rotate(hudRotation);
-      
-      // Dashed outer ring
-      ctx.beginPath();
-      ctx.arc(0, 0, 125, 0, Math.PI * 2);
-      ctx.strokeStyle = "#00a4af";
-      ctx.setLineDash([6, 15]);
-      ctx.globalAlpha = isHovered ? 0.4 : 0.2;
-      ctx.stroke();
+      const projectedPoints: ProjectedPoint[] = [];
 
-      // Dotted inner ring
-      ctx.beginPath();
-      ctx.arc(0, 0, 65, 0, Math.PI * 2);
-      ctx.strokeStyle = "#00ff97";
-      ctx.setLineDash([2, 8]);
-      ctx.globalAlpha = isHovered ? 0.5 : 0.3;
-      ctx.stroke();
+      points.forEach((p) => {
+        // 1. WAVE DISPLACEMENT
+        // Create organic 3D wave ripples on the sphere radius based on angles and time
+        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
+        const radius = baseRadius + wave;
 
-      ctx.restore();
+        // 2. CONVERT TO 3D CARTESIAN
+        const x3d = radius * Math.sin(p.theta) * Math.cos(p.phi);
+        const y3d = radius * Math.sin(p.theta) * Math.sin(p.phi);
+        const z3d = radius * Math.cos(p.theta);
 
-      // 2. DRAW CENTRAL CORE (ELENA.AI PORTAL)
-      const coreRadius = 45 * pulseScale;
-      const coreGlow = ctx.createRadialGradient(
-        centerX,
-        centerY,
-        coreRadius * 0.2,
-        centerX,
-        centerY,
-        coreRadius * 1.5
-      );
-      
-      const primaryColor = isHovered ? "rgba(0, 255, 151, 0.85)" : "rgba(44, 50, 254, 0.75)";
-      const glowColor = isHovered ? "rgba(0, 255, 151, 0)" : "rgba(44, 50, 254, 0)";
+        // 3. APPLY ROTATION MATRIX
+        // Rotate around Y axis
+        let x1 = x3d * Math.cos(rotY) - z3d * Math.sin(rotY);
+        let z1 = x3d * Math.sin(rotY) + z3d * Math.cos(rotY);
+        let y1 = y3d;
 
-      coreGlow.addColorStop(0, "rgba(12, 15, 36, 0.95)");
-      coreGlow.addColorStop(0.4, primaryColor);
-      coreGlow.addColorStop(1, glowColor);
+        // Rotate around X axis
+        let y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
+        let z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
+        let x2 = x1;
 
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, coreRadius * 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = coreGlow;
-      ctx.fill();
+        // 4. PERSPECTIVE PROJECT TO 2D SCREEN
+        const scale = focalLength / (focalLength + z2);
+        let screenX = x2 * scale + centerX;
+        let screenY = y2 * scale + centerY;
 
-      // Draw solid core border
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, coreRadius, 0, Math.PI * 2);
-      ctx.strokeStyle = isHovered ? "#00ff97" : "#2c32fe";
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.8;
-      ctx.stroke();
-
-      // Core text
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 10px monospace";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.globalAlpha = 0.9;
-      ctx.fillText("ELENA.AI", centerX, centerY - 6);
-
-      ctx.font = "7px monospace";
-      ctx.fillStyle = isHovered ? "#00ff97" : "#00a4af";
-      ctx.fillText("AGENT ACTIVE", centerX, centerY + 8);
-
-      // 3. UPDATE & DRAW ORBITING PARTICLES
-      particles.forEach((p) => {
-        p.angle += p.speed * speedMultiplier;
-
-        // Calculate 3D orbit position with tilt rotation
-        const rawX = Math.cos(p.angle) * p.radiusX;
-        const rawY = Math.sin(p.angle) * p.radiusY;
-
-        const x = rawX * Math.cos(p.tilt) - rawY * Math.sin(p.tilt) + centerX;
-        const y = rawX * Math.sin(p.tilt) + rawY * Math.cos(p.tilt) + centerY;
-
-        // Draw particle glow
-        ctx.beginPath();
-        ctx.arc(x, y, p.size * (isHovered ? 1.5 : 1.0), 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = isHovered ? 0.9 : 0.65;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = isHovered ? 12 : 6;
-        ctx.fill();
-        ctx.shadowBlur = 0; // Reset shadow
-
-        // Draw connection lines to nearby particles on same orbit to create constellation/grid effect
-        particles.forEach((other) => {
-          if (other !== p && other.color === p.color) {
-            const oRawX = Math.cos(other.angle) * other.radiusX;
-            const oRawY = Math.sin(other.angle) * other.radiusY;
-            const ox = oRawX * Math.cos(other.tilt) - oRawY * Math.sin(other.tilt) + centerX;
-            const oy = oRawX * Math.sin(other.tilt) + oRawY * Math.cos(other.tilt) + centerY;
-
-            const dist = Math.hypot(x - ox, y - oy);
-            if (dist < 45) {
-              ctx.beginPath();
-              ctx.moveTo(x, y);
-              ctx.lineTo(ox, oy);
-              ctx.strokeStyle = p.color;
-              ctx.lineWidth = 0.5;
-              ctx.globalAlpha = (1 - dist / 45) * (isHovered ? 0.45 : 0.25);
-              ctx.stroke();
-            }
+        // 5. MOUSE INTERACTION (FLUID REPULSION VECTORS)
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = screenX - mouse.x;
+          const dy = screenY - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          
+          if (dist < 90) {
+            // Push particles away relative to distance
+            const force = (90 - dist) / 90;
+            const angle = Math.atan2(dy, dx);
+            
+            // Warp coordinates
+            screenX += Math.cos(angle) * force * 24;
+            screenY += Math.sin(angle) * force * 24;
           }
+        }
+
+        // 6. DEPTH Normalization & Alpha Fade
+        const maxDepth = baseRadius + 15; // Max z range
+        const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
+        const alpha = Math.max(0.1, (1 - depthRatio) * 0.85 + 0.15); // fade back particles
+        const size = Math.max(0.7, (1 - depthRatio) * 2.8 + 0.6);   // front particles are larger
+
+        projectedPoints.push({
+          x: screenX,
+          y: screenY,
+          z: z2,
+          color: p.baseColor,
+          size,
+          alpha,
+          rawZ: z2,
         });
       });
+
+      // 7. DEPTH SORTING (Back to Front)
+      // Sort in descending order of z coordinate so back particles render first
+      projectedPoints.sort((a, b) => b.z - a.z);
+
+      // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
+      projectedPoints.forEach((p, idx) => {
+        // Draw particle dot
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+        
+        // Front particles get slight neon shadow glows
+        if (p.rawZ < -20 && isHovered) {
+          ctx.shadowColor = `rgb(${p.color})`;
+          ctx.shadowBlur = 8;
+        } else {
+          ctx.shadowBlur = 0;
+        }
+        
+        ctx.fill();
+        ctx.shadowBlur = 0; // Reset
+
+        // Render neural web connection lines when mouse is active and near particles
+        if (mouse.x !== null && mouse.y !== null) {
+          const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+          if (mDist < 75) {
+            // Check nearest neighbor particles to draw lines
+            for (let j = idx + 1; j < projectedPoints.length; j++) {
+              const other = projectedPoints[j];
+              const otherDistToMouse = Math.hypot(other.x - mouse.x, other.y - mouse.y);
+              
+              if (otherDistToMouse < 75) {
+                const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
+                if (linkDist < 35) {
+                  ctx.beginPath();
+                  ctx.moveTo(p.x, p.y);
+                  ctx.lineTo(other.x, other.y);
+                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 35) * 0.35})`;
+                  ctx.lineWidth = 0.5;
+                  ctx.stroke();
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 9. DRAW TECH CENTRAL LABEL FADEOUT
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 9px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.globalAlpha = isHovered ? 0.3 : 0.8;
+      ctx.fillText("ELENA.AI", centerX, centerY);
 
       animationId = requestAnimationFrame(draw);
     };
@@ -238,15 +251,16 @@ export default function ElenaAgentOrb() {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resizeCanvas);
     };
-  }, [isHovered]);
+  }, [mouse, isHovered]);
 
   return (
     <Link href="/elena-ai" className="elena-orb-portal-link">
       <div
         ref={containerRef}
         className={`elena-orb-container ${isHovered ? "hovered" : ""}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <canvas ref={canvasRef} className="elena-orb-canvas" />
       </div>
