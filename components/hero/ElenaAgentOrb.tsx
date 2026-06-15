@@ -149,9 +149,21 @@ export default function ElenaAgentOrb() {
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
-        // 1. WAVE DISPLACEMENT
-        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * waveAmplitude;
-        const radius = baseRadius + wave;
+        // 1. GEOMETRIC FIBONACCI DISPLACEMENT
+        // We use Fibonacci frequencies (8, 13, 21) and sharp mathematical functions
+        // to create a strict, faceted geometric shape (like a mathematical crystal or polyhedron)
+        // instead of a smooth organic blob.
+        const freqTheta = 8.0;
+        const freqPhi = 13.0;
+        
+        // Math.abs creates sharp geometric vertices and flat planes
+        const geoTheta = Math.abs(Math.sin(p.theta * freqTheta + time * 0.8));
+        const geoPhi = Math.abs(Math.cos(p.phi * freqPhi - time * 0.5));
+        
+        // Multiply them to create an intersecting geometric matrix
+        const geometricShape = (geoTheta * geoPhi) * waveAmplitude * 2.5;
+        
+        const radius = baseRadius + geometricShape - (waveAmplitude * 0.5);
 
         // 2. CONVERT TO 3D CARTESIAN
         const x3d = radius * Math.sin(p.theta) * Math.cos(p.phi);
