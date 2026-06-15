@@ -126,8 +126,9 @@ export default function ElenaAgentOrb() {
     let rotY = 0;
     let rotX = 0;
 
-    const baseRadius = 145; 
-    const focalLength = 260; // DECREASED FOCAL LENGTH FOR ENHANCED 3D DEPTH
+    // Reduced base radius mathematically guarantees it never exceeds the 340x340 bounds (no cropping)
+    const baseRadius = 90; 
+    const focalLength = 280; // Decreased focal length for enhanced 3D perspective
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -157,8 +158,8 @@ export default function ElenaAgentOrb() {
 
       points.forEach((p) => {
         // 1. WAVE DISPLACEMENT
-        // INCREASED WAVE AMPLITUDE TO 18 FOR STRONGER 3D TOPOLOGY
-        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 18;
+        // Strong 3D surface waves
+        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
         const radius = baseRadius + wave;
 
         // 2. CONVERT TO 3D CARTESIAN
