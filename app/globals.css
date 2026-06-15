@@ -199,17 +199,7 @@
   transform: translateY(-100%) !important;
 }
 
-/* Compact height when sticky */
-.xb-header-area-sticky .header__wrap {
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
-  min-height: unset !important;
-}
-
-.xb-header-area-sticky .xb-header-logo img {
-  height: 32px !important;
-  width: auto !important;
-}
+/* Legacy sticky overrides removed - see bottom of file */
 
 /* ── 6. ELENA CHAT WIDGET ────────────────────────────────────── */
 
@@ -1063,14 +1053,15 @@
 }
 
 /* ── 18. MAIN MENU LOGO & STICKY HEIGHT ── */
-.xb-header {
+.header__wrap {
   padding-top: 15px !important; /* Reduced main menu height */
   padding-bottom: 15px !important;
 }
 
-.xb-header-area-sticky .xb-header {
+.xb-header-area-sticky .header__wrap {
   padding-top: 5px !important; /* Ultra thin sticky bar */
   padding-bottom: 5px !important; 
+  min-height: unset !important;
 }
 
 .xb-header-logo img {
@@ -1081,6 +1072,7 @@
 
 .xb-header-area-sticky .xb-header-logo img {
   width: 210px !important; /* Enlarged floating menu logo */
+  height: auto !important; /* Override legacy 32px height constraint */
 }
 
 
