@@ -568,13 +568,12 @@
   z-index: 1;
   border-radius: 16px;
   overflow: hidden;
+  border: 1px solid rgba(0, 255, 151, 0.2) !important;
+  animation: borderGlowPulse 6s infinite ease-in-out;
 }
 .pricing-item:hover {
   transform: translateY(-12px);
-  border-color: rgba(0, 255, 151, 0.4) !important;
-  box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.5), 
-    0 0 25px rgba(0, 255, 151, 0.2) !important;
+  animation: borderGlowPulseHover 2s infinite ease-in-out;
 }
 .pricing-item .thm-btn.chatbot-btn {
   transition: all 0.3s ease !important;
@@ -585,6 +584,52 @@
   background: #00FF97 !important;
   color: #00020f !important;
   box-shadow: 0 4px 20px rgba(0, 255, 151, 0.5) !important;
+}
+
+@keyframes borderGlowPulse {
+  0% {
+    border-color: rgba(0, 255, 151, 0.2) !important;
+    box-shadow: 0 0 10px rgba(0, 255, 151, 0.1) !important;
+  }
+  50% {
+    border-color: rgba(44, 50, 254, 0.4) !important;
+    box-shadow: 0 0 20px rgba(44, 50, 254, 0.25) !important;
+  }
+  100% {
+    border-color: rgba(0, 255, 151, 0.2) !important;
+    box-shadow: 0 0 10px rgba(0, 255, 151, 0.1) !important;
+  }
+}
+
+@keyframes borderGlowPulseHover {
+  0% {
+    border-color: rgba(0, 255, 151, 0.8) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 151, 0.4) !important;
+  }
+  50% {
+    border-color: rgba(44, 50, 254, 0.9) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 35px rgba(44, 50, 254, 0.6) !important;
+  }
+  100% {
+    border-color: rgba(0, 255, 151, 0.8) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 151, 0.4) !important;
+  }
+}
+
+/* ── FOOTER POSITIONING & EMAIL ALIGNMENT FIX ── */
+.xb-footer-heading {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  position: relative !important;
+  margin-bottom: 50px !important;
+}
+.xb-footer-heading .mail {
+  position: relative !important;
+  left: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+  margin-top: 10px !important;
 }
 
 /* ── 11. BLOG LANDSCAPE WIDESCREEN IMAGES ── */
@@ -886,3 +931,80 @@
     width: 320px !important;
   }
 }
+
+/* ── 16. HORIZONTAL SCROLLING MARQUEE GAP & HOVER OUTLINE GLOW ── */
+.marquee-track {
+  display: flex !important;
+  gap: 40px !important; /* Increased space between scrolling blocks! */
+}
+
+/* Track animation durations */
+.about.marquee-container .marquee-track {
+  animation: marquee-left 25s linear infinite !important;
+}
+.xb-blog-marquee-wrap.marquee-container .marquee-track {
+  animation: marquee-left 35s linear infinite !important;
+}
+
+/* Pause scroll when hovering over the marquee track */
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused !important;
+}
+
+/* About Section items border glow */
+.about .xb-about-img-item {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.about .xb-about-img-item:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(0, 255, 151, 0.8) !important;
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.6), 
+    0 0 25px rgba(0, 255, 151, 0.45) !important;
+}
+
+/* Blog Marquee item layout */
+.xb-blog-marquee-wrap {
+  width: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+.xb-blog-marquee-item {
+  width: 440px !important; /* Fixed card width for stable flow */
+  flex-shrink: 0 !important;
+}
+.xb-blog-marquee-item .xb-blog-item {
+  margin: 0 !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: #0c0f24 !important; /* Premium dark background */
+}
+.xb-blog-marquee-item .xb-blog-item .xb-item--inner {
+  border: none !important;
+  border-radius: 20px !important;
+}
+.xb-blog-marquee-item .xb-blog-item .xb-img img {
+  border-top-left-radius: 19px !important;
+  border-top-right-radius: 19px !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Blog outline glow on hover */
+.xb-blog-marquee-item .xb-blog-item:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(0, 255, 151, 0.8) !important;
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.6), 
+    0 0 25px rgba(0, 255, 151, 0.45) !important;
+}
+
+@media (max-width: 767px) {
+  .xb-blog-marquee-item {
+    width: 320px !important;
+  }
+}
+
