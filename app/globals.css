@@ -1054,27 +1054,48 @@
 
 /* ── 18. MAIN MENU LOGO & STICKY HEIGHT ── */
 .header__wrap {
-  padding-top: 15px !important; /* Reduced main menu height */
+  padding-top: 15px !important; 
   padding-bottom: 15px !important;
 }
 
 .xb-header-area-sticky .header__wrap {
-  padding-top: 5px !important; /* Ultra thin sticky bar */
+  padding-top: 5px !important; 
   padding-bottom: 5px !important; 
   min-height: unset !important;
 }
 
 .xb-header-logo img {
-  width: 250px !important; /* Maximum readable size */
+  width: 250px !important; 
   height: auto !important;
   transition: all 0.3s ease;
 }
 
 .xb-header-area-sticky .xb-header-logo img {
-  width: 210px !important; /* Enlarged floating menu logo */
-  height: auto !important; /* Override legacy 32px height constraint */
+  width: 210px !important; 
+  height: auto !important; 
 }
 
+/* Force inner elements to compress vertically to guarantee thin bar */
+.xb-header .main-menu > ul > li > a {
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
 
+.xb-header-area-sticky .main-menu > ul > li > a {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
 
+.xb-header-area-sticky .thm-btn {
+  padding: 8px 20px !important; /* Compress button vertically */
+}
 
+.xb-header-area-sticky .custom-language-dropdown .dropdown-trigger {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  height: 34px !important;
+}
+
+.xb-header, .header__wrap {
+  margin: 0 !important;
+}
