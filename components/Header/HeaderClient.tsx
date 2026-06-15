@@ -120,14 +120,25 @@ export default function HeaderClient() {
   }, []);
 
   const handleLangChange = (langCode: string) => {
+    // 1. Find the hidden Google Translate select element
     const selectEl = document.querySelector(".goog-te-combo") as HTMLSelectElement;
+    
     if (selectEl) {
+      // 2. Change its value to the selected language
       selectEl.value = langCode;
-      selectEl.dispatchEvent(new Event("change"));
-      const matched = LANGUAGES.find((l) => l.code === langCode);
-      if (matched) setSelectedLang(matched);
-      setDropdownOpen(false);
+      
+      // 3. IMPORTANT: Dispatch a bubbling change event so Google's listener catches it
+      selectEl.dispatchEvent(new Event("change", { bubbles: true }));
     }
+    
+    // 4. Update our custom UI state regardless
+    const matched = LANGUAGES.find((l) => l.code === langCode);
+    if (matched) {
+      setSelectedLang(matched);
+      // Set a cookie so it persists on reload just like Google's own cookie
+      document.cookie = `googtrans=/en/${langCode}; path=/;`;
+    }
+    setDropdownOpen(false);
   };
 
   const toggleMobileMenu = useCallback(() => setMobileActive((p) => !p), []);
@@ -207,14 +218,19 @@ export default function HeaderClient() {
             {/* Header Buttons and Custom Translator Dropdown */}
             <div className="header-action-group ul_li align-items-center">
               
-              {/* Custom Google Translate Dropdown (hover-expandable) */}
-              <div className="custom-language-dropdown notranslate me-3">
-                <div className="dropdown-trigger ul_li align-items-center">
+              {/* Custom Google Translate Dropdown */}
+              <div className="custom-language-dropdown notranslate me-3" ref={selectorRef}>
+                <div 
+                  className="dropdown-trigger ul_li align-items-center"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
                   <span className="flag-icon">{selectedLang.flag}</span>
                   <span className="lang-label ms-2">{selectedLang.label}</span>
-                  <i className="far fa-angle-down ms-2" />
+                  <i className={`far fa-angle-down ms-2 transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
                 </div>
-                <div className="dropdown-menu-list">
+                
+                {/* Dropdown Menu - Conditionally Rendered with CSS transition classes */}
+                <div className={`dropdown-menu-list ${dropdownOpen ? "active" : ""}`}>
                   {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
