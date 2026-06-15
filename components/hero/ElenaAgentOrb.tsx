@@ -193,9 +193,9 @@ export default function ElenaAgentOrb() {
         const maxDepth = baseRadius + waveAmplitude; 
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
         
-        // Drastically reduced particle sizes as requested
-        const baseParticleSize = Math.max(0.15, width * 0.0003); // Super fine dust
-        const maxSizeVariance = width * 0.002;
+        // Moderately sized particles (between the original 'too big' and recent 'too small')
+        const baseParticleSize = Math.max(0.3, width * 0.0008); 
+        const maxSizeVariance = width * 0.0035;
         
         const alpha = Math.max(0.02, (1 - depthRatio) * 0.95 + 0.05); 
         const size = Math.max(baseParticleSize, (1 - depthRatio) * maxSizeVariance + baseParticleSize);   
