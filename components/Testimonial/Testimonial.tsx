@@ -82,6 +82,7 @@ const testimonials = [
 export default function TestimonialSection() {
   return (
     <section
+      id="testimonials"
       className="testimonial pb-150 bg_img"
       style={{
         backgroundImage: `url(${bgImage.src})`,

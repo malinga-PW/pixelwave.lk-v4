@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,7 +15,7 @@ import moneyGif from "@/public/images/icon/money-icegif-22-unscreen.gif";
 import icon1 from "@/public/images/icon/pricing-icon01.svg";
 
 /* ================================
-   Static Constants
+   Static Constants & Data
 ================================= */
 
 const BG_STYLE = {
@@ -71,9 +72,82 @@ const ENTERPRISE_AI = [
   "Priority 24/7 Support",
 ];
 
-/* ================================ */
+const CURRENCIES = [
+  { code: "USD", symbol: "$", rate: 1.0, flag: "🇺🇸", name: "US Dollar" },
+  { code: "LKR", symbol: "Rs. ", rate: 300.0, flag: "🇱🇰", name: "Sri Lankan Rupee" },
+  { code: "INR", symbol: "₹", rate: 83.5, flag: "🇮🇳", name: "Indian Rupee" },
+  { code: "PKR", symbol: "₨", rate: 278.0, flag: "🇵🇰", name: "Pakistani Rupee" },
+  { code: "EUR", symbol: "€", rate: 0.92, flag: "🇪🇺", name: "Euro" },
+  { code: "GBP", symbol: "£", rate: 0.79, flag: "🇬🇧", name: "British Pound" },
+  { code: "AUD", symbol: "A$", rate: 1.51, flag: "🇦🇺", name: "Australian Dollar" },
+  { code: "CAD", symbol: "C$", rate: 1.37, flag: "🇨🇦", name: "Canadian Dollar" },
+  { code: "SGD", symbol: "S$", rate: 1.35, flag: "🇸🇬", name: "Singapore Dollar" },
+  { code: "AED", symbol: "AED ", rate: 3.67, flag: "🇦🇪", name: "UAE Dirham" },
+  { code: "JPY", symbol: "¥", rate: 157.0, flag: "🇯🇵", name: "Japanese Yen" },
+  { code: "CNY", symbol: "¥", rate: 7.25, flag: "🇨🇳", name: "Chinese Yuan" },
+];
+
+const PRICING_DATA = [
+  {
+    id: 1,
+    name: "Digital Presence",
+    prices: {
+      weekly: 10,
+      monthly: 39,
+      yearly: 399,
+    },
+    features: DIGITAL_PRESENCE,
+    popular: false,
+  },
+  {
+    id: 2,
+    name: "Growth Engine",
+    prices: {
+      weekly: 25,
+      monthly: 99,
+      yearly: 999,
+    },
+    features: GROWTH_ENGINE,
+    popular: true,
+  },
+  {
+    id: 3,
+    name: "Enterprise AI",
+    prices: {
+      weekly: 50,
+      monthly: 199,
+      yearly: 1999,
+    },
+    features: ENTERPRISE_AI,
+    popular: false,
+  },
+];
 
 export default function PricingSection() {
+  const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly" | "yearly">("yearly");
+  const [selectedCurrency, setSelectedCurrency] = useState(CURRENCIES[0]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close currency selector dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const formatPrice = (valueUSD: number, rate: number, symbol: string) => {
+    const converted = valueUSD * rate;
+    const formatted = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 0,
+    }).format(converted);
+    return `${symbol}${formatted}`;
+  };
+
   return (
     <section id="pricing" className="pricing pt-145 pb-150 bg_img" style={BG_STYLE}>
       <div className="container">
@@ -91,91 +165,118 @@ export default function PricingSection() {
           </h2>
         </div>
 
-        <div className="row mt-none-30 justify-content-center">
+        {/* CONTROLS SWITCHERS (Billing and Currency Selectors) */}
+        <div className="pricing-controls-wrapper ul_li_between align-items-center mb-50 notranslate">
+          {/* Billing Switcher Pill */}
+          <div className="billing-switcher-pill ul_li align-items-center">
+            {(["weekly", "monthly", "yearly"] as const).map((cycle) => (
+              <button
+                key={cycle}
+                type="button"
+                className={`billing-btn ${billingCycle === cycle ? "active" : ""}`}
+                onClick={() => setBillingCycle(cycle)}
+              >
+                {cycle.charAt(0).toUpperCase() + cycle.slice(1)}
+              </button>
+            ))}
+          </div>
 
-          {/* PACKAGE 1 */}
-          <div className="col-lg-4 col-md-6 mt-30">
-            <div className="pricing-item xb-border bg_img h-100 d-flex flex-column" style={BG_ITEM_STYLE}>
-              <div className="xb-icon">
-                <Image src={icon1} alt="icon" width={50} height={50} />
-              </div>
+          {/* Currency Dropdown Selector */}
+          <div className="currency-selector position-relative" ref={dropdownRef}>
+            <button
+              type="button"
+              className="currency-btn ul_li align-items-center"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            >
+              <span className="currency-flag">{selectedCurrency.flag}</span>
+              <span className="currency-code ms-2">{selectedCurrency.code}</span>
+              <span className="currency-name d-none d-md-inline ms-1">({selectedCurrency.name})</span>
+              <i className="far fa-angle-down ms-2" />
+            </button>
 
-              <h3 className="mb-10 text-white">Digital Presence</h3>
-              <h2 className="xb-dollar mb-20">$399 <sub>/Year</sub></h2>
-
-              <div className="pricing-btn mb-25 mt-auto">
-                <Link className="thm-btn chatbot-btn w-100 text-center" href="/contact">
-                  <span className="text">Choose Plan</span>
-                </Link>
-              </div>
-
-              <ul className="pricing-list list-unstyled mt-3">
-                {DIGITAL_PRESENCE.map((item, i) => (
-                  <li key={i}>
-                    <span>{CheckIcon}</span>
-                    {item}
+            {dropdownOpen && (
+              <ul className="currency-dropdown position-absolute list-unstyled m-0 p-0">
+                {CURRENCIES.map((curr) => (
+                  <li key={curr.code}>
+                    <button
+                      type="button"
+                      className={`currency-option ul_li align-items-center w-100 ${
+                        selectedCurrency.code === curr.code ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        setSelectedCurrency(curr);
+                        setDropdownOpen(false);
+                      }}
+                    >
+                      <span className="currency-flag">{curr.flag}</span>
+                      <strong className="ms-2">{curr.code}</strong>
+                      <span className="currency-desc ms-2 d-none d-sm-inline">- {curr.name}</span>
+                    </button>
                   </li>
                 ))}
               </ul>
-            </div>
+            )}
           </div>
-
-          {/* PACKAGE 2 */}
-          <div className="col-lg-4 col-md-6 mt-30">
-            <div className="pricing-item xb-border bg_img h-100 d-flex flex-column" style={BG_ITEM_STYLE}>
-              <div className="xb-icon">
-                <Image src={icon1} alt="icon" width={50} height={50} />
-              </div>
-
-              <h3 className="mb-10 text-white">Growth Engine</h3>
-              <h2 className="xb-dollar mb-20">$999 <sub>/Year</sub></h2>
-
-              <div className="pricing-btn mb-25 mt-auto">
-                <Link className="thm-btn chatbot-btn w-100 text-center" href="/contact">
-                  <span className="text">Choose Plan</span>
-                </Link>
-              </div>
-
-              <ul className="pricing-list list-unstyled mt-3">
-                {GROWTH_ENGINE.map((item, i) => (
-                  <li key={i}>
-                    <span>{CheckIcon}</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <span className="xb-tag premium-plan">Most Popular</span>
-            </div>
-          </div>
-
-          {/* PACKAGE 3 */}
-          <div className="col-lg-4 col-md-6 mt-30">
-            <div className="pricing-item xb-border bg_img h-100 d-flex flex-column" style={BG_ITEM_STYLE}>
-              <div className="xb-icon">
-                <Image src={icon1} alt="icon" width={50} height={50} />
-              </div>
-
-              <h3 className="mb-10 text-white">Enterprise AI</h3>
-              <h2 className="xb-dollar mb-20">$1999 <sub>/Year</sub></h2>
-
-              <div className="pricing-btn mb-25 mt-auto">
-                <Link className="thm-btn chatbot-btn w-100 text-center" href="/contact">
-                  <span className="text">Choose Plan</span>
-                </Link>
-              </div>
-
-              <ul className="pricing-list list-unstyled mt-3">
-                {ENTERPRISE_AI.map((item, i) => (
-                  <li key={i}>
-                    <span>{CheckIcon}</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
         </div>
+
+        {/* CARDS GRID */}
+        <div className="row mt-none-30 justify-content-center">
+          {PRICING_DATA.map((tier) => {
+            const basePrice = tier.prices[billingCycle];
+            const formattedPrice = formatPrice(
+              basePrice,
+              selectedCurrency.rate,
+              selectedCurrency.symbol
+            );
+            const cycleText =
+              billingCycle === "yearly"
+                ? "Year"
+                : billingCycle === "monthly"
+                ? "Month"
+                : "Week";
+
+            return (
+              <div key={tier.id} className="col-lg-4 col-md-6 mt-30">
+                <div
+                  className="pricing-item xb-border bg_img h-100 d-flex flex-column"
+                  style={BG_ITEM_STYLE}
+                >
+                  <div className="xb-icon">
+                    <Image src={icon1} alt="icon" width={50} height={50} />
+                  </div>
+
+                  <h3 className="mb-10 text-white">{tier.name}</h3>
+                  <h2 className="xb-dollar mb-20">
+                    {formattedPrice} <sub>/{cycleText}</sub>
+                  </h2>
+
+                  <div className="pricing-btn mb-25 mt-auto">
+                    <Link
+                      className="thm-btn chatbot-btn w-100 text-center"
+                      href="/contact"
+                    >
+                      <span className="text">Choose Plan</span>
+                    </Link>
+                  </div>
+
+                  <ul className="pricing-list list-unstyled mt-3">
+                    {tier.features.map((item, i) => (
+                      <li key={i}>
+                        <span>{CheckIcon}</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {tier.popular && (
+                    <span className="xb-tag premium-plan">Most Popular</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
     </section>
   );

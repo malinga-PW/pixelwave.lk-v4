@@ -98,7 +98,7 @@ export default function ServiceSection() {
   const [activeId, setActiveId] = useState<number>(1);
 
   return (
-    <section className="service pt-135">
+    <section id="services" className="service pt-135">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-lg-11">

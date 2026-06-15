@@ -23,7 +23,7 @@ export default function FeaturesAndBrands() {
       }}
     >
       {/* Feature Section */}
-      <section className="feature pt-145">
+      <section id="features" className="feature pt-145">
         <div className="container">
 
           {/* Title */}

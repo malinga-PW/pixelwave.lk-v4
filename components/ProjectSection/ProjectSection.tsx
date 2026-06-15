@@ -122,7 +122,7 @@ export default function ProjectSection() {
   ];
 
   return (
-    <section className="project bg_img pt-135 pb-150">
+    <section id="portfolio" className="project bg_img pt-135 pb-150">
       <div className="container">
         <div className="sec-title custom-sec-title xb-sec-padding text-center">
           <span className="sub-title">Our Projects</span>

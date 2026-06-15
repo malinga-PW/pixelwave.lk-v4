@@ -35,7 +35,7 @@ const BG_STYLE = {
 
 export default function AboutSection() {
   return (
-    <section className="about pt-140">
+    <section id="about" className="about pt-140">
       <div className="container">
         <div className="sec-title about-sec-title mb-75">
           <span className="sub-title">Who We are?</span>
