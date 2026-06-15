@@ -3,9 +3,10 @@
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 
-interface SpherePoint {
-  theta: number; // Polar angle
-  phi: number;   // Azimuthal angle
+interface BrainPoint {
+  x: number;
+  y: number;
+  z: number;
   baseColor: string;
 }
 
@@ -42,7 +43,6 @@ export default function ElenaAgentOrb() {
     const handleGlobalMouseMove = (e: MouseEvent) => {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
-      // Store mouse position relative to the center of the canvas
       mouseRef.current = {
         x: e.clientX - (rect.left + rect.width / 2),
         y: e.clientY - (rect.top + rect.height / 2),
@@ -56,21 +56,20 @@ export default function ElenaAgentOrb() {
     window.addEventListener("mousemove", handleGlobalMouseMove);
     window.addEventListener("mouseleave", handleGlobalMouseLeave);
 
-    // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
-    const points: SpherePoint[] = [];
-    const numPoints = 6000; // Drastically increased particle density for high resolution realistic look
+    // Initialize 3D particles sculpted into a Human Brain Shape
+    const points: BrainPoint[] = [];
+    const numPoints = 15000; // Drastically increased for high-detail brain folds
 
-    // Helper to get color based on vertical sphere height
+    // Helper to get color based on vertical height
     const getSphereColor = (ratio: number) => {
       if (ratio < 0.5) {
-        // Interpolate between Green (0, 255, 151) and Cyan (0, 164, 175)
+        // Green to Cyan
         const t = ratio * 2;
-        const r = 0;
         const g = Math.round(255 * (1 - t) + 164 * t);
         const b = Math.round(151 * (1 - t) + 175 * t);
-        return `${r}, ${g}, ${b}`;
+        return `0, ${g}, ${b}`;
       } else {
-        // Interpolate between Cyan (0, 164, 175) and Blue (44, 50, 254)
+        // Cyan to Blue
         const t = (ratio - 0.5) * 2;
         const r = Math.round(0 * (1 - t) + 44 * t);
         const g = Math.round(164 * (1 - t) + 50 * t);
@@ -80,14 +79,50 @@ export default function ElenaAgentOrb() {
     };
 
     for (let i = 0; i < numPoints; i++) {
-      const y = 1 - (i / (numPoints - 1)) * 2; // range: -1 to 1
-      const theta = Math.acos(y); // polar angle
-      const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle spiral
+      const y = 1 - (i / (numPoints - 1)) * 2; // -1 to 1
+      const theta = Math.acos(y);
+      const phi = i * Math.PI * (3 - Math.sqrt(5)); // Golden angle
       
-      const ratio = (y + 1) / 2; // 0 at bottom pole, 1 at top pole
+      const ratio = (y + 1) / 2;
       const baseColor = getSphereColor(ratio);
       
-      points.push({ theta, phi, baseColor });
+      // Unit sphere cartesian
+      let x = Math.sin(theta) * Math.cos(phi);
+      let yCoord = y;
+      let z = Math.sin(theta) * Math.sin(phi);
+
+      // --- BRAIN SCULPTING MATH ---
+      
+      // 1. Proportions: Elongated front-to-back, slightly wider at the back
+      const isBack = z < 0;
+      x *= isBack ? 1.05 : 0.85; 
+      z *= 1.35; // Elongate
+      yCoord *= 0.9; // Flatten slightly
+
+      let rModifier = 1.0;
+
+      // 2. Longitudinal Fissure: Deep indent splitting left/right hemispheres
+      // Only applies where x is close to 0, mostly on top and back
+      const fissure = Math.exp(-(x * x) / 0.015) * 0.25;
+      rModifier -= fissure;
+
+      // 3. Brain Folds (Gyri and Sulci)
+      // We use high-frequency sine/cosine waves to create a bumpy surface
+      const folds = (Math.sin(theta * 25) * Math.cos(phi * 25)) * 0.035 + 
+                    (Math.cos(theta * 15) * Math.sin(phi * 35)) * 0.025;
+      rModifier += folds;
+
+      // Lower temporal lobes (bulges on bottom sides)
+      if (yCoord < 0 && Math.abs(x) > 0.4) {
+        rModifier += 0.05;
+      }
+
+      points.push({ 
+        x: x * rModifier, 
+        y: yCoord * rModifier, 
+        z: z * rModifier, 
+        baseColor 
+      });
     }
 
     // Animation variables
@@ -95,7 +130,7 @@ export default function ElenaAgentOrb() {
     let currentRotY = 0;
     let currentRotX = 0;
 
-    const baseRadius = 124; // Reduced sphere base radius by 20% to prevent cropping
+    const baseRadius = 124; // Base size
     const focalLength = 320;
 
     const draw = () => {
@@ -109,24 +144,22 @@ export default function ElenaAgentOrb() {
       let targetRotY = 0;
 
       if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-        // Focus on mouse: calculate rotation based on distance from center
-        // Using window inner dimensions to make it track smoothly across the whole screen
+        // Focus on mouse
         targetRotY = (mouseRef.current.x / (window.innerWidth / 2)) * Math.PI * 0.8; 
         targetRotX = -(mouseRef.current.y / (window.innerHeight / 2)) * Math.PI * 0.8;
       } else {
-        // Idle ambient rotation when mouse is outside window
+        // Idle ambient rotation
         targetRotY = Math.sin(time * 0.5) * 0.2;
         targetRotX = Math.cos(time * 0.3) * 0.1;
       }
 
-      // Smooth Lerp towards target rotation
+      // Smooth Lerp
       currentRotX += (targetRotX - currentRotX) * 0.05;
       currentRotY += (targetRotY - currentRotY) * 0.05;
       
-      // Wave progress over time (slow ambient animation)
       time += 0.015;
 
-      // Project points to 3D and store in an array for depth sorting
+      // Projection array
       interface ProjectedPoint {
         x: number;
         y: number;
@@ -139,37 +172,38 @@ export default function ElenaAgentOrb() {
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
-        // 1. WAVE DISPLACEMENT
-        // Create organic 3D wave ripples on the sphere radius based on angles and time
-        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
-        const radius = baseRadius + wave;
+        // Gentle "breathing" wave
+        const wave = Math.sin(p.y * 5.0 + time) * 0.03;
+        const currentRadius = baseRadius * (1 + wave);
 
-        // 2. CONVERT TO 3D CARTESIAN
-        const x3d = radius * Math.sin(p.theta) * Math.cos(p.phi);
-        const y3d = radius * Math.sin(p.theta) * Math.sin(p.phi);
-        const z3d = radius * Math.cos(p.theta);
+        const x3d = p.x * currentRadius;
+        const y3d = p.y * currentRadius;
+        const z3d = p.z * currentRadius;
 
-        // 3. APPLY ROTATION MATRIX
-        // Rotate around Y axis
+        // Rotate Y
         let x1 = x3d * Math.cos(currentRotY) - z3d * Math.sin(currentRotY);
         let z1 = x3d * Math.sin(currentRotY) + z3d * Math.cos(currentRotY);
         let y1 = y3d;
 
-        // Rotate around X axis
+        // Rotate X
         let y2 = y1 * Math.cos(currentRotX) - z1 * Math.sin(currentRotX);
         let z2 = y1 * Math.sin(currentRotX) + z1 * Math.cos(currentRotX);
         let x2 = x1;
 
-        // 4. PERSPECTIVE PROJECT TO 2D SCREEN
+        // Perspective Project
         const scale = focalLength / (focalLength + z2);
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // 5. DEPTH Normalization & Alpha Fade
-        const maxDepth = baseRadius + 15; // Max z range
-        const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
-        const alpha = Math.max(0.08, (1 - depthRatio) * 0.82 + 0.12); // fade back particles
-        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.4);   // front particles are slightly larger, but overall smaller for smooth density
+        // Depth Normalization
+        const maxDepth = baseRadius + 15; 
+        const depthRatio = (z2 + maxDepth) / (maxDepth * 2); 
+        
+        // Alpha: Fade out back particles slightly
+        const alpha = Math.max(0.05, (1 - depthRatio) * 0.85 + 0.1); 
+        
+        // Size: Reduced size as requested, smaller for back particles
+        const size = Math.max(0.15, (1 - depthRatio) * 0.9 + 0.15);   
 
         projectedPoints.push({
           x: screenX,
@@ -181,16 +215,14 @@ export default function ElenaAgentOrb() {
         });
       });
 
-      // 6. DEPTH SORTING (Back to Front)
-      // Sort in descending order of z coordinate so back particles render first
+      // Depth Sort (Back to Front)
       projectedPoints.sort((a, b) => b.z - a.z);
 
-      // 7. RENDER PARTICLES ONLY (Removed laggy neural web lines)
+      // Render 15,000 particles highly optimized
       projectedPoints.forEach((p) => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        ctx.fill();
+        // Using fillRect instead of arc for massive performance boost with 15k particles
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
       });
 
       animationId = requestAnimationFrame(draw);
