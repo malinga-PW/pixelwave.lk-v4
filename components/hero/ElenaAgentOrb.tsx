@@ -7,6 +7,7 @@ interface SpherePoint {
   theta: number; // Polar angle
   phi: number;   // Azimuthal angle
   baseColor: string;
+  layer: number; // 0: Outer, 1: Middle, 2: Core
 }
 
 export default function ElenaAgentOrb() {
@@ -25,9 +26,7 @@ export default function ElenaAgentOrb() {
     let width = 500;
     let height = 500;
 
-    // Mathematical parameters mapped to viewport size for perfect responsiveness without clipping
     let baseRadius = 120;
-    let waveAmplitude = 20;
     let focalLength = 375;
 
     const resizeCanvas = () => {
@@ -40,12 +39,10 @@ export default function ElenaAgentOrb() {
       canvas.width = width;
       canvas.height = height;
 
-      // Recalculate 3D bounds. We use a larger focal length to reduce edge distortion,
-      // which mathematically allows us to increase the base radius drastically without cropping.
+      // Perfectly symmetrical geometry bounds
       const sizeRef = Math.min(width, height);
-      baseRadius = 0.33 * sizeRef; // Drastically enlarged orbit
-      waveAmplitude = 0.03 * sizeRef; 
-      focalLength = 1.5 * sizeRef; // Long focal length to fit the massive orb
+      baseRadius = 0.35 * sizeRef; // Large orbit
+      focalLength = 1.5 * sizeRef; // Long focal length to maintain clean perspective
     };
 
     resizeCanvas();
@@ -55,7 +52,6 @@ export default function ElenaAgentOrb() {
     const handleGlobalMouseMove = (e: MouseEvent) => {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
-      // Mouse coordinates relative to the canvas top-left
       mouseRef.current = {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
@@ -98,7 +94,17 @@ export default function ElenaAgentOrb() {
       const ratio = (y + 1) / 2; 
       const baseColor = getSphereColor(ratio);
       
-      points.push({ theta, phi, baseColor });
+      // Assign particles to 3 distinct concentric layers for perfect geometric symmetry
+      let layer = 0;
+      if (i % 6 === 0) {
+        layer = 2; // Core sphere
+      } else if (i % 6 === 1 || i % 6 === 2) {
+        layer = 1; // Middle sphere
+      } else {
+        layer = 0; // Outer sphere
+      }
+      
+      points.push({ theta, phi, baseColor, layer });
     }
 
     // Animation variables
@@ -117,15 +123,13 @@ export default function ElenaAgentOrb() {
       let targetRotY = 0;
 
       if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-        // Global Focus on mouse: calculate rotation based on distance from center
-        // Using window inner dimensions to make it track smoothly across the whole screen
         const globalDx = mouseRef.current.x - centerX;
         const globalDy = mouseRef.current.y - centerY;
         
         targetRotY = (globalDx / (window.innerWidth / 2)) * Math.PI * 0.8; 
         targetRotX = -(globalDy / (window.innerHeight / 2)) * Math.PI * 0.8;
       } else {
-        // Idle ambient rotation when mouse is outside window
+        // Idle ambient rotation
         targetRotY = Math.sin(time * 0.5) * 0.2;
         targetRotX = Math.cos(time * 0.3) * 0.1;
       }
@@ -134,7 +138,6 @@ export default function ElenaAgentOrb() {
       currentRotX += (targetRotX - currentRotX) * 0.05;
       currentRotY += (targetRotY - currentRotY) * 0.05;
       
-      // Wave progress over time
       time += 0.015;
 
       interface ProjectedPoint {
@@ -149,34 +152,42 @@ export default function ElenaAgentOrb() {
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
-        // 1. GEOMETRIC FIBONACCI DISPLACEMENT
-        // We use Fibonacci frequencies (8, 13, 21) and sharp mathematical functions
-        // to create a strict, faceted geometric shape (like a mathematical crystal or polyhedron)
-        // instead of a smooth organic blob.
-        const freqTheta = 8.0;
-        const freqPhi = 13.0;
+        // 1. PERFECT SYMMETRICAL GEOMETRY
+        // No displacement waves, just 3 perfect concentric spheres
+        let radius = baseRadius;
         
-        // Math.abs creates sharp geometric vertices and flat planes
-        const geoTheta = Math.abs(Math.sin(p.theta * freqTheta + time * 0.8));
-        const geoPhi = Math.abs(Math.cos(p.phi * freqPhi - time * 0.5));
-        
-        // Multiply them to create an intersecting geometric matrix
-        const geometricShape = (geoTheta * geoPhi) * waveAmplitude * 2.5;
-        
-        const radius = baseRadius + geometricShape - (waveAmplitude * 0.5);
+        if (p.layer === 0) {
+          radius = baseRadius; // Outer
+        } else if (p.layer === 1) {
+          radius = baseRadius * 0.65; // Middle
+        } else {
+          radius = baseRadius * 0.3; // Core
+        }
+
+        // Apply opposing rotations to inner layers for dynamic geometric mechanism
+        let layerRotX = currentRotX;
+        let layerRotY = currentRotY;
+
+        if (p.layer === 1) {
+          layerRotX = -currentRotX * 1.2;
+          layerRotY = -currentRotY * 1.2;
+        } else if (p.layer === 2) {
+          layerRotX = currentRotX * 2.5;
+          layerRotY = currentRotY * 2.5 + time; // core spins slightly on its own
+        }
 
         // 2. CONVERT TO 3D CARTESIAN
         const x3d = radius * Math.sin(p.theta) * Math.cos(p.phi);
         const y3d = radius * Math.sin(p.theta) * Math.sin(p.phi);
         const z3d = radius * Math.cos(p.theta);
 
-        // 3. APPLY ROTATION MATRIX
-        let x1 = x3d * Math.cos(currentRotY) - z3d * Math.sin(currentRotY);
-        let z1 = x3d * Math.sin(currentRotY) + z3d * Math.cos(currentRotY);
+        // 3. APPLY LAYER ROTATION MATRIX
+        let x1 = x3d * Math.cos(layerRotY) - z3d * Math.sin(layerRotY);
+        let z1 = x3d * Math.sin(layerRotY) + z3d * Math.cos(layerRotY);
         let y1 = y3d;
 
-        let y2 = y1 * Math.cos(currentRotX) - z1 * Math.sin(currentRotX);
-        let z2 = y1 * Math.sin(currentRotX) + z1 * Math.cos(currentRotX);
+        let y2 = y1 * Math.cos(layerRotX) - z1 * Math.sin(layerRotX);
+        let z2 = y1 * Math.sin(layerRotX) + z1 * Math.cos(layerRotX);
         let x2 = x1;
 
         // 4. PERSPECTIVE PROJECT TO 2D SCREEN
@@ -184,13 +195,13 @@ export default function ElenaAgentOrb() {
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // 5. GLOBAL MOUSE INTERACTION (Reacts when mouse gets close to the sphere on screen)
+        // 5. GLOBAL MOUSE INTERACTION
         if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const dx = screenX - mouseRef.current.x;
           const dy = screenY - mouseRef.current.y;
           const dist = Math.hypot(dx, dy);
           
-          const interactionRadius = width * 0.2; // Large responsive interaction radius
+          const interactionRadius = width * 0.2; 
           if (dist < interactionRadius) {
             const force = (interactionRadius - dist) / interactionRadius;
             const angle = Math.atan2(dy, dx);
@@ -202,14 +213,14 @@ export default function ElenaAgentOrb() {
         }
 
         // 6. DEPTH Normalization & Alpha Fade
-        const maxDepth = baseRadius + waveAmplitude; 
+        const maxDepth = baseRadius; 
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
         
-        // Moderately sized particles (between the original 'too big' and recent 'too small')
-        const baseParticleSize = Math.max(0.3, width * 0.0008); 
-        const maxSizeVariance = width * 0.0035;
+        // Increased particle sizes as requested
+        const baseParticleSize = Math.max(0.6, width * 0.0015); 
+        const maxSizeVariance = width * 0.006;
         
-        const alpha = Math.max(0.02, (1 - depthRatio) * 0.95 + 0.05); 
+        const alpha = Math.max(0.05, (1 - depthRatio) * 0.95 + 0.05); 
         const size = Math.max(baseParticleSize, (1 - depthRatio) * maxSizeVariance + baseParticleSize);   
 
         projectedPoints.push({
