@@ -2,6 +2,8 @@
 
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/public/images/logo/logo.svg";
 
 interface SpherePoint {
   theta: number; // Polar angle
@@ -287,9 +289,14 @@ export default function ElenaAgentOrb() {
       <Link href="/elena-ai" className="elena-orb-portal-link relative w-full aspect-square max-w-[600px]">
         <div
           ref={containerRef}
-          className="elena-orb-container w-full h-full absolute inset-0 overflow-visible"
+          className="elena-orb-container w-full h-full absolute inset-0 overflow-visible flex items-center justify-center"
         >
-          <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full block" />
+          <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full block absolute inset-0 z-10" />
+          
+          {/* Logo Overlay */}
+          <div className="absolute z-20 pointer-events-none drop-shadow-[0_0_20px_rgba(0,229,255,0.6)]">
+            <Image src={logo} alt="PixelWave Logo" width={200} height={60} className="opacity-95" />
+          </div>
         </div>
       </Link>
     </div>
