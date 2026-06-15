@@ -611,7 +611,7 @@
 
 @media (min-width: 992px) {
   .mega_menu_wrapper_inner {
-    height: 320px !important; /* Unified height so they are exactly the same size */
+    height: 330px !important; /* Unified height so they are exactly the same size */
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
@@ -634,6 +634,14 @@
     justify-content: space-between !important;
     padding: 0 !important;
   }
+}
+
+/* Remove default massive 47px top and 40px bottom padding on Bootstrap columns inside mega menus */
+.mega_menu_wrapper .row:has(> [class*="col-"] > .megamenu_widget) > [class*="col-"] {
+  padding: 0 !important;
+}
+.mega_menu_wrapper .row:has(> [class*="col-"] > .megamenu_widget) > [class*="col-"]:not(:last-child) {
+  padding-right: 25px !important;
 }
 
 /* Ensure the original linear-gradient glow matches sample image exactly */
@@ -672,18 +680,26 @@
   padding-top: 10px !important;
   border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
+.mega_menu_wrapper .social_area .mt-30 {
+  margin-top: 10px !important; /* Pull up banner inside left column */
+}
+.mega_menu_wrapper .service_link {
+  padding: 8px 12px !important; /* Tighter padding for bottom card */
+  gap: 15px !important;
+}
 .mega_menu_wrapper .service_link .xb-item--inner {
-  padding: 6px 12px !important; /* Tighter padding for bottom card */
+  padding: 0 !important;
 }
 .mega_menu_wrapper .service_link .xb-item--holder {
   margin-top: 0 !important;
+  margin-bottom: 2px !important;
 }
 .mega_menu_wrapper .service_link .xb-item--title {
   font-size: 13px !important;
 }
 .mega_menu_wrapper .service_link .xb-item--text {
   font-size: 11px !important;
-  margin: 1px 0 0 0 !important;
+  margin: 0 !important;
 }
 
 /* Right column card spacing reduction */
@@ -710,7 +726,8 @@
   padding: 8px 0 0 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  height: 100% !important;
+  height: auto !important; /* Let height be natural */
+  flex-grow: 1 !important; /* Grow to distribute button to bottom */
 }
 .mega_menu_wrapper .megamenu_case .xb-item--title {
   font-size: 14px !important;
