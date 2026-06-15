@@ -60,7 +60,7 @@ export default function ElenaAgentOrb() {
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 2700; // Increased particle density for high resolution smoothness
+    const numPoints = 6000; // Drastically increased particle density for high resolution realistic look
 
     // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
@@ -92,41 +92,14 @@ export default function ElenaAgentOrb() {
       points.push({ theta, phi, baseColor });
     }
 
-    // --- TEXT PARTICLES SETUP ---
-    const textParticles: { baseX: number, baseY: number }[] = [];
-    const textCanvas = document.createElement("canvas");
-    textCanvas.width = 120;
-    textCanvas.height = 40;
-    const textCtx = textCanvas.getContext("2d");
-    if (textCtx) {
-      textCtx.fillStyle = "#ffffff";
-      textCtx.font = "bold 12px monospace";
-      textCtx.textAlign = "center";
-      textCtx.textBaseline = "middle";
-      textCtx.fillText("ELENA.AI", 60, 20);
-      
-      const imgData = textCtx.getImageData(0, 0, 120, 40);
-      const data = imgData.data;
-      
-      for (let y = 0; y < 40; y += 1) {
-        for (let x = 0; x < 120; x += 1) {
-          const idx = (y * 120 + x) * 4;
-          if (data[idx + 3] > 128) {
-            textParticles.push({
-              baseX: x - 60,
-              baseY: y - 20
-            });
-          }
-        }
-      }
-    }
+
 
     // Animation variables
     let time = 0;
     let rotY = 0;
     let rotX = 0;
 
-    const baseRadius = 155; // Enlarged sphere base radius
+    const baseRadius = 124; // Reduced sphere base radius by 20% to prevent cropping
     const focalLength = 320;
 
     const draw = () => {
@@ -254,21 +227,7 @@ export default function ElenaAgentOrb() {
         }
       });
 
-      // 9. DRAW CENTRAL LABEL AS WAVING PIXEL PARTICLES
-      ctx.fillStyle = "#00e5ff"; // Cyan pixel color
-      ctx.globalAlpha = 0.85;
-      
-      textParticles.forEach(tp => {
-        // Apply a wave effect based on position and time
-        const waveX = Math.sin(tp.baseY * 0.4 + time * 3) * 1.5;
-        const waveY = Math.cos(tp.baseX * 0.2 + time * 2.5) * 1.5;
-        
-        const px = centerX + tp.baseX + waveX;
-        const py = centerY + tp.baseY + waveY;
-        
-        // Pixel appearance (squares)
-        ctx.fillRect(px, py, 1.2, 1.2);
-      });
+
 
       animationId = requestAnimationFrame(draw);
     };
