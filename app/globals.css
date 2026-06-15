@@ -1008,3 +1008,52 @@
   }
 }
 
+/* ── 17. ELENA AI JARVIS ORB PORTAL ── */
+.elena-orb-portal-link {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.elena-orb-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  transition: all 0.4s ease;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elena-orb-container::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 151, 0.04) 0%, rgba(44, 50, 254, 0.04) 50%, transparent 100%);
+  z-index: 0;
+  transition: all 0.4s ease;
+  filter: blur(15px);
+}
+
+.elena-orb-container.hovered::before {
+  background: radial-gradient(circle, rgba(0, 255, 151, 0.12) 0%, rgba(44, 50, 254, 0.12) 50%, transparent 100%);
+  transform: scale(1.2);
+}
+
+.elena-orb-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+

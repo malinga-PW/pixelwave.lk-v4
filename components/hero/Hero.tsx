@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
+import ElenaAgentOrb from "./ElenaAgentOrb";
 
 // Image imports
 import heroBg from "@/public/images/bg/hero_bg.png";
-import heroIcon from "@/public/images/icon/animated-gif02.gif";
 import featureIcon1 from "@/public/images/icon/feature-icon01.svg";
 import featureIcon2 from "@/public/images/icon/feature-icon02.svg";
 import featureIcon3 from "@/public/images/icon/feature-icon03.svg";
@@ -67,14 +67,14 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* RIGHT GIF */}
+          {/* RIGHT PARTICLE ORB */}
           <div className="col-lg-3 col-md-3">
             <div
               className="hero-icon wow zoomIn"
               data-wow-delay="700ms"
               data-wow-duration="800ms"
             >
-              <Image src={heroIcon} alt="Hero animated icon" className="hero-gif" />
+              <ElenaAgentOrb />
             </div>
           </div>
         </div>
