@@ -12,26 +12,26 @@ interface SpherePoint {
 export default function ElenaAgentOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
-  const [isHovered, setIsHovered] = useState(false);
+  const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+  const isHoveredRef = useRef(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    setMouse({
+    mouseRef.current = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-    });
+    };
   };
 
   const handleMouseLeave = () => {
-    setMouse({ x: null, y: null });
-    setIsHovered(false);
+    mouseRef.current = { x: null, y: null };
+    isHoveredRef.current = false;
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    isHoveredRef.current = true;
   };
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function ElenaAgentOrb() {
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 900; // Increased particle density for high resolution smoothness
+    const numPoints = 2700; // Increased particle density for high resolution smoothness
 
     // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
@@ -97,7 +97,7 @@ export default function ElenaAgentOrb() {
     let rotY = 0;
     let rotX = 0;
 
-    const baseRadius = 105; // Enlarged sphere base radius
+    const baseRadius = 155; // Enlarged sphere base radius
     const focalLength = 320;
 
     const draw = () => {
@@ -107,11 +107,11 @@ export default function ElenaAgentOrb() {
       const centerY = height / 2;
 
       // Slowly increment rotation angles (slow, majestic motion)
-      rotY += isHovered ? 0.004 : 0.002;
-      rotX += isHovered ? 0.003 : 0.0015;
+      rotY += isHoveredRef.current ? 0.004 : 0.002;
+      rotX += isHoveredRef.current ? 0.003 : 0.0015;
       
       // Wave progress over time (slow animation)
-      time += isHovered ? 0.025 : 0.01;
+      time += isHoveredRef.current ? 0.025 : 0.01;
 
       // Project points to 3D and store in an array for depth sorting
       interface ProjectedPoint {
@@ -154,9 +154,9 @@ export default function ElenaAgentOrb() {
         let screenY = y2 * scale + centerY;
 
         // 5. MOUSE INTERACTION (FLUID REPULSION VECTORS)
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = screenX - mouse.x;
-          const dy = screenY - mouse.y;
+        if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
+          const dx = screenX - mouseRef.current.x;
+          const dy = screenY - mouseRef.current.y;
           const dist = Math.hypot(dx, dy);
           
           if (dist < 85) {
@@ -201,13 +201,13 @@ export default function ElenaAgentOrb() {
         ctx.fill();
 
         // Render neural web connection lines when mouse is active and near particles
-        if (mouse.x !== null && mouse.y !== null) {
-          const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
+          const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
           if (mDist < 70) {
             // Check nearest neighbor particles to draw lines
             for (let j = idx + 1; j < projectedPoints.length; j++) {
               const other = projectedPoints[j];
-              const otherDistToMouse = Math.hypot(other.x - mouse.x, other.y - mouse.y);
+              const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
               
               if (otherDistToMouse < 70) {
                 const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
@@ -242,7 +242,7 @@ export default function ElenaAgentOrb() {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resizeCanvas);
     };
-  }, [mouse, isHovered]);
+  }, []);
 
   return (
     <Link href="/elena-ai" className="elena-orb-portal-link">
