@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 
 interface SpherePoint {
-  x: number;
-  y: number;
-  z: number;
+  theta: number; // Polar angle
+  phi: number;   // Azimuthal angle
   baseColor: string;
-  originalR: number;
 }
 
 export default function ElenaAgentOrb() {
@@ -59,9 +58,9 @@ export default function ElenaAgentOrb() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Initialize 3D particles distributed on a sculpted face structure
+    // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 2700; // Dense particle cloud
+    const numPoints = 2700; // Increased particle density for high resolution smoothness
 
     // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
@@ -84,46 +83,50 @@ export default function ElenaAgentOrb() {
 
     for (let i = 0; i < numPoints; i++) {
       const y = 1 - (i / (numPoints - 1)) * 2; // range: -1 to 1
-      const radiusAtY = Math.sqrt(1 - y * y);
+      const theta = Math.acos(y); // polar angle
       const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle spiral
-      
-      const x = Math.cos(phi) * radiusAtY;
-      const z = Math.sin(phi) * radiusAtY;
-      
-      let rModifier = 1.0;
-      // Let the face point towards +Z axis (z > 0)
-      if (z > 0) {
-        // Sculpting facial features using Gaussian-like displacements
-        const nose = Math.exp(-((x * x) / 0.02 + ((y - 0.1) * (y - 0.1)) / 0.05)) * 0.25;
-        const leftEye = Math.exp(-(((x + 0.3) * (x + 0.3)) / 0.04 + ((y - 0.25) * (y - 0.25)) / 0.02)) * -0.15;
-        const rightEye = Math.exp(-(((x - 0.3) * (x - 0.3)) / 0.04 + ((y - 0.25) * (y - 0.25)) / 0.02)) * -0.15;
-        const mouth = Math.exp(-((x * x) / 0.08 + ((y + 0.25) * (y + 0.25)) / 0.01)) * -0.08;
-        const chin = Math.exp(-((x * x) / 0.05 + ((y + 0.45) * (y + 0.45)) / 0.03)) * 0.1;
-        const leftCheek = Math.exp(-(((x + 0.4) * (x + 0.4)) / 0.05 + ((y + 0.05) * (y + 0.05)) / 0.05)) * 0.08;
-        const rightCheek = Math.exp(-(((x - 0.4) * (x - 0.4)) / 0.05 + ((y + 0.05) * (y + 0.05)) / 0.05)) * 0.08;
-
-        rModifier += nose + leftEye + rightEye + mouth + chin + leftCheek + rightCheek;
-      }
-      
-      // Elongate face vertically for a more natural head shape
-      rModifier *= (1.0 + Math.abs(y) * 0.15);
-
-      const finalX = x * rModifier;
-      const finalY = y * rModifier;
-      const finalZ = z * rModifier;
       
       const ratio = (y + 1) / 2; // 0 at bottom pole, 1 at top pole
       const baseColor = getSphereColor(ratio);
       
-      points.push({ x: finalX, y: finalY, z: finalZ, baseColor, originalR: rModifier });
+      points.push({ theta, phi, baseColor });
+    }
+
+    // --- TEXT PARTICLES SETUP ---
+    const textParticles: { baseX: number, baseY: number }[] = [];
+    const textCanvas = document.createElement("canvas");
+    textCanvas.width = 120;
+    textCanvas.height = 40;
+    const textCtx = textCanvas.getContext("2d");
+    if (textCtx) {
+      textCtx.fillStyle = "#ffffff";
+      textCtx.font = "bold 12px monospace";
+      textCtx.textAlign = "center";
+      textCtx.textBaseline = "middle";
+      textCtx.fillText("ELENA.AI", 60, 20);
+      
+      const imgData = textCtx.getImageData(0, 0, 120, 40);
+      const data = imgData.data;
+      
+      for (let y = 0; y < 40; y += 1) {
+        for (let x = 0; x < 120; x += 1) {
+          const idx = (y * 120 + x) * 4;
+          if (data[idx + 3] > 128) {
+            textParticles.push({
+              baseX: x - 60,
+              baseY: y - 20
+            });
+          }
+        }
+      }
     }
 
     // Animation variables
     let time = 0;
-    let currentRotX = 0;
-    let currentRotY = 0;
+    let rotY = 0;
+    let rotX = 0;
 
-    const baseRadius = 124; // 80% of original 155
+    const baseRadius = 155; // Enlarged sphere base radius
     const focalLength = 320;
 
     const draw = () => {
@@ -132,25 +135,12 @@ export default function ElenaAgentOrb() {
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Mouse tracking rotation (smooth lerp)
-      let targetRotX = 0;
-      let targetRotY = 0;
-      if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
-          const dx = mouseRef.current.x - centerX;
-          const dy = mouseRef.current.y - centerY;
-          // Look at mouse, max rotation ~45 degrees
-          targetRotY = (dx / width) * Math.PI * 0.6; 
-          targetRotX = -(dy / height) * Math.PI * 0.6;
-      } else {
-          // Default gentle idle rotation
-          targetRotY = Math.sin(time * 0.5) * 0.2;
-          targetRotX = Math.cos(time * 0.4) * 0.1;
-      }
-
-      currentRotX += (targetRotX - currentRotX) * 0.05;
-      currentRotY += (targetRotY - currentRotY) * 0.05;
+      // Slowly increment rotation angles (slow, majestic motion)
+      rotY += isHoveredRef.current ? 0.004 : 0.002;
+      rotX += isHoveredRef.current ? 0.003 : 0.0015;
       
-      time += 0.015; // smooth idle wave time
+      // Wave progress over time (slow animation)
+      time += isHoveredRef.current ? 0.025 : 0.01;
 
       // Project points to 3D and store in an array for depth sorting
       interface ProjectedPoint {
@@ -167,24 +157,24 @@ export default function ElenaAgentOrb() {
 
       points.forEach((p) => {
         // 1. WAVE DISPLACEMENT
-        // Small organic wave to keep the neural particles feeling alive
-        const wave = Math.sin(p.originalR * 10 + time) * 0.03;
-        const currentRadius = baseRadius * (1 + wave);
+        // Create organic 3D wave ripples on the sphere radius based on angles and time
+        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
+        const radius = baseRadius + wave;
 
-        // 2. USE PRECALCULATED 3D CARTESIAN
-        const x3d = p.x * currentRadius;
-        const y3d = p.y * currentRadius;
-        const z3d = p.z * currentRadius;
+        // 2. CONVERT TO 3D CARTESIAN
+        const x3d = radius * Math.sin(p.theta) * Math.cos(p.phi);
+        const y3d = radius * Math.sin(p.theta) * Math.sin(p.phi);
+        const z3d = radius * Math.cos(p.theta);
 
         // 3. APPLY ROTATION MATRIX
         // Rotate around Y axis
-        let x1 = x3d * Math.cos(currentRotY) - z3d * Math.sin(currentRotY);
-        let z1 = x3d * Math.sin(currentRotY) + z3d * Math.cos(currentRotY);
+        let x1 = x3d * Math.cos(rotY) - z3d * Math.sin(rotY);
+        let z1 = x3d * Math.sin(rotY) + z3d * Math.cos(rotY);
         let y1 = y3d;
 
         // Rotate around X axis
-        let y2 = y1 * Math.cos(currentRotX) - z1 * Math.sin(currentRotX);
-        let z2 = y1 * Math.sin(currentRotX) + z1 * Math.cos(currentRotX);
+        let y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
+        let z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
         let x2 = x1;
 
         // 4. PERSPECTIVE PROJECT TO 2D SCREEN
@@ -198,14 +188,14 @@ export default function ElenaAgentOrb() {
           const dy = screenY - mouseRef.current.y;
           const dist = Math.hypot(dx, dy);
           
-          if (dist < 60) {
-            // Push particles away relative to distance gently
-            const force = (60 - dist) / 60;
+          if (dist < 85) {
+            // Push particles away relative to distance
+            const force = (85 - dist) / 85;
             const angle = Math.atan2(dy, dx);
             
             // Warp coordinates
-            screenX += Math.cos(angle) * force * 15;
-            screenY += Math.sin(angle) * force * 15;
+            screenX += Math.cos(angle) * force * 20;
+            screenY += Math.sin(angle) * force * 20;
           }
         }
 
@@ -213,7 +203,7 @@ export default function ElenaAgentOrb() {
         const maxDepth = baseRadius + 15; // Max z range
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
         const alpha = Math.max(0.08, (1 - depthRatio) * 0.82 + 0.12); // fade back particles
-        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.4);   // front particles are slightly larger
+        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.4);   // front particles are slightly larger, but overall smaller for smooth density
 
         projectedPoints.push({
           x: screenX,
@@ -227,20 +217,23 @@ export default function ElenaAgentOrb() {
       });
 
       // 7. DEPTH SORTING (Back to Front)
+      // Sort in descending order of z coordinate so back particles render first
       projectedPoints.sort((a, b) => b.z - a.z);
 
       // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
       projectedPoints.forEach((p, idx) => {
+        // Draw particle dot (No shadow/glow on hover as requested)
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        ctx.shadowBlur = 0; 
+        ctx.shadowBlur = 0; // Explicitly remove glow
         ctx.fill();
 
         // Render neural web connection lines when mouse is active and near particles
         if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
           if (mDist < 70) {
+            // Check nearest neighbor particles to draw lines
             for (let j = idx + 1; j < projectedPoints.length; j++) {
               const other = projectedPoints[j];
               const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
@@ -261,6 +254,22 @@ export default function ElenaAgentOrb() {
         }
       });
 
+      // 9. DRAW CENTRAL LABEL AS WAVING PIXEL PARTICLES
+      ctx.fillStyle = "#00e5ff"; // Cyan pixel color
+      ctx.globalAlpha = 0.85;
+      
+      textParticles.forEach(tp => {
+        // Apply a wave effect based on position and time
+        const waveX = Math.sin(tp.baseY * 0.4 + time * 3) * 1.5;
+        const waveY = Math.cos(tp.baseX * 0.2 + time * 2.5) * 1.5;
+        
+        const px = centerX + tp.baseX + waveX;
+        const py = centerY + tp.baseY + waveY;
+        
+        // Pixel appearance (squares)
+        ctx.fillRect(px, py, 1.2, 1.2);
+      });
+
       animationId = requestAnimationFrame(draw);
     };
 
@@ -273,26 +282,16 @@ export default function ElenaAgentOrb() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-lg mx-auto">
+    <Link href="/elena-ai" className="elena-orb-portal-link">
       <div
         ref={containerRef}
-        className="elena-orb-container w-full aspect-square relative"
+        className="elena-orb-container"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full" />
+        <canvas ref={canvasRef} className="elena-orb-canvas" />
       </div>
-      <div className="flex w-full max-w-[340px] items-center gap-2 z-10 relative">
-        <input 
-          type="text" 
-          placeholder="Ask Elena..." 
-          className="flex-1 rounded-full border border-white/20 bg-black/50 px-5 py-3 text-sm text-white placeholder-white/50 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-cyan-500" 
-        />
-        <button className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all hover:shadow-[0_0_20px_rgba(0,229,255,0.5)] hover:scale-105 active:scale-95">
-          Ask
-        </button>
-      </div>
-    </div>
+    </Link>
   );
 }
