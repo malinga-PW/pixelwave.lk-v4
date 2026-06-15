@@ -561,20 +561,43 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* Pricing Tiles premium hover animation */
+/* Pricing Tiles Animated Gradient Border */
 .pricing-item {
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
   position: relative;
   z-index: 1;
   border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(0, 255, 151, 0.2) !important;
-  animation: borderGlowPulse 6s infinite ease-in-out;
+  overflow: hidden; /* Needed for ribbon */
+  border: none !important; /* Remove static border */
 }
+
+.pricing-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px; /* border thickness */
+  background: linear-gradient(60deg, #00FF97, #2c32fe, #00a4af, #00FF97);
+  background-size: 300% 300%;
+  animation: animatedBorderGradient 4s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes animatedBorderGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .pricing-item:hover {
   transform: translateY(-12px);
-  animation: borderGlowPulseHover 2s infinite ease-in-out;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 151, 0.2);
 }
+
 .pricing-item .thm-btn.chatbot-btn {
   transition: all 0.3s ease !important;
   position: relative;
@@ -586,34 +609,22 @@
   box-shadow: 0 4px 20px rgba(0, 255, 151, 0.5) !important;
 }
 
-@keyframes borderGlowPulse {
-  0% {
-    border-color: rgba(0, 255, 151, 0.2) !important;
-    box-shadow: 0 0 10px rgba(0, 255, 151, 0.1) !important;
-  }
-  50% {
-    border-color: rgba(44, 50, 254, 0.4) !important;
-    box-shadow: 0 0 20px rgba(44, 50, 254, 0.25) !important;
-  }
-  100% {
-    border-color: rgba(0, 255, 151, 0.2) !important;
-    box-shadow: 0 0 10px rgba(0, 255, 151, 0.1) !important;
-  }
-}
-
-@keyframes borderGlowPulseHover {
-  0% {
-    border-color: rgba(0, 255, 151, 0.8) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 151, 0.4) !important;
-  }
-  50% {
-    border-color: rgba(44, 50, 254, 0.9) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 35px rgba(44, 50, 254, 0.6) !important;
-  }
-  100% {
-    border-color: rgba(0, 255, 151, 0.8) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 151, 0.4) !important;
-  }
+/* Most Popular 45-degree Ribbon */
+.pricing-item .premium-plan {
+  position: absolute !important;
+  top: 25px !important;
+  right: -35px !important;
+  background: #00FF97 !important;
+  color: #00020f !important;
+  padding: 6px 40px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  transform: rotate(45deg) !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+  z-index: 10;
+  border-radius: 0 !important; /* Override pill shape */
 }
 
 /* ── FOOTER POSITIONING & EMAIL ALIGNMENT FIX ── */
@@ -663,7 +674,7 @@
     padding: 20px 25px !important;
     overflow: visible !important; /* Keep overflow visible so glow is not clipped */
     background: #222746 !important; /* Original theme color */
-    border-radius: 10px !important;
+    border-radius: 24px !important; /* Increased corner radius */
     border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Original theme border */
     box-shadow: none !important; /* Clear custom box shadow to rely on original gradient glow */
   }
@@ -701,7 +712,7 @@
   opacity: 0.95 !important;
   filter: blur(25px) !important;
   background: linear-gradient(52deg, #2c32fe 0%, #00a4af 49%, #00ff97 100%) !important;
-  border-radius: 10px !important;
+  border-radius: 24px !important; /* Match inner radius */
   display: block !important;
 }
 
@@ -1049,6 +1060,22 @@
   display: block;
   position: relative;
   z-index: 1;
+}
+
+/* ── 18. MAIN MENU LOGO & STICKY HEIGHT ── */
+.xb-header-logo img {
+  width: 220px !important; /* Increased logo size */
+  height: auto !important;
+  transition: all 0.3s ease;
+}
+
+.xb-header-area-sticky .xb-header-logo img {
+  width: 180px !important; /* Slightly smaller on scroll but still larger than default */
+}
+
+.xb-header-area-sticky .xb-header {
+  padding-top: 15px !important; /* Reduced sticky height */
+  padding-bottom: 15px !important; /* Reduced sticky height */
 }
 
 
