@@ -1061,8 +1061,10 @@
 }
 
 .header__wrap {
-  padding-top: 15px !important; 
-  padding-bottom: 15px !important;
+  height: 85px !important; /* Force explicit thin main menu */
+  padding-top: 0 !important; 
+  padding-bottom: 0 !important;
+  align-items: center !important;
 }
 
 .xb-header-area-sticky .header__wrap {
@@ -1086,8 +1088,9 @@
 
 /* Force inner elements to compress vertically to guarantee thin bar */
 .xb-header .main-menu > ul > li > a {
-  padding-top: 15px !important;
-  padding-bottom: 15px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 85px !important; /* Vertical centering in 85px bar */
 }
 
 .xb-header-area-sticky .main-menu > ul > li > a {
