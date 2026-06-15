@@ -42,14 +42,19 @@ export default function ElenaAgentOrb() {
     if (!ctx) return;
 
     let animationId: number;
-    let width = 340;
-    let height = 340;
+    // Base size significantly increased
+    let width = 550;
+    let height = 550;
 
     const resizeCanvas = () => {
       const container = containerRef.current;
       if (container) {
-        width = container.clientWidth || 340;
-        height = container.clientHeight || 340;
+        width = container.clientWidth || 550;
+        height = container.clientHeight || 550;
+        
+        // Force minimum size of 550px to prevent canvas from shrinking and cropping the enlarged orbit
+        if (width < 550) width = 550;
+        if (height < 550) height = 550;
       }
       canvas.width = width;
       canvas.height = height;
@@ -92,43 +97,14 @@ export default function ElenaAgentOrb() {
       points.push({ theta, phi, baseColor });
     }
 
-    // --- TEXT PARTICLES SETUP ---
-    const textParticles: { baseX: number, baseY: number }[] = [];
-    const textCanvas = document.createElement("canvas");
-    textCanvas.width = 120;
-    textCanvas.height = 40;
-    const textCtx = textCanvas.getContext("2d");
-    if (textCtx) {
-      textCtx.fillStyle = "#ffffff";
-      textCtx.font = "bold 12px monospace";
-      textCtx.textAlign = "center";
-      textCtx.textBaseline = "middle";
-      textCtx.fillText("ELENA.AI", 60, 20);
-      
-      const imgData = textCtx.getImageData(0, 0, 120, 40);
-      const data = imgData.data;
-      
-      for (let y = 0; y < 40; y += 1) {
-        for (let x = 0; x < 120; x += 1) {
-          const idx = (y * 120 + x) * 4;
-          if (data[idx + 3] > 128) {
-            textParticles.push({
-              baseX: x - 60,
-              baseY: y - 20
-            });
-          }
-        }
-      }
-    }
-
     // Animation variables
     let time = 0;
     let rotY = 0;
     let rotX = 0;
 
-    // Reduced base radius mathematically guarantees it never exceeds the 340x340 bounds (no cropping)
-    const baseRadius = 90; 
-    const focalLength = 280; // Decreased focal length for enhanced 3D perspective
+    // Massively enlarged base radius for a big impressive sphere
+    const baseRadius = 135; 
+    const focalLength = 280; 
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -158,7 +134,6 @@ export default function ElenaAgentOrb() {
 
       points.forEach((p) => {
         // 1. WAVE DISPLACEMENT
-        // Strong 3D surface waves
         const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
         const radius = baseRadius + wave;
 
@@ -168,12 +143,10 @@ export default function ElenaAgentOrb() {
         const z3d = radius * Math.cos(p.theta);
 
         // 3. APPLY ROTATION MATRIX
-        // Rotate around Y axis
         let x1 = x3d * Math.cos(rotY) - z3d * Math.sin(rotY);
         let z1 = x3d * Math.sin(rotY) + z3d * Math.cos(rotY);
         let y1 = y3d;
 
-        // Rotate around X axis
         let y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
         let z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
         let x2 = x1;
@@ -194,7 +167,6 @@ export default function ElenaAgentOrb() {
             const force = (85 - dist) / 85;
             const angle = Math.atan2(dy, dx);
             
-            // Warp coordinates
             screenX += Math.cos(angle) * force * 20;
             screenY += Math.sin(angle) * force * 20;
           }
@@ -220,18 +192,14 @@ export default function ElenaAgentOrb() {
       });
 
       // 7. DEPTH SORTING (Back to Front)
-      // Sort in descending order of z coordinate so back particles render first
       projectedPoints.sort((a, b) => b.z - a.z);
 
       // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
       projectedPoints.forEach((p, idx) => {
         // Render neural web connection lines when mouse is active and near particles
-        // ONLY render lines for front particles to preserve performance with 8k density
         if (mouseRef.current.x !== null && mouseRef.current.y !== null && p.alpha > 0.4) {
           const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
           if (mDist < 70) {
-            // Check nearest neighbor particles to draw lines
-            // Limit checks to prevent lag
             const maxChecks = Math.min(idx + 15, projectedPoints.length);
             for (let j = idx + 1; j < maxChecks; j++) {
               const other = projectedPoints[j];
@@ -252,25 +220,9 @@ export default function ElenaAgentOrb() {
           }
         }
 
-        // Use fillRect instead of arc for massive performance boost with 8000 particles
+        // Use fillRect instead of arc for massive performance boost
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
         ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-      });
-
-      // 9. DRAW CENTRAL LABEL AS WAVING PIXEL PARTICLES
-      ctx.fillStyle = "#00e5ff"; // Cyan pixel color
-      ctx.globalAlpha = 0.85;
-      
-      textParticles.forEach(tp => {
-        // Apply a wave effect based on position and time
-        const waveX = Math.sin(tp.baseY * 0.4 + time * 3) * 1.5;
-        const waveY = Math.cos(tp.baseX * 0.2 + time * 2.5) * 1.5;
-        
-        const px = centerX + tp.baseX + waveX;
-        const py = centerY + tp.baseY + waveY;
-        
-        // Pixel appearance (squares)
-        ctx.fillRect(px, py, 1.2, 1.2);
       });
 
       animationId = requestAnimationFrame(draw);
@@ -285,15 +237,15 @@ export default function ElenaAgentOrb() {
   }, []);
 
   return (
-    <Link href="/elena-ai" className="elena-orb-portal-link">
+    <Link href="/elena-ai" className="elena-orb-portal-link block relative" style={{ minHeight: '550px' }}>
       <div
         ref={containerRef}
-        className="elena-orb-container"
+        className="elena-orb-container w-full h-full flex items-center justify-center absolute inset-0 overflow-visible"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <canvas ref={canvasRef} className="elena-orb-canvas" />
+        <canvas ref={canvasRef} className="elena-orb-canvas max-w-none" style={{ marginLeft: '-100px' }} />
       </div>
     </Link>
   );

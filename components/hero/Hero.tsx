@@ -43,7 +43,7 @@ export default function HeroSection() {
         <div className="row">
 
           {/* LEFT CONTENT */}
-          <div className="col-lg-9 col-md-9">
+          <div className="col-lg-7 col-md-7">
             <div className="hero-content">
               <h2 className="title scale-animation wow">
                 Build Smarter.<br />Grow Faster.
@@ -68,7 +68,7 @@ export default function HeroSection() {
           </div>
 
           {/* RIGHT PARTICLE ORB */}
-          <div className="col-lg-3 col-md-3">
+          <div className="col-lg-5 col-md-5">
             <div
               className="hero-icon wow zoomIn"
               data-wow-delay="700ms"
