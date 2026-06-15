@@ -1053,15 +1053,24 @@
 }
 
 /* ── 18. MAIN MENU LOGO & STICKY HEIGHT ── */
+.xb-header.xb-header-area-sticky {
+  background: rgba(11, 13, 23, 0.88) !important; /* ~12% transparency */
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
 .header__wrap {
   padding-top: 15px !important; 
   padding-bottom: 15px !important;
 }
 
 .xb-header-area-sticky .header__wrap {
-  padding-top: 5px !important; 
-  padding-bottom: 5px !important; 
+  height: 65px !important; /* Brutally reduced height */
+  padding-top: 0 !important; 
+  padding-bottom: 0 !important; 
   min-height: unset !important;
+  align-items: center !important;
 }
 
 .xb-header-logo img {
@@ -1071,7 +1080,7 @@
 }
 
 .xb-header-area-sticky .xb-header-logo img {
-  width: 210px !important; 
+  width: 170px !important; /* Shrunk to perfectly fit the 65px thin bar */
   height: auto !important; 
 }
 
@@ -1082,18 +1091,19 @@
 }
 
 .xb-header-area-sticky .main-menu > ul > li > a {
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 65px !important; /* Perfect vertical centering in thin bar */
 }
 
 .xb-header-area-sticky .thm-btn {
-  padding: 8px 20px !important; /* Compress button vertically */
+  padding: 6px 18px !important; /* Compress button vertically */
 }
 
 .xb-header-area-sticky .custom-language-dropdown .dropdown-trigger {
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  height: 34px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  height: 30px !important;
 }
 
 .xb-header, .header__wrap {
