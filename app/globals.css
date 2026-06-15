@@ -1063,19 +1063,24 @@
 }
 
 /* ── 18. MAIN MENU LOGO & STICKY HEIGHT ── */
+.xb-header {
+  padding-top: 15px !important; /* Reduced main menu height */
+  padding-bottom: 15px !important;
+}
+
+.xb-header-area-sticky .xb-header {
+  padding-top: 5px !important; /* Ultra thin sticky bar */
+  padding-bottom: 5px !important; 
+}
+
 .xb-header-logo img {
-  width: 220px !important; /* Increased logo size */
+  width: 250px !important; /* Maximum readable size */
   height: auto !important;
   transition: all 0.3s ease;
 }
 
 .xb-header-area-sticky .xb-header-logo img {
-  width: 180px !important; /* Slightly smaller on scroll but still larger than default */
-}
-
-.xb-header-area-sticky .xb-header {
-  padding-top: 15px !important; /* Reduced sticky height */
-  padding-bottom: 15px !important; /* Reduced sticky height */
+  width: 210px !important; /* Enlarged floating menu logo */
 }
 
 
