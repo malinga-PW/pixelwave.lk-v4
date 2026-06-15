@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 
 interface SpherePoint {
@@ -13,26 +13,6 @@ export default function ElenaAgentOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
-  const isHoveredRef = useRef(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    mouseRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-  };
-
-  const handleMouseLeave = () => {
-    mouseRef.current = { x: null, y: null };
-    isHoveredRef.current = false;
-  };
-
-  const handleMouseEnter = () => {
-    isHoveredRef.current = true;
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -53,7 +33,6 @@ export default function ElenaAgentOrb() {
     const resizeCanvas = () => {
       const container = containerRef.current;
       if (container) {
-        // Use client width to make it perfectly responsive
         width = container.clientWidth || 500;
         height = container.clientHeight || 500;
       }
@@ -61,24 +40,39 @@ export default function ElenaAgentOrb() {
       canvas.width = width;
       canvas.height = height;
 
-      // Recalculate 3D bounds to guarantee it fits 90% of the canvas width
-      // R_max = baseRadius + waveAmplitude = 0.28 * width
-      // Focal length = 0.75 * width
-      // This results in an apparent projected radius of ~0.45 * width, safely inside the 0.5 * width boundary.
+      // Recalculate 3D bounds. We use a larger focal length to reduce edge distortion,
+      // which mathematically allows us to increase the base radius drastically without cropping.
       const sizeRef = Math.min(width, height);
-      baseRadius = 0.24 * sizeRef;
-      waveAmplitude = 0.04 * sizeRef;
-      focalLength = 0.75 * sizeRef;
+      baseRadius = 0.33 * sizeRef; // Drastically enlarged orbit
+      waveAmplitude = 0.03 * sizeRef; 
+      focalLength = 1.5 * sizeRef; // Long focal length to fit the massive orb
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
+    // Global Mouse Listener to track anywhere in the window
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      // Mouse coordinates relative to the canvas top-left
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    };
+
+    const handleGlobalMouseLeave = () => {
+      mouseRef.current = { x: null, y: null };
+    };
+
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+    window.addEventListener("mouseleave", handleGlobalMouseLeave);
+
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
     const numPoints = 8000; // High Density
 
-    // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
       if (ratio < 0.5) {
         // Green to Cyan
@@ -109,8 +103,8 @@ export default function ElenaAgentOrb() {
 
     // Animation variables
     let time = 0;
-    let rotY = 0;
-    let rotX = 0;
+    let currentRotY = 0;
+    let currentRotX = 0;
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -118,12 +112,30 @@ export default function ElenaAgentOrb() {
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Slowly increment rotation angles
-      rotY += isHoveredRef.current ? 0.005 : 0.003;
-      rotX += isHoveredRef.current ? 0.004 : 0.002;
+      // Mouse tracking target rotation
+      let targetRotX = 0;
+      let targetRotY = 0;
+
+      if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
+        // Global Focus on mouse: calculate rotation based on distance from center
+        // Using window inner dimensions to make it track smoothly across the whole screen
+        const globalDx = mouseRef.current.x - centerX;
+        const globalDy = mouseRef.current.y - centerY;
+        
+        targetRotY = (globalDx / (window.innerWidth / 2)) * Math.PI * 0.8; 
+        targetRotX = -(globalDy / (window.innerHeight / 2)) * Math.PI * 0.8;
+      } else {
+        // Idle ambient rotation when mouse is outside window
+        targetRotY = Math.sin(time * 0.5) * 0.2;
+        targetRotX = Math.cos(time * 0.3) * 0.1;
+      }
+
+      // Smooth Lerp towards target rotation
+      currentRotX += (targetRotX - currentRotX) * 0.05;
+      currentRotY += (targetRotY - currentRotY) * 0.05;
       
       // Wave progress over time
-      time += isHoveredRef.current ? 0.03 : 0.015;
+      time += 0.015;
 
       interface ProjectedPoint {
         x: number;
@@ -147,12 +159,12 @@ export default function ElenaAgentOrb() {
         const z3d = radius * Math.cos(p.theta);
 
         // 3. APPLY ROTATION MATRIX
-        let x1 = x3d * Math.cos(rotY) - z3d * Math.sin(rotY);
-        let z1 = x3d * Math.sin(rotY) + z3d * Math.cos(rotY);
+        let x1 = x3d * Math.cos(currentRotY) - z3d * Math.sin(currentRotY);
+        let z1 = x3d * Math.sin(currentRotY) + z3d * Math.cos(currentRotY);
         let y1 = y3d;
 
-        let y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
-        let z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
+        let y2 = y1 * Math.cos(currentRotX) - z1 * Math.sin(currentRotX);
+        let z2 = y1 * Math.sin(currentRotX) + z1 * Math.cos(currentRotX);
         let x2 = x1;
 
         // 4. PERSPECTIVE PROJECT TO 2D SCREEN
@@ -160,19 +172,20 @@ export default function ElenaAgentOrb() {
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // 5. MOUSE INTERACTION
+        // 5. GLOBAL MOUSE INTERACTION (Reacts when mouse gets close to the sphere on screen)
         if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const dx = screenX - mouseRef.current.x;
           const dy = screenY - mouseRef.current.y;
           const dist = Math.hypot(dx, dy);
           
-          const interactionRadius = width * 0.15; // responsive interaction radius
+          const interactionRadius = width * 0.2; // Large responsive interaction radius
           if (dist < interactionRadius) {
             const force = (interactionRadius - dist) / interactionRadius;
             const angle = Math.atan2(dy, dx);
             
-            screenX += Math.cos(angle) * force * (width * 0.04);
-            screenY += Math.sin(angle) * force * (width * 0.04);
+            // Push particles away smoothly
+            screenX += Math.cos(angle) * force * (width * 0.05);
+            screenY += Math.sin(angle) * force * (width * 0.05);
           }
         }
 
@@ -180,12 +193,12 @@ export default function ElenaAgentOrb() {
         const maxDepth = baseRadius + waveAmplitude; 
         const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
         
-        // Dynamic sizing based on canvas width to keep particles relative
-        const baseParticleSize = width * 0.001;
+        // Drastically reduced particle sizes as requested
+        const baseParticleSize = Math.max(0.15, width * 0.0003); // Super fine dust
+        const maxSizeVariance = width * 0.002;
         
-        // High contrast in alpha and size
-        const alpha = Math.max(0.02, (1 - depthRatio) * 0.9 + 0.1); 
-        const size = Math.max(baseParticleSize, (1 - depthRatio) * (baseParticleSize * 10) + baseParticleSize);   
+        const alpha = Math.max(0.02, (1 - depthRatio) * 0.95 + 0.05); 
+        const size = Math.max(baseParticleSize, (1 - depthRatio) * maxSizeVariance + baseParticleSize);   
 
         projectedPoints.push({
           x: screenX,
@@ -205,6 +218,7 @@ export default function ElenaAgentOrb() {
       const lineRenderLimit = width * 0.04;
       
       projectedPoints.forEach((p, idx) => {
+        // Line connection effect also reacts to global mouse position
         if (mouseRef.current.x !== null && mouseRef.current.y !== null && p.alpha > 0.4) {
           const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
           if (mDist < lineConnectionDist) {
@@ -219,7 +233,7 @@ export default function ElenaAgentOrb() {
                   ctx.beginPath();
                   ctx.moveTo(p.x, p.y);
                   ctx.lineTo(other.x, other.y);
-                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / lineRenderLimit) * 0.25})`;
+                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / lineRenderLimit) * 0.35})`;
                   ctx.lineWidth = 0.4;
                   ctx.stroke();
                 }
@@ -240,6 +254,8 @@ export default function ElenaAgentOrb() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("mousemove", handleGlobalMouseMove);
+      window.removeEventListener("mouseleave", handleGlobalMouseLeave);
     };
   }, []);
 
@@ -249,9 +265,6 @@ export default function ElenaAgentOrb() {
         <div
           ref={containerRef}
           className="elena-orb-container w-full h-full absolute inset-0 overflow-visible"
-          onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
         >
           <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full block" />
         </div>
