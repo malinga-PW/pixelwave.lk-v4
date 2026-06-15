@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 
 interface SpherePoint {
-  theta: number; // Polar angle
-  phi: number;   // Azimuthal angle
+  x: number;
+  y: number;
+  z: number;
   baseColor: string;
+  originalR: number;
+  sizeModifier: number;
 }
 
 export default function ElenaAgentOrb() {
@@ -42,14 +45,14 @@ export default function ElenaAgentOrb() {
     if (!ctx) return;
 
     let animationId: number;
-    let width = 340;
-    let height = 340;
+    let width = 300;
+    let height = 300;
 
     const resizeCanvas = () => {
       const container = containerRef.current;
       if (container) {
-        width = container.clientWidth || 340;
-        height = container.clientHeight || 340;
+        width = container.clientWidth || 300;
+        height = container.clientHeight || 300;
       }
       canvas.width = width;
       canvas.height = height;
@@ -58,21 +61,20 @@ export default function ElenaAgentOrb() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
+    // Initialize 3D particles
     const points: SpherePoint[] = [];
-    const numPoints = 2700; // Increased particle density for high resolution smoothness
+    const numPoints = 2500; // Dense particle cloud
 
     // Helper to get color based on vertical sphere height
     const getSphereColor = (ratio: number) => {
       if (ratio < 0.5) {
-        // Interpolate between Green (0, 255, 151) and Cyan (0, 164, 175)
+        // Interpolate between Green and Cyan
         const t = ratio * 2;
-        const r = 0;
         const g = Math.round(255 * (1 - t) + 164 * t);
         const b = Math.round(151 * (1 - t) + 175 * t);
-        return `${r}, ${g}, ${b}`;
+        return `0, ${g}, ${b}`;
       } else {
-        // Interpolate between Cyan (0, 164, 175) and Blue (44, 50, 254)
+        // Interpolate between Cyan and Blue
         const t = (ratio - 0.5) * 2;
         const r = Math.round(0 * (1 - t) + 44 * t);
         const g = Math.round(164 * (1 - t) + 50 * t);
@@ -82,51 +84,50 @@ export default function ElenaAgentOrb() {
     };
 
     for (let i = 0; i < numPoints; i++) {
-      const y = 1 - (i / (numPoints - 1)) * 2; // range: -1 to 1
-      const theta = Math.acos(y); // polar angle
-      const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle spiral
+      const y = 1 - (i / (numPoints - 1)) * 2; // -1 to 1
+      const radiusAtY = Math.sqrt(1 - y * y);
+      const phi = i * Math.PI * (3 - Math.sqrt(5)); // golden angle
       
-      const ratio = (y + 1) / 2; // 0 at bottom pole, 1 at top pole
-      const baseColor = getSphereColor(ratio);
+      const x = Math.cos(phi) * radiusAtY;
+      const z = Math.sin(phi) * radiusAtY;
       
-      points.push({ theta, phi, baseColor });
-    }
+      const ratio = (y + 1) / 2;
+      let baseColor = getSphereColor(ratio);
+      let rModifier = 1.0;
+      let sizeModifier = 1.0;
 
-    // --- TEXT PARTICLES SETUP ---
-    const textParticles: { baseX: number, baseY: number }[] = [];
-    const textCanvas = document.createElement("canvas");
-    textCanvas.width = 120;
-    textCanvas.height = 40;
-    const textCtx = textCanvas.getContext("2d");
-    if (textCtx) {
-      textCtx.fillStyle = "#ffffff";
-      textCtx.font = "bold 12px monospace";
-      textCtx.textAlign = "center";
-      textCtx.textBaseline = "middle";
-      textCtx.fillText("ELENA.AI", 60, 20);
-      
-      const imgData = textCtx.getImageData(0, 0, 120, 40);
-      const data = imgData.data;
-      
-      for (let y = 0; y < 40; y += 1) {
-        for (let x = 0; x < 120; x += 1) {
-          const idx = (y * 120 + x) * 4;
-          if (data[idx + 3] > 128) {
-            textParticles.push({
-              baseX: x - 60,
-              baseY: y - 20
-            });
-          }
+      // Draw Face on the front hemisphere (z > 0)
+      if (z > 0) {
+        // Eyes
+        const dLeftEye = Math.hypot(x + 0.35, y - 0.15);
+        const dRightEye = Math.hypot(x - 0.35, y - 0.15);
+        
+        if (dLeftEye < 0.12 || dRightEye < 0.12) {
+          baseColor = "0, 255, 255"; // Glowing Cyan LED eye
+          sizeModifier = 2.5;
+          rModifier = 0.95; // Indent slightly
+        }
+        
+        // Mouth (Robot smile)
+        if (y > 0.3 && y < 0.5 && Math.abs(x) < 0.25) {
+           const curveDist = Math.abs((0.4 + x * x * 0.8) - y);
+           if (curveDist < 0.05) {
+             baseColor = "0, 255, 255";
+             sizeModifier = 2.0;
+             rModifier = 0.95;
+           }
         }
       }
+
+      points.push({ x, y, z, baseColor, originalR: rModifier, sizeModifier });
     }
 
     // Animation variables
     let time = 0;
-    let rotY = 0;
-    let rotX = 0;
+    let currentRotX = 0;
+    let currentRotY = 0;
 
-    const baseRadius = 155; // Enlarged sphere base radius
+    const baseRadius = 124; // 80% size
     const focalLength = 320;
 
     const draw = () => {
@@ -135,139 +136,110 @@ export default function ElenaAgentOrb() {
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Slowly increment rotation angles (slow, majestic motion)
-      rotY += isHoveredRef.current ? 0.004 : 0.002;
-      rotX += isHoveredRef.current ? 0.003 : 0.0015;
-      
-      // Wave progress over time (slow animation)
-      time += isHoveredRef.current ? 0.025 : 0.01;
-
-      // Project points to 3D and store in an array for depth sorting
-      interface ProjectedPoint {
-        x: number;
-        y: number;
-        z: number;
-        color: string;
-        size: number;
-        alpha: number;
-        rawZ: number;
+      // Mouse tracking rotation
+      let targetRotX = 0;
+      let targetRotY = 0;
+      if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
+          const dx = mouseRef.current.x - centerX;
+          const dy = mouseRef.current.y - centerY;
+          targetRotY = (dx / width) * Math.PI * 0.7; // Look towards mouse
+          targetRotX = -(dy / height) * Math.PI * 0.7;
+      } else {
+          // Idle rotation
+          targetRotY = Math.sin(time * 0.4) * 0.25;
+          targetRotX = Math.cos(time * 0.3) * 0.15;
       }
 
+      // Smooth Lerp
+      currentRotX += (targetRotX - currentRotX) * 0.08;
+      currentRotY += (targetRotY - currentRotY) * 0.08;
+      
+      time += 0.015;
+
+      // Projection array
+      interface ProjectedPoint {
+        x: number; y: number; z: number; color: string; size: number; alpha: number;
+      }
       const projectedPoints: ProjectedPoint[] = [];
 
       points.forEach((p) => {
-        // 1. WAVE DISPLACEMENT
-        // Create organic 3D wave ripples on the sphere radius based on angles and time
-        const wave = Math.sin(p.theta * 5.0 + time) * Math.cos(p.phi * 5.0 + time) * 12;
-        const radius = baseRadius + wave;
+        // Pulse wave
+        const wave = Math.sin(p.originalR * 5 + time * 2) * 0.02;
+        const currentRadius = baseRadius * p.originalR * (1 + wave);
 
-        // 2. CONVERT TO 3D CARTESIAN
-        const x3d = radius * Math.sin(p.theta) * Math.cos(p.phi);
-        const y3d = radius * Math.sin(p.theta) * Math.sin(p.phi);
-        const z3d = radius * Math.cos(p.theta);
+        // Scale to radius
+        const x3d = p.x * currentRadius;
+        const y3d = p.y * currentRadius;
+        const z3d = p.z * currentRadius;
 
-        // 3. APPLY ROTATION MATRIX
-        // Rotate around Y axis
-        let x1 = x3d * Math.cos(rotY) - z3d * Math.sin(rotY);
-        let z1 = x3d * Math.sin(rotY) + z3d * Math.cos(rotY);
+        // Rotate Y
+        let x1 = x3d * Math.cos(currentRotY) - z3d * Math.sin(currentRotY);
+        let z1 = x3d * Math.sin(currentRotY) + z3d * Math.cos(currentRotY);
         let y1 = y3d;
 
-        // Rotate around X axis
-        let y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
-        let z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
+        // Rotate X
+        let y2 = y1 * Math.cos(currentRotX) - z1 * Math.sin(currentRotX);
+        let z2 = y1 * Math.sin(currentRotX) + z1 * Math.cos(currentRotX);
         let x2 = x1;
 
-        // 4. PERSPECTIVE PROJECT TO 2D SCREEN
+        // Perspective Project
         const scale = focalLength / (focalLength + z2);
         let screenX = x2 * scale + centerX;
         let screenY = y2 * scale + centerY;
 
-        // 5. MOUSE INTERACTION (FLUID REPULSION VECTORS)
+        // Mouse Repulsion
         if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const dx = screenX - mouseRef.current.x;
           const dy = screenY - mouseRef.current.y;
           const dist = Math.hypot(dx, dy);
-          
-          if (dist < 85) {
-            // Push particles away relative to distance
-            const force = (85 - dist) / 85;
+          if (dist < 60) {
+            const force = (60 - dist) / 60;
             const angle = Math.atan2(dy, dx);
-            
-            // Warp coordinates
-            screenX += Math.cos(angle) * force * 20;
-            screenY += Math.sin(angle) * force * 20;
+            screenX += Math.cos(angle) * force * 10;
+            screenY += Math.sin(angle) * force * 10;
           }
         }
 
-        // 6. DEPTH Normalization & Alpha Fade
-        const maxDepth = baseRadius + 15; // Max z range
-        const depthRatio = (z2 + maxDepth) / (maxDepth * 2); // 0 (front) to 1 (back)
-        const alpha = Math.max(0.08, (1 - depthRatio) * 0.82 + 0.12); // fade back particles
-        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.4);   // front particles are slightly larger, but overall smaller for smooth density
+        // Alpha and Size
+        const maxDepth = baseRadius + 15;
+        const depthRatio = (z2 + maxDepth) / (maxDepth * 2);
+        const alpha = Math.max(0.08, (1 - depthRatio) * 0.85 + 0.15);
+        const size = Math.max(0.4, (1 - depthRatio) * 1.5 + 0.5) * p.sizeModifier;
 
-        projectedPoints.push({
-          x: screenX,
-          y: screenY,
-          z: z2,
-          color: p.baseColor,
-          size,
-          alpha,
-          rawZ: z2,
-        });
+        projectedPoints.push({ x: screenX, y: screenY, z: z2, color: p.baseColor, size, alpha });
       });
 
-      // 7. DEPTH SORTING (Back to Front)
-      // Sort in descending order of z coordinate so back particles render first
+      // Depth Sort
       projectedPoints.sort((a, b) => b.z - a.z);
 
-      // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
+      // Render
       projectedPoints.forEach((p, idx) => {
-        // Draw particle dot (No shadow/glow on hover as requested)
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        ctx.shadowBlur = 0; // Explicitly remove glow
         ctx.fill();
 
-        // Render neural web connection lines when mouse is active and near particles
+        // Neural links
         if (mouseRef.current.x !== null && mouseRef.current.y !== null) {
           const mDist = Math.hypot(p.x - mouseRef.current.x, p.y - mouseRef.current.y);
-          if (mDist < 70) {
-            // Check nearest neighbor particles to draw lines
+          if (mDist < 60) {
             for (let j = idx + 1; j < projectedPoints.length; j++) {
               const other = projectedPoints[j];
               const otherDistToMouse = Math.hypot(other.x - mouseRef.current.x, other.y - mouseRef.current.y);
-              
-              if (otherDistToMouse < 70) {
+              if (otherDistToMouse < 60) {
                 const linkDist = Math.hypot(p.x - other.x, p.y - other.y);
-                if (linkDist < 25) {
+                if (linkDist < 20) {
                   ctx.beginPath();
                   ctx.moveTo(p.x, p.y);
                   ctx.lineTo(other.x, other.y);
-                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 25) * 0.25})`;
-                  ctx.lineWidth = 0.4;
+                  ctx.strokeStyle = `rgba(${p.color}, ${(1 - linkDist / 20) * 0.3})`;
+                  ctx.lineWidth = 0.5;
                   ctx.stroke();
                 }
               }
             }
           }
         }
-      });
-
-      // 9. DRAW CENTRAL LABEL AS WAVING PIXEL PARTICLES
-      ctx.fillStyle = "#00e5ff"; // Cyan pixel color
-      ctx.globalAlpha = 0.85;
-      
-      textParticles.forEach(tp => {
-        // Apply a wave effect based on position and time
-        const waveX = Math.sin(tp.baseY * 0.4 + time * 3) * 1.5;
-        const waveY = Math.cos(tp.baseX * 0.2 + time * 2.5) * 1.5;
-        
-        const px = centerX + tp.baseX + waveX;
-        const py = centerY + tp.baseY + waveY;
-        
-        // Pixel appearance (squares)
-        ctx.fillRect(px, py, 1.2, 1.2);
       });
 
       animationId = requestAnimationFrame(draw);
@@ -282,16 +254,68 @@ export default function ElenaAgentOrb() {
   }, []);
 
   return (
-    <Link href="/elena-ai" className="elena-orb-portal-link">
-      <div
-        ref={containerRef}
-        className="elena-orb-container"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+    <div 
+      className="elena-orb-container relative w-full flex justify-center" 
+      style={{ aspectRatio: '1/1', position: 'relative' }}
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+      
+      {/* Ask Elena Overlay - using inline styles to absolutely prevent layout crashes with global CSS */}
+      <div 
+        style={{ 
+          position: "absolute", 
+          bottom: "10%", 
+          left: "50%", 
+          transform: "translateX(-50%)", 
+          width: "90%", 
+          maxWidth: "280px", 
+          display: "flex", 
+          gap: "8px", 
+          zIndex: 20 
+        }}
       >
-        <canvas ref={canvasRef} className="elena-orb-canvas" />
+        <input 
+          type="text" 
+          placeholder="Ask Elena..." 
+          style={{ 
+            flex: 1, 
+            background: "rgba(0,0,0,0.6)", 
+            border: "1px solid rgba(255,255,255,0.2)", 
+            color: "white", 
+            padding: "10px 16px", 
+            borderRadius: "9999px",
+            fontSize: "13px",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            outline: "none",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+            margin: 0
+          }}
+        />
+        <button 
+          style={{ 
+            background: "linear-gradient(to right, #00e5ff, #0077ff)", 
+            color: "white", 
+            border: "none", 
+            padding: "10px 20px", 
+            borderRadius: "9999px",
+            fontSize: "13px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            boxShadow: "0 0 15px rgba(0,229,255,0.4)",
+            margin: 0,
+            whiteSpace: "nowrap"
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          Ask
+        </button>
       </div>
-    </Link>
+    </div>
   );
 }
