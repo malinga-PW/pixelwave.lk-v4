@@ -89,11 +89,13 @@ export default function ProjectSection() {
   const projects = [
     {
       img: projectImg01,
-      title: "cupzotea.com",
-      desc: "A premium tea exporter website designed to showcase high-quality Ceylon tea products to the global market, featuring an elegant catalog and international trade inquiry system.",
-      industry: "Export & E-Commerce",
+      title: "Cupzo Tea B2B Portal & AI Lead Automation",
+      desc: "A premium Next.js B2B portal integrated with a custom \"Human-in-the-Loop\" AI backend (n8n, OpenAI) to automate global lead qualification via Telegram.",
+      industry: "B2B Enterprise Tea Export",
       country: "Sri Lanka",
-      techs: [icon01, icon02, icon03],
+      techs: [],
+      techTags: ["Next.js", "Tailwind CSS", "n8n Enterprise", "OpenAI", "Supabase"],
+      link: "cupzotea.com"
     },
     {
       img: projectImg02,
@@ -178,15 +180,26 @@ export default function ProjectSection() {
                       <li>Country: <span>{project.country}</span></li>
                     </ul>
 
-                    <div className="xb-item--technologie ul_li">
-                      <span>Core Technologies:</span>
-                      <ul className="list-unstyled ul_li">
-                        {project.techs.map((icon, i) => (
-                          <li key={i}>
-                            <Image src={icon} alt="tech icon" />
-                          </li>
-                        ))}
-                      </ul>
+                    <div className="xb-item--technologie ul_li mt-20">
+                      <span className="mb-10 d-block">Core Technologies:</span>
+                      
+                      {project.techTags && project.techTags.length > 0 ? (
+                        <div className="d-flex flex-wrap gap-2">
+                          {project.techTags.map((tag, i) => (
+                            <span key={i} className="badge bg-dark border border-secondary text-white py-2 px-3 fw-normal" style={{ fontSize: '13px', borderRadius: '30px' }}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <ul className="list-unstyled ul_li">
+                          {project.techs.map((icon, i) => (
+                            <li key={i}>
+                              <Image src={icon} alt="tech icon" />
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
 
                     <div className="xb-item---btn mt-70">

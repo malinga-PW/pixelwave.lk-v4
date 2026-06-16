@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 // ---- image imports ----
-import img07 from "@/public/images/project/img07.jpg";
+import img07 from "@/public/images/project/project-img01.jpg";
 
 import icon4 from "@/public/images/icon/project-icon04.svg";
 import icon5 from "@/public/images/icon/project-icon05.svg";
@@ -27,85 +27,145 @@ const CheckIcon: React.FC = () => (
 // ==== main component ====
 export default function ProjectDetailsSection() {
   const projectMeta = [
-    { icon: icon4, label: "services :", value: "Ai solutions" },
-    { icon: icon5, label: "client :", value: "PixelWave Client" },
-    { icon: icon6, label: "location :", value: "New York, NY, USA" },
-    { icon: icon7, label: "completed date :", value: "20-12-2025" },
-  ];
-
-  const requirementList = [
-    "Intelligent Process Automation.",
-    "Smart Alerts & Notifications",
-    "Real-Time Data Monitoring.",
-    "Natural Language Processing (NLP)",
-    "Custom Dashboard Interface.",
-    "Predictive Maintenance.",
-    "Supply Chain Optimization.",
-    "AI-Powered Decision Support.",
+    { icon: icon4, label: "client :", value: "Cupzo Tea" },
+    { icon: icon5, label: "industry :", value: "B2B Enterprise Tea Export" },
+    { icon: icon6, label: "location :", value: "Sri Lanka / Global" },
+    { icon: icon7, label: "focus :", value: "AI Automation & Portals" },
   ];
 
   return (
-    <section className="project-details pb-90">
+    <section className="project-details pb-90 pt-50">
       <div className="container">
+        
+        {/* Title Block */}
+        <div className="mb-50 text-center">
+          <span className="sub-title d-block mb-10 text-primary" style={{letterSpacing: '2px', textTransform: 'uppercase', fontSize: '14px', fontWeight: 600}}>Case Study</span>
+          <h1 className="title" style={{ fontSize: '48px', lineHeight: 1.2 }}>Cupzo Tea B2B Portal & <br /> <span style={{ color: '#00FF97' }}>AI-Driven Lead Automation</span></h1>
+        </div>
 
         {/* image */}
-        <div className="single-item-image mb-75">
+        <div className="single-item-image mb-75 rounded overflow-hidden shadow-lg border border-secondary">
           <Image
             src={img07}
-            alt="AI solutions project overview"
+            alt="Cupzo Tea AI solutions project overview"
             className="w-100"
+            style={{ objectFit: "cover" }}
           />
         </div>
 
-        <h2 className="details-content-title mb-15">
-          AI solutions for smarter operations.
-        </h2>
-
-        <p>
-          Our AI solutions are designed to transform how businesses operate by automating repetitive tasks, optimizing workflows, and enabling data-driven decision-making. We develop intelligent systems that adapt to your unique processes—whether it's managing supply chains, improving customer service, or enhancing internal operations. With real-time analytics, predictive insights, and seamless integrations, our solutions help reduce operational costs, increase productivity, and deliver measurable outcomes. From startups to enterprise-level organizations, we tailor each project to support long-term efficiency and scalable growth powered by smart automation and machine learning.
-        </p>
-
-        <p className="mt-30">
-          By leveraging cutting-edge technologies like machine learning, natural language processing, and real-time data processing, we ensure our AI systems evolve with your business needs. Our goal isn’t just to implement tools—it’s to empower your teams with intelligent capabilities.
-        </p>
-
         {/* meta icons */}
-        <ul className="project-meta ul_li_between mt-120">
+        <ul className="project-meta ul_li_between mb-80 p-4 rounded bg-dark border border-secondary">
           {projectMeta.map((item, i) => (
-            <li key={i}>
-              <Image src={item.icon} alt={item.label} />
-              <span>{item.label}</span> {item.value}
+            <li key={i} className="mb-3 mb-md-0">
+              <Image src={item.icon} alt={item.label} width={40} height={40} className="me-3" />
+              <div>
+                <span className="d-block text-uppercase text-secondary" style={{fontSize: '12px'}}>{item.label}</span>
+                <strong className="text-white">{item.value}</strong>
+              </div>
             </li>
           ))}
         </ul>
 
-        {/* requirements */}
-        <div className="services-outcome-wrap mt-115 mb-125">
-          <h2 className="details-content-title mb-15">Project requirement</h2>
+        {/* Project Overview */}
+        <h2 className="details-content-title mb-20 text-white">Project Overview</h2>
+        <p className="mb-30 text-light" style={{ fontSize: '18px', lineHeight: 1.8 }}>
+          Cupzo Tea is a premium Ceylon Tea exporter targeting large-scale international enterprise buyers. PixelWave transformed their traditional B2B inquiry process into a hyper-automated, AI-powered lead generation and management ecosystem. By combining a high-performance Next.js frontend with an advanced "Human-in-the-Loop" (HITL) automation backend, we eliminated manual data entry and drastically accelerated sales response times.
+        </p>
 
-          <p>
-            The project aims to develop an AI-powered solution designed to optimize business operations through intelligent automation and real-time decision-making. The system should be capable of handling large volumes of data, generating actionable insights.
+        <ul className="list-unstyled mb-60 ps-3 border-start border-primary border-3">
+          <li className="mb-2"><strong className="text-white">Client Focus:</strong> B2B Enterprise Tea Export & Private Labeling (OEM)</li>
+          <li><strong className="text-white">Core Technologies:</strong> Next.js, Tailwind CSS, n8n Enterprise Workflow Automation, OpenAI (GPT models), Supabase (Secure Cloud Database)</li>
+        </ul>
+
+        {/* Business Challenge */}
+        <div className="mt-80 mb-80 p-5 rounded" style={{ background: 'rgba(255,255,255,0.03)' }}>
+          <h2 className="details-content-title mb-20 text-white">The Business Challenge</h2>
+          <p className="mb-30 text-light">
+            In the global B2B commodity export market, the first supplier to respond intelligently to a buyer's request usually wins the contract. Cupzo Tea faced three major operational bottlenecks:
           </p>
-
-          <ul className="service-outcome-list project-requerment list-unstyled mt-35">
-            {requirementList.map((text, index) => (
-              <li key={index}>
-                <span><CheckIcon /></span>
-                {text}
-              </li>
-            ))}
-          </ul>
+          <div className="row">
+            <div className="col-md-4 mb-4">
+              <div className="p-4 h-100 rounded border border-secondary" style={{ background: '#0a0d14' }}>
+                <h4 className="text-white mb-3" style={{ fontSize: '20px' }}>1. Unstructured Buyer Data</h4>
+                <p className="text-secondary mb-0" style={{ fontSize: '15px' }}>International buyers leave long, complex text requirements (specific packaging types, container volumes) that take hours for sales teams to read and parse.</p>
+              </div>
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="p-4 h-100 rounded border border-secondary" style={{ background: '#0a0d14' }}>
+                <h4 className="text-white mb-3" style={{ fontSize: '20px' }}>2. Delayed Response Times</h4>
+                <p className="text-secondary mb-0" style={{ fontSize: '15px' }}>High-value leads from different time zones sat in queues before being manually qualified by managers, risking lost opportunities.</p>
+              </div>
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="p-4 h-100 rounded border border-secondary" style={{ background: '#0a0d14' }}>
+                <h4 className="text-white mb-3" style={{ fontSize: '20px' }}>3. Data Fragmentation</h4>
+                <p className="text-secondary mb-0" style={{ fontSize: '15px' }}>Crucial raw customer notes were often summarized too early, losing key context and causing miscommunication during production.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <h2 className="details-content-title mb-15">Solution and result</h2>
-
-        <p>
-          The proposed AI solution leverages advanced machine learning algorithms, real-time data analytics, and automation technologies to transform traditional operations into intelligent, adaptive processes. By integrating predictive analytics, the system anticipates potential disruptions, optimizes resource allocation, and automates routine tasks, enabling businesses to operate with greater precision and efficiency.
+        {/* Solution Architecture */}
+        <h2 className="details-content-title mb-20 text-white">The PixelWave Solution Architecture</h2>
+        <p className="mb-40 text-light">
+          We built a closed-loop system where premium frontend design meets autonomous backend execution:
         </p>
 
-        <p className="mt-30">
-         he AI-driven insights empower decision-makers to respond swiftly to changing conditions, reducing downtime and operational costs significantly. Furthermore, continuous learning capabilities ensure that the system evolves alongside the business environment.
-        </p>
+        <ul className="service-outcome-list project-requerment list-unstyled mt-35 mb-80">
+          <li className="mb-4 align-items-start d-flex">
+            <span className="me-3 mt-1"><CheckIcon /></span>
+            <div>
+              <strong className="text-white d-block mb-1" style={{ fontSize: '18px' }}>High-Conversion B2B Frontend (Next.js)</strong>
+              <span className="text-light">A modern, luxury-tier international web application optimized for enterprise decision-makers. It features specialized product catalogs with subtle AI micro-interactions that trigger Contextual Help desks to maximize trade inquiries.</span>
+            </div>
+          </li>
+          <li className="mb-4 align-items-start d-flex">
+            <span className="me-3 mt-1"><CheckIcon /></span>
+            <div>
+              <strong className="text-white d-block mb-1" style={{ fontSize: '18px' }}>Autonomous Lead Qualification (OpenAI & n8n)</strong>
+              <span className="text-light">When a buyer submits an inquiry, an n8n workflow immediately hands the payload to an isolated AI engine (Zara.AI). The AI autonomously analyzes the unstructured data, ranks the lead's commercial priority, and extracts a structured business summary within milliseconds.</span>
+            </div>
+          </li>
+          <li className="mb-4 align-items-start d-flex">
+            <span className="me-3 mt-1"><CheckIcon /></span>
+            <div>
+              <strong className="text-white d-block mb-1" style={{ fontSize: '18px' }}>"Human-in-the-Loop" Telegram Command Center</strong>
+              <span className="text-light">The manager receives a beautifully formatted notification instantly on their mobile phone containing the AI's smart summary. With a single tap (Approve / Done), the system executes backend updates. The interactive buttons gracefully self-update into an inactive state (✅ Approved), ensuring an organized chronological stream of qualified leads.</span>
+            </div>
+          </li>
+          <li className="mb-4 align-items-start d-flex">
+            <span className="me-3 mt-1"><CheckIcon /></span>
+            <div>
+              <strong className="text-white d-block mb-1" style={{ fontSize: '18px' }}>Zero Data Loss Relational Storage (Supabase)</strong>
+              <span className="text-light">To guarantee compliance, the approved pipeline logs both the pristine, untouched original human inputs alongside the AI-generated operational summaries, secured under enterprise-grade Service-Role architecture.</span>
+            </div>
+          </li>
+        </ul>
+
+        {/* ROI */}
+        <div className="p-5 rounded" style={{ background: 'linear-gradient(135deg, rgba(0, 255, 151, 0.1) 0%, rgba(0, 0, 0, 0) 100%)', border: '1px solid rgba(0, 255, 151, 0.2)' }}>
+          <h2 className="details-content-title mb-30 text-white"><span style={{ color: '#00FF97' }}>Tangible Business Results & ROI</span></h2>
+          
+          <div className="row text-center">
+            <div className="col-md-3 mb-4 mb-md-0">
+              <h3 className="display-4 fw-bold text-white mb-2">85%</h3>
+              <p className="text-secondary fw-semibold">Reduction in Lead Processing Time (Under 3s)</p>
+            </div>
+            <div className="col-md-3 mb-4 mb-md-0">
+              <h3 className="display-4 fw-bold text-white mb-2">0%</h3>
+              <p className="text-secondary fw-semibold">Lead Leakage or Data Loss</p>
+            </div>
+            <div className="col-md-3 mb-4 mb-md-0">
+              <h3 className="display-4 fw-bold text-white mb-2">100+</h3>
+              <p className="text-secondary fw-semibold">Global Container Inquiries Scalability</p>
+            </div>
+            <div className="col-md-3">
+              <h3 className="display-4 fw-bold text-white mb-2">24/7</h3>
+              <p className="text-secondary fw-semibold">Frictionless Executive Mobile Control</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
