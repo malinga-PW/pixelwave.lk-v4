@@ -23,7 +23,7 @@ export default function FeaturesAndBrands() {
       }}
     >
       {/* Feature Section */}
-      <section id="features" className="feature pt-145">
+      <section id="features" className="feature pt-80 pb-60">
         <div className="container">
 
           {/* Title */}
@@ -50,7 +50,7 @@ export default function FeaturesAndBrands() {
                     data-wow-delay={`${(i + 1) * 100}ms`}
                     data-wow-duration="600ms"
                   >
-                    <div className="xb-item--inner feature-tile-compact xb-border">
+                    <div className="xb-item--inner feature-tile-left xb-border">
                       <span className="xb-item--icon">
                         <Image src={icon} alt="icon" />
                       </span>
@@ -75,7 +75,7 @@ export default function FeaturesAndBrands() {
                     data-wow-delay={`${(i + 1) * 100}ms`}
                     data-wow-duration="600ms"
                   >
-                    <div className="xb-item--inner feature-tile-compact xb-border">
+                    <div className="xb-item--inner feature-tile-right xb-border">
                       <span className="xb-item--icon">
                         <Image src={icon} alt="icon" />
                       </span>
