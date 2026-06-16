@@ -271,28 +271,26 @@
 }
 
 /* ── 10. MEGA MENU BIG BUTTON GRADIENT ────────────── */
-.service_link {
+.custom-mega-cta {
   background: linear-gradient(90deg, #3247FF 0%, #00FF97 100%) !important;
   border-radius: 6px !important;
   position: relative !important;
   overflow: hidden !important;
   border: none !important;
-  padding: 24px 30px !important;
+  padding: 20px 30px !important;
   display: flex !important;
   align-items: center !important;
+  justify-content: space-between !important;
   transition: all 0.3s ease !important;
+  margin-top: 30px !important;
 }
 
-.service_link:hover {
+.custom-mega-cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0, 255, 151, 0.2);
 }
 
-.service_link .xb-item--inner {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  width: 100% !important;
+.custom-mega-cta .cta-content {
   display: flex !important;
   flex-direction: column !important;
   gap: 8px !important;
@@ -300,27 +298,13 @@
   z-index: 1;
 }
 
-.service_link .xb-item--holder {
-  margin: 0 !important;
-  gap: 12px !important;
+.custom-mega-cta .cta-header {
+  display: flex !important;
   align-items: center !important;
+  gap: 12px !important;
 }
 
-.service_link .xb-item--title,
-.service_link .xb-item--title a {
-  color: #ffffff !important;
-  font-size: 20px !important;
-  font-weight: 600 !important;
-  margin: 0 !important;
-}
-
-.service_link .xb-item--text {
-  color: rgba(255, 255, 255, 0.9) !important;
-  font-size: 14px !important;
-  margin: 0 !important;
-}
-
-.service_link .xb-item--icon {
+.custom-mega-cta .cta-icon {
   background: rgba(255, 255, 255, 0.15) !important;
   backdrop-filter: blur(4px);
   border-radius: 8px !important;
@@ -331,32 +315,49 @@
   justify-content: center !important;
 }
 
-/* Add the black circular arrow button to the right */
-.service_link::after {
-  content: "↗";
-  position: absolute;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
+.custom-mega-cta .cta-title,
+.custom-mega-cta .cta-title a {
+  color: #ffffff !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  text-decoration: none !important;
+}
+
+.custom-mega-cta .cta-title a:hover {
+  color: #ffffff !important;
+}
+
+.custom-mega-cta .cta-text {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+  padding-left: 52px !important; /* to align with text */
+}
+
+.custom-mega-cta .cta-arrow {
+  position: relative;
+  z-index: 2;
   width: 44px;
   height: 44px;
   background-color: #0b0f19;
   border-radius: 50%;
-  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  font-weight: bold;
-  pointer-events: none;
-  z-index: 2;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.service_link:hover::after {
+.custom-mega-cta:hover .cta-arrow {
   background-color: #ffffff;
-  color: #0b0f19;
 }
+
+.custom-mega-cta:hover .cta-arrow svg path {
+  stroke: #0b0f19;
+}
+
+/* Removed obsolete .service_link rules */
 /* ── 8. SIDE ICON FEATURE TILES (Why Choose Us) ────────────── */
 .feature-tile-left,
 .feature-tile-right {

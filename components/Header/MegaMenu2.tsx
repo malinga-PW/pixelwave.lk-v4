@@ -98,30 +98,30 @@ export default function MegaMenuServices() {
                         {/* CTA: Need custom AI service */}
                         <div className="col-xl-8 mt-30">
                           {/* UPDATED MEGA MENU BANNER */}
-                          <div className="relative overflow-hidden rounded-lg px-6 py-5 flex items-center justify-between group" style={{ background: 'linear-gradient(90deg, #3247FF 0%, #00FF97 100%)', border: 'none' }}>
-                            <div className="relative z-10 flex flex-col gap-2">
-                              <div className="flex items-center gap-3">
-                                <span className="flex items-center justify-center w-10 h-10 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)' }}>
+                          <div className="custom-mega-cta">
+                            <div className="cta-content">
+                              <div className="cta-header">
+                                <span className="cta-icon">
                                   <Image src={m05} alt="icon" />
                                 </span>
-                                <h3 className="text-white text-xl font-semibold m-0 p-0">
-                                  <Link href="/contact" className="text-white hover:text-white">
+                                <h3 className="cta-title">
+                                  <Link href="/contact">
                                     Need a Custom AI Service?
                                   </Link>
                                 </h3>
                               </div>
-                              <p className="text-white text-opacity-90 text-sm m-0 p-0 ml-14">
+                              <p className="cta-text">
                                 Get a free consultation today.
                               </p>
                             </div>
                             
                             {/* Overlay Link for full-banner click */}
-                            <Link href="/contact" className="absolute inset-0 z-20"></Link>
+                            <Link href="/contact" className="xb-overlay"></Link>
 
                             {/* Right Arrow Button */}
-                            <div className="relative z-10 flex items-center justify-center w-11 h-11 bg-[#0b0f19] rounded-full transition-colors duration-300 group-hover:bg-white group-hover:text-[#0b0f19] text-white">
+                            <div className="cta-arrow">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 19L19 5M19 5H7.5M19 5V16.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M5 19L19 5M19 5H7.5M19 5V16.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                               </svg>
                             </div>
                           </div>
