@@ -51,9 +51,9 @@ export default function BlogSection() {
       <div className="xb-blog-marquee-wrap marquee-container mb-60" style={{ paddingTop: "30px", paddingBottom: "30px" }}>
         <div className="marquee-track">
           {marqueeBlogs.map((blog, index) => (
-            <div key={index} className="xb-blog-marquee-item">
-              <div className="xb-blog-item xb-border">
-                <div className="xb-item--inner img-hove-effect">
+            <div key={index} className="xb-blog-marquee-item h-100" style={{ paddingTop: '15px', paddingBottom: '15px' }}>
+              <div className="xb-blog-item xb-border h-100 d-flex flex-column">
+                <div className="xb-item--inner img-hove-effect h-100 d-flex flex-column">
                   <div className="xb-img">
                     {[0, 1, 2, 3].map((i) => (
                       <Link key={i} href={`/blog/${blog.slug}`}>
@@ -62,7 +62,7 @@ export default function BlogSection() {
                     ))}
                   </div>
 
-                  <div className="xb-item--holder">
+                  <div className="xb-item--holder d-flex flex-column flex-grow-1 justify-content-between">
                     <ul className="xb-item--meta list-unstyled ul_li">
                       <li>
                         <Image src={icon01} alt="icon" /> {blog.category}
