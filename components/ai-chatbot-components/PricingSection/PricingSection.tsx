@@ -236,7 +236,7 @@ export default function PricingSection() {
         </div>
 
         {/* CARDS GRID */}
-        <div className="d-flex flex-nowrap overflow-auto mt-none-30 pb-4 custom-scrollbar" style={{ gap: '30px' }}>
+        <div className="d-flex flex-nowrap justify-content-xl-center overflow-auto mt-none-30 pb-4 custom-scrollbar" style={{ gap: '30px' }}>
           {PRICING_DATA.map((tier) => {
             const basePrice = tier.prices[billingCycle];
             const formattedPrice = formatPrice(
