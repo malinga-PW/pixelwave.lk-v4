@@ -236,7 +236,7 @@ export default function PricingSection() {
         </div>
 
         {/* CARDS GRID */}
-        <div className="row mt-none-30 justify-content-center">
+        <div className="d-flex flex-nowrap overflow-auto mt-none-30 pb-4 custom-scrollbar" style={{ gap: '30px' }}>
           {PRICING_DATA.map((tier) => {
             const basePrice = tier.prices[billingCycle];
             const formattedPrice = formatPrice(
@@ -252,7 +252,7 @@ export default function PricingSection() {
                 : "Week";
 
             return (
-              <div key={tier.id} className="col-lg-4 col-md-6 mt-30">
+              <div key={tier.id} className="mt-30 flex-shrink-0" style={{ width: '350px' }}>
                 <div
                   className="pricing-item xb-border bg_img h-100 d-flex flex-column"
                   style={BG_ITEM_STYLE}
