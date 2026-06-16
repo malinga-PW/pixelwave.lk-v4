@@ -61,24 +61,35 @@ export default function MegaMenuSolutions() {
                     <div className="social_area">
                       <div className="row mt-none-30 align-items-center">
                         <div className="col-xl-12 mt-30">
-                          <div className="service_link">
-                            <div className="xb-item--inner">
-                              <div className="xb-item--holder ul_li">
-                                <span className="xb-item--icon">
+                          {/* UPDATED MEGA MENU BANNER */}
+                          <div className="relative overflow-hidden rounded-lg px-6 py-5 flex items-center justify-between group" style={{ background: 'linear-gradient(90deg, #3247FF 0%, #00FF97 100%)', border: 'none' }}>
+                            <div className="relative z-10 flex flex-col gap-2">
+                              <div className="flex items-center gap-3">
+                                <span className="flex items-center justify-center w-10 h-10 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)' }}>
                                   <Image src={m05} alt="icon" />
                                 </span>
-                                <h3 className="xb-item--title">
-                                  <Link href="/contact">
+                                <h3 className="text-white text-xl font-semibold m-0 p-0">
+                                  <Link href="/contact" className="text-white hover:text-white">
                                     Need a custom automation solution?
                                   </Link>
                                 </h3>
                               </div>
-                              <p className="xb-item--text">
+                              <p className="text-white text-opacity-90 text-sm m-0 p-0 ml-14">
                                 Talk to our consultants for personalized enterprise integration maps.
                               </p>
                             </div>
-                            <Link href="/contact" className="xb-overlay"></Link>
+                            
+                            {/* Overlay Link for full-banner click */}
+                            <Link href="/contact" className="absolute inset-0 z-20"></Link>
+
+                            {/* Right Arrow Button */}
+                            <div className="relative z-10 flex items-center justify-center w-11 h-11 bg-[#0b0f19] rounded-full transition-colors duration-300 group-hover:bg-white group-hover:text-[#0b0f19] text-white">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 19L19 5M19 5H7.5M19 5V16.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </div>
                           </div>
+                          {/* END UPDATED BANNER */}
                         </div>
                       </div>
                     </div>

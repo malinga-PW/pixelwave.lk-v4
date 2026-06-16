@@ -97,63 +97,35 @@ export default function MegaMenuServices() {
 
                         {/* CTA: Need custom AI service */}
                         <div className="col-xl-8 mt-30">
-                          <div className="service_link">
-                            <div className="xb-item--inner">
-                              <div className="xb-item--holder ul_li">
-                                <span className="xb-item--icon">
+                          {/* UPDATED MEGA MENU BANNER */}
+                          <div className="relative overflow-hidden rounded-lg px-6 py-5 flex items-center justify-between group" style={{ background: 'linear-gradient(90deg, #3247FF 0%, #00FF97 100%)', border: 'none' }}>
+                            <div className="relative z-10 flex flex-col gap-2">
+                              <div className="flex items-center gap-3">
+                                <span className="flex items-center justify-center w-10 h-10 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)' }}>
                                   <Image src={m05} alt="icon" />
                                 </span>
-                                <h3 className="xb-item--title">
-                                  <Link href="/contact">
+                                <h3 className="text-white text-xl font-semibold m-0 p-0">
+                                  <Link href="/contact" className="text-white hover:text-white">
                                     Need a Custom AI Service?
                                   </Link>
                                 </h3>
                               </div>
-                              <p className="xb-item--text">
+                              <p className="text-white text-opacity-90 text-sm m-0 p-0 ml-14">
                                 Get a free consultation today.
                               </p>
                             </div>
+                            
+                            {/* Overlay Link for full-banner click */}
+                            <Link href="/contact" className="absolute inset-0 z-20"></Link>
 
-                            <Link href="/contact" className="xb-item--btn">
-                              {/* SVG icons preserved */}
-                              {/* First SVG */}
-                              <svg
-                                width="31"
-                                height="31"
-                                viewBox="0 0 31 31"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <rect x="6.29" y="21.41" width="22.36" height="2.84" transform="rotate(-40.28 6.29 21.41)" fill="white"/>
-                                <rect x="9.45" y="7.57" width="2.84" height="2.84" transform="rotate(-40.28 9.45 7.57)" fill="white"/>
-                                <rect x="13.45" y="7.89" width="2.84" height="2.84" transform="rotate(-40.28 13.45 7.89)" fill="white"/>
-                                <rect x="17.45" y="8.23" width="2.84" height="2.84" transform="rotate(-40.28 17.45 8.23)" fill="white"/>
-                                <rect x="21.12" y="12.56" width="2.84" height="2.84" transform="rotate(-40.28 21.12 12.56)" fill="white"/>
-                                <rect x="20.79" y="16.56" width="2.84" height="2.84" transform="rotate(-40.28 20.79 16.56)" fill="white"/>
-                                <rect x="20.46" y="20.56" width="2.84" height="2.84" transform="rotate(-40.28 20.46 20.56)" fill="white"/>
+                            {/* Right Arrow Button */}
+                            <div className="relative z-10 flex items-center justify-center w-11 h-11 bg-[#0b0f19] rounded-full transition-colors duration-300 group-hover:bg-white group-hover:text-[#0b0f19] text-white">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 19L19 5M19 5H7.5M19 5V16.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                               </svg>
-
-                              {/* Second SVG (duplicate) */}
-                              <svg
-                                width="31"
-                                height="31"
-                                viewBox="0 0 31 31"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <rect x="6.29" y="21.41" width="22.36" height="2.84" transform="rotate(-40.28 6.29 21.41)" fill="white"/>
-                                <rect x="9.45" y="7.57" width="2.84" height="2.84" transform="rotate(-40.28 9.45 7.57)" fill="white"/>
-                                <rect x="13.45" y="7.89" width="2.84" height="2.84" transform="rotate(-40.28 13.45 7.89)" fill="white"/>
-                                <rect x="17.45" y="8.23" width="2.84" height="2.84" transform="rotate(-40.28 17.45 8.23)" fill="white"/>
-                                <rect x="21.12" y="12.56" width="2.84" height="2.84" transform="rotate(-40.28 21.12 12.56)" fill="white"/>
-                                <rect x="20.79" y="16.56" width="2.84" height="2.84" transform="rotate(-40.28 20.79 16.56)" fill="white"/>
-                                <rect x="20.46" y="20.56" width="2.84" height="2.84" transform="rotate(-40.28 20.46 20.56)" fill="white"/>
-                              </svg>
-                            </Link>
-
-                            {/* Invisible overlay for full-click area */}
-                            <Link href="/contact" className="xb-overlay"></Link>
+                            </div>
                           </div>
+                          {/* END UPDATED BANNER */}
                         </div>
 
                       </div>
