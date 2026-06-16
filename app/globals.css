@@ -264,6 +264,11 @@
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
 }
+
+/* ── 9. PROJECT SECTION SMOOTH SCROLL FADE ────────────── */
+.xb-project-item {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
 /* ── 8. COMPACT FEATURE TILES (Why Choose Us) ────────────── */
 .feature-tile-compact {
   display: flex !important;
