@@ -90,7 +90,7 @@ export default function ElenaAgentOrb() {
 
     // Initialize 3D particles distributed on a sphere shell using Fibonacci spiral
     const points: SpherePoint[] = [];
-    const numPoints = 3500; // Drastically reduced density for smooth 60fps scrolling
+    const numPoints = 1500; // Drastically reduced density for smooth 60fps scrolling
 
     const getSphereColor = (ratio: number, layer: number) => {
       if (layer === 1) {
@@ -125,11 +125,6 @@ export default function ElenaAgentOrb() {
       
       // Assign particles to 2 distinct layers for a cleaner, high-performance geometry
       let layer = 0;
-      if (i % 4 === 0) {
-        layer = 1; // Core sphere (25% of points)
-      } else {
-        layer = 0; // Outer sphere (75% of points)
-      }
       
       const ratio = (y + 1) / 2; 
       const baseColor = getSphereColor(ratio, layer);
@@ -261,38 +256,8 @@ export default function ElenaAgentOrb() {
         });
       });
 
-      // 7. RENDER PLASMA CORE (Fluid organic effect using layered radial gradients)
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter"; // Additive blending for energy glow
-      
-      const numBlobs = 5;
-      for (let i = 0; i < numBlobs; i++) {
-        // Organic movement using multiple sine waves
-        const angle = time * (0.4 + i * 0.1) + i * ((Math.PI * 2) / numBlobs);
-        const distance = baseRadius * 0.25 * Math.sin(time * 0.6 + i);
-        
-        const blobX = centerX + Math.cos(angle) * distance;
-        const blobY = centerY + Math.sin(angle) * distance;
-        
-        // Blobs pulsate in size
-        const blobRadius = baseRadius * 0.5 * (1 + 0.15 * Math.sin(time * 1.2 + i));
-
-        // Shifting colors between Cyan, Blue, and Magenta
-        const rColor = Math.floor(120 + 135 * Math.sin(time * 0.5 + i));
-        const gColor = Math.floor(80 + 80 * Math.cos(time * 0.4 + i));
-        const bColor = 255;
-        
-        const g = ctx.createRadialGradient(blobX, blobY, 0, blobX, blobY, blobRadius);
-        g.addColorStop(0, `rgba(${rColor}, ${gColor}, ${bColor}, 0.5)`); // Bright core
-        g.addColorStop(0.5, `rgba(80, 40, 255, 0.2)`); // Deep blue/purple mid-tone
-        g.addColorStop(1, `rgba(0, 0, 0, 0)`); // Fade to transparent
-        
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(blobX, blobY, blobRadius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
+      // 7. RENDER PLASMA CORE
+      // Removed as per request to keep only outer globe
 
       // 8. DEPTH SORTING (Back to Front)
       projectedPoints.sort((a, b) => b.z - a.z);
