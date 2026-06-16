@@ -154,7 +154,7 @@
 
 .main-menu ul > li > a {
   position: relative;
-  padding: 6px 14px !important;
+  padding: 2px 14px !important; /* Decreased height */
   border-radius: 100px;
   border: 1px solid transparent;
   transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease !important;
@@ -177,18 +177,26 @@
 
 /* ── 5. FLOATING HEADER — COMPACT HEIGHT ON STICKY ───────────── */
 
-.xb-header-area-sticky {
+/* Make base header fixed and transparent to prevent hiding when scrolling starts */
+.xb-header {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 9999 !important;
+  background: transparent !important;
+  border-bottom: 1px solid transparent !important;
+  box-shadow: none !important;
+  transform: translateY(0) !important;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease !important;
+}
+
+.xb-header-area-sticky {
   backdrop-filter: blur(20px) !important;
   background: rgba(0, 2, 15, 0.85) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4) !important;
-  transform: translateY(-100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease !important;
+  transform: translateY(0) !important;
 }
 
 .xb-header-area-sticky.xb-header-fixed {
