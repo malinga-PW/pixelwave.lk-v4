@@ -16,6 +16,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "PixelWave AI Solutions | Build Smarter. Grow Faster.",
   description: "Transforming Sri Lankan businesses through intelligent automation, AI solutions, premium website development, and business growth strategies.",
+  icons: {
+    icon: "/images/favicon.svg",
+  },
 };
 
 export default function RootLayout({
