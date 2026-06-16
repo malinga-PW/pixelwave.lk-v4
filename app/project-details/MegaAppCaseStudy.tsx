@@ -49,7 +49,7 @@ export default function MegaAppCaseStudy() {
             src={img07}
             alt="All-In-One Mega App AI Project Overview"
             className="w-100"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", maxHeight: "550px", objectPosition: "center" }}
           />
         </div>
 

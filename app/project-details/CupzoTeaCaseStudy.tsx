@@ -49,7 +49,7 @@ export default function CupzoTeaCaseStudy() {
             src={img07}
             alt="Cupzo Tea AI solutions project overview"
             className="w-100"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", maxHeight: "550px", objectPosition: "center" }}
           />
         </div>
 

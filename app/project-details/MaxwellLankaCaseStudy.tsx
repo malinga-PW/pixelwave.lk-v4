@@ -49,7 +49,7 @@ export default function MaxwellLankaCaseStudy() {
             src={img07}
             alt="Maxwell Lanka AI solutions project overview"
             className="w-100"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", maxHeight: "550px", objectPosition: "center" }}
           />
         </div>
 
