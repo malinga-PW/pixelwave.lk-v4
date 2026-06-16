@@ -159,9 +159,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 44px !important;
-  min-height: 44px !important;
-  padding: 0 24px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 16px !important;
   border-radius: 9999px !important;
   background: rgba(8, 12, 30, 0.85) !important;
   backdrop-filter: blur(12px) !important;
@@ -197,7 +197,7 @@
 /* Make base header fixed and transparent to prevent hiding when scrolling starts */
 .xb-header {
   position: fixed !important;
-  top: 0 !important;
+  top: 15px !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 9999 !important;
@@ -209,6 +209,7 @@
 }
 
 .xb-header-area-sticky {
+  top: 0 !important;
   backdrop-filter: blur(20px) !important;
   background: rgba(0, 2, 15, 0.85) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
@@ -226,120 +227,225 @@
 
 /* Legacy sticky overrides removed - see bottom of file */
 
-/* ── 6. ELENA CHAT WIDGET ────────────────────────────────────── */
+/* ── 6. ELENA CHAT WIDGET (HOVER & CLICK REVEAL) ────────────────────── */
 
 .elena-chat-widget {
   position: fixed;
   bottom: 95px;
-  right: 30px;
+  right: 0;
   left: auto;
   z-index: 9998;
   display: flex;
   flex-direction: row-reverse;
-  align-items: center;
-  gap: 0px;
-  cursor: pointer;
-  animation: elena-float 3s ease-in-out infinite;
+  align-items: flex-end;
+  animation: elena-slide-in 1s ease forwards 1s;
 }
 
-@keyframes elena-float {
-  0%, 100% { transform: translateY(0); }
-  50%        { transform: translateY(-6px); }
+@keyframes elena-slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
-.elena-avatar {
-  position: relative;
-  width: 52px;
+/* The toggle element resting on the edge */
+.elena-chat-toggle {
   height: 52px;
-  border-radius: 50%;
+  border-radius: 26px 0 0 26px; /* capsule shape */
   background: linear-gradient(135deg, #00f0ff, #0057ff, #bd00ff);
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(0, 87, 255, 0.2);
-  flex-shrink: 0;
-}
-
-.elena-avatar::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: conic-gradient(#00f0ff, #0057ff, #bd00ff, #00f0ff);
-  z-index: -1;
-  animation: elena-spin 4s linear infinite;
-  filter: blur(3px);
-}
-
-@keyframes elena-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  box-shadow: -5px 0 20px rgba(0, 240, 255, 0.4);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 0 0 4px;
 }
 
 .elena-avatar-inner {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #00020f;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.elena-label {
-  background: rgba(0, 2, 15, 0.9);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 240, 255, 0.25);
-  border-radius: 24px;
-  padding: 6px 0px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 240, 255, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.elena-toggle-label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
   max-width: 0;
   opacity: 0;
-  overflow: hidden;
-  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.elena-chat-widget:hover .elena-label {
-  border-color: rgba(0, 240, 255, 0.55);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 240, 255, 0.2);
-  max-width: 200px;
+/* Hover: expand to show name */
+.elena-chat-widget:not(.is-open):hover .elena-toggle-label {
+  max-width: 100px;
   opacity: 1;
-  padding: 6px 14px 6px 14px;
-  margin-right: 10px;
+  padding: 0 16px 0 10px;
+}
+
+/* The Chat Panel */
+.elena-chat-panel {
+  position: absolute;
+  bottom: 0;
+  right: 64px; /* Next to the toggle with some margin */
+  width: 320px;
+  background: rgba(0, 2, 15, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 16px;
+  box-shadow: -10px 10px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Hidden state */
+  transform: translateX(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Click reveal logic */
+.elena-chat-widget.is-open .elena-chat-panel {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Header */
+.elena-chat-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.elena-chat-title {
+  display: flex;
+  flex-direction: column;
 }
 
 .elena-name {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.02em;
-  line-height: 1.2;
 }
 
 .elena-status {
-  font-size: 10px;
+  font-size: 11px;
   color: #00f0ff;
-  letter-spacing: 0.05em;
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-top: 1px;
+  gap: 6px;
+  margin-top: 2px;
 }
 
 .elena-status-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #00f0ff;
-  animation: elena-pulse 1.5s ease-in-out infinite;
+  animation: elena-pulse 1.5s infinite;
 }
 
 @keyframes elena-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.7); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.elena-expand-btn {
+  color: #00f0ff;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.elena-expand-btn:hover {
+  color: #fff;
+}
+
+/* History container */
+.elena-chat-history {
+  padding: 16px;
+  height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.elena-chat-history::-webkit-scrollbar {
+  width: 4px;
+}
+
+.elena-chat-history::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 4px;
+}
+
+.elena-message {
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 90%;
+  color: #e2e8f0;
+}
+
+.elena-message.bot {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-bottom-left-radius: 2px;
+  align-self: flex-start;
+}
+
+.elena-message p {
+  margin: 0;
+}
+
+/* Input Area */
+.elena-chat-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.elena-mock-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 8px 16px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+
+.elena-mock-submit {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #00f0ff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.elena-mock-submit:hover {
+  transform: scale(1.05);
 }
 
 /* ── 7. SCROLL-TO-TOP BUTTON OVERRIDE (base) ─────────────────── */

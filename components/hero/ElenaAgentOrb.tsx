@@ -92,20 +92,29 @@ export default function ElenaAgentOrb() {
     const points: SpherePoint[] = [];
     const numPoints = 3500; // Drastically reduced density for smooth 60fps scrolling
 
-    const getSphereColor = (ratio: number) => {
-      if (ratio < 0.5) {
-        // Green to Cyan
-        const t = ratio * 2;
-        const g = Math.round(255 * (1 - t) + 164 * t);
-        const b = Math.round(151 * (1 - t) + 175 * t);
-        return `0, ${g}, ${b}`;
-      } else {
-        // Cyan to Blue
-        const t = (ratio - 0.5) * 2;
-        const r = Math.round(0 * (1 - t) + 44 * t);
-        const g = Math.round(164 * (1 - t) + 50 * t);
-        const b = Math.round(175 * (1 - t) + 254 * t);
+    const getSphereColor = (ratio: number, layer: number) => {
+      if (layer === 1) {
+        // Bright Cyan to Magenta core
+        const t = ratio;
+        const r = Math.round(0 * (1 - t) + 255 * t);
+        const g = Math.round(255 * (1 - t) + 0 * t);
+        const b = 255;
         return `${r}, ${g}, ${b}`;
+      } else {
+        // Outer shell: Deep Blue to Electric Purple to Cyan
+        if (ratio < 0.5) {
+          const t = ratio * 2;
+          const r = Math.round(0 * (1 - t) + 138 * t); // Blue to Purple
+          const g = Math.round(0 * (1 - t) + 43 * t);
+          const b = Math.round(255 * (1 - t) + 226 * t);
+          return `${r}, ${g}, ${b}`;
+        } else {
+          const t = (ratio - 0.5) * 2;
+          const r = Math.round(138 * (1 - t) + 0 * t); // Purple to Cyan
+          const g = Math.round(43 * (1 - t) + 255 * t);
+          const b = Math.round(226 * (1 - t) + 255 * t);
+          return `${r}, ${g}, ${b}`;
+        }
       }
     };
 
@@ -114,9 +123,6 @@ export default function ElenaAgentOrb() {
       const theta = Math.acos(y); 
       const phi = i * Math.PI * (3 - Math.sqrt(5)); 
       
-      const ratio = (y + 1) / 2; 
-      const baseColor = getSphereColor(ratio);
-      
       // Assign particles to 2 distinct layers for a cleaner, high-performance geometry
       let layer = 0;
       if (i % 4 === 0) {
@@ -124,6 +130,9 @@ export default function ElenaAgentOrb() {
       } else {
         layer = 0; // Outer sphere (75% of points)
       }
+      
+      const ratio = (y + 1) / 2; 
+      const baseColor = getSphereColor(ratio, layer);
       
       points.push({ theta, phi, baseColor, layer });
     }
@@ -252,10 +261,43 @@ export default function ElenaAgentOrb() {
         });
       });
 
-      // 7. DEPTH SORTING (Back to Front)
+      // 7. RENDER PLASMA CORE (Fluid organic effect using layered radial gradients)
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter"; // Additive blending for energy glow
+      
+      const numBlobs = 5;
+      for (let i = 0; i < numBlobs; i++) {
+        // Organic movement using multiple sine waves
+        const angle = time * (0.4 + i * 0.1) + i * ((Math.PI * 2) / numBlobs);
+        const distance = baseRadius * 0.25 * Math.sin(time * 0.6 + i);
+        
+        const blobX = centerX + Math.cos(angle) * distance;
+        const blobY = centerY + Math.sin(angle) * distance;
+        
+        // Blobs pulsate in size
+        const blobRadius = baseRadius * 0.5 * (1 + 0.15 * Math.sin(time * 1.2 + i));
+
+        // Shifting colors between Cyan, Blue, and Magenta
+        const rColor = Math.floor(120 + 135 * Math.sin(time * 0.5 + i));
+        const gColor = Math.floor(80 + 80 * Math.cos(time * 0.4 + i));
+        const bColor = 255;
+        
+        const g = ctx.createRadialGradient(blobX, blobY, 0, blobX, blobY, blobRadius);
+        g.addColorStop(0, `rgba(${rColor}, ${gColor}, ${bColor}, 0.5)`); // Bright core
+        g.addColorStop(0.5, `rgba(80, 40, 255, 0.2)`); // Deep blue/purple mid-tone
+        g.addColorStop(1, `rgba(0, 0, 0, 0)`); // Fade to transparent
+        
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(blobX, blobY, blobRadius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 8. DEPTH SORTING (Back to Front)
       projectedPoints.sort((a, b) => b.z - a.z);
 
-      // 8. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
+      // 9. RENDER PARTICLES AND DYNAMIC NEURAL NEIGHBOR LINES
       const lineConnectionDist = width * 0.12;
       const lineRenderLimit = width * 0.05; // Slightly longer reach to compensate for fewer points
       
@@ -304,14 +346,21 @@ export default function ElenaAgentOrb() {
   return (
     <div className="w-full flex justify-center items-center">
       <Link href="/elena-ai" className="elena-orb-portal-link relative w-full aspect-square max-w-[600px]">
+        {/* CSS Atmospheric Plasma Aura */}
+        <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+          <div className="absolute w-[60%] h-[60%] bg-fuchsia-600/30 rounded-full blur-[80px] animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute w-[50%] h-[50%] bg-cyan-500/30 rounded-full blur-[70px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s', transform: 'translate(15%, -15%)' }} />
+          <div className="absolute w-[55%] h-[55%] bg-blue-600/30 rounded-full blur-[90px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s', transform: 'translate(-15%, 15%)' }} />
+        </div>
+
         <div
           ref={containerRef}
-          className="elena-orb-container w-full h-full absolute inset-0 overflow-visible flex items-center justify-center"
+          className="elena-orb-container w-full h-full absolute inset-0 overflow-visible flex items-center justify-center z-10"
         >
-          <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full block absolute inset-0 z-10" />
+          <canvas ref={canvasRef} className="elena-orb-canvas w-full h-full block absolute inset-0" />
           
           {/* Logo Overlay */}
-          <div className="absolute z-20 pointer-events-none drop-shadow-[0_0_20px_rgba(0,229,255,0.6)]">
+          <div className="absolute z-20 pointer-events-none drop-shadow-[0_0_20px_rgba(0,229,255,0.8)]">
             <Image src={logo} alt="PixelWave Logo" width={200} height={60} className="opacity-95" />
           </div>
         </div>
