@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 // ---- image imports ----
-import img07 from "@/public/images/project/project-img01.jpg";
+import img07 from "@/public/images/project/cupzo-banner.png";
 
 import icon4 from "@/public/images/icon/project-icon04.svg";
 import icon5 from "@/public/images/icon/project-icon05.svg";

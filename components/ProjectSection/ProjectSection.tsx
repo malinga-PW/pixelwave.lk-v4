@@ -8,7 +8,7 @@ import Image from "next/image";
 import projectBg from "@/public/images/bg/project-bg.png";
 import gifRound from "@/public/images/icon/b10c3e43e836d32554bf.gif";
 
-import projectImg01 from "@/public/images/project/project-img01.jpg";
+import projectImg01 from "@/public/images/project/cupzo-banner.png";
 import projectImg02 from "@/public/images/project/project-img02.jpg";
 import projectImg03 from "@/public/images/project/project-img03.jpg";
 import projectImg04 from "@/public/images/project/project-img04.jpg";
