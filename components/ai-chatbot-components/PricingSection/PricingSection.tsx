@@ -46,6 +46,11 @@ const CheckIcon = (
   </svg>
 );
 
+const STARTUP_BUSINESS = [
+  "Website Design & Host",
+  "2 Business Email Addresses",
+];
+
 const DIGITAL_PRESENCE = [
   "Premium Website",
   "High-Speed Hosting",
@@ -89,12 +94,23 @@ const CURRENCIES = [
 
 const PRICING_DATA = [
   {
+    id: 0,
+    name: "Startup Business",
+    prices: {
+      weekly: 5,
+      monthly: 19,
+      yearly: 199,
+    },
+    features: STARTUP_BUSINESS,
+    popular: false,
+  },
+  {
     id: 1,
     name: "Digital Presence",
     prices: {
-      weekly: 10,
-      monthly: 39,
-      yearly: 399,
+      weekly: 15,
+      monthly: 49,
+      yearly: 499,
     },
     features: DIGITAL_PRESENCE,
     popular: false,
