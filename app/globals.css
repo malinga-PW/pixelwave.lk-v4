@@ -398,9 +398,9 @@
   flex-shrink: 0;
 }
 
-/* Reduce gap between feature items to further decrease overall section height */
+/* Increase gap between feature items */
 .xb-feature-item2 {
-  margin-bottom: 20px !important;
+  margin-bottom: 40px !important;
 }
 
 /* The toggle element resting on the edge */
