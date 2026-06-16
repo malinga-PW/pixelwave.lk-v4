@@ -152,7 +152,7 @@
 
 /* ── 4. MAIN MENU NAV — HOVER & ACTIVE (PILL BORDER) ────────── */
 
-.main-menu ul > li > a,
+.main-menu > ul > li > a,
 .xb-header-nav .responsivemenu > li > a,
 .xb-header-nav .responsivemenu > li > p {
   position: relative;
@@ -173,7 +173,7 @@
 }
 
 /* Hover: subtle pill bg and primary color text */
-.main-menu ul > li:hover > a,
+.main-menu > ul > li:hover > a,
 .xb-header-nav .responsivemenu > li:hover > a,
 .xb-header-nav .responsivemenu > li:hover > p {
   color: var(--color-primary) !important;
@@ -183,7 +183,7 @@
 }
 
 /* Active page: glowing pill border */
-.main-menu ul > li.pw-active > a,
+.main-menu > ul > li.pw-active > a,
 .xb-header-nav .responsivemenu > li.active > a,
 .xb-header-nav .responsivemenu > li.active > p {
   color: var(--color-primary) !important;
@@ -682,16 +682,17 @@
 
 @media (min-width: 992px) {
   .mega_menu_wrapper_inner {
-    height: 330px !important; /* Unified height so they are exactly the same size */
+    height: auto !important; /* Let content dictate height or min-height */
+    min-height: 330px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    padding: 20px 25px !important;
+    padding: 24px 30px !important; /* Added more breathing room */
     overflow: visible !important; /* Keep overflow visible so glow is not clipped */
     background: #222746 !important; /* Original theme color */
     border-radius: 24px !important; /* Increased corner radius */
     border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Original theme border */
-    box-shadow: none !important; /* Clear custom box shadow to rely on original gradient glow */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important; /* Deeper shadow for depth */
   }
 
   .mega_menu_wrapper_inner > .row {
@@ -736,56 +737,94 @@
   padding-bottom: 0 !important;
 }
 .mega_menu_wrapper .megamenu_widget ul {
-  gap: 8px 22px !important; /* Extremely compact list spacing */
+  gap: 12px 24px !important; /* More spacious list spacing */
 }
 .mega_menu_wrapper .megamenu_widget ul li {
   padding: 0 !important;
 }
 .mega_menu_wrapper .megamenu_widget ul li a {
   font-size: 15px !important;
-  font-weight: 600 !important;
-  line-height: 1.2 !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px 8px !important; /* Clean text links with simple padding */
+  display: inline-flex;
+  transition: all 0.3s ease !important;
 }
+
+.mega_menu_wrapper .megamenu_widget ul li a:hover {
+  color: #00FF97 !important;
+  background: rgba(0, 255, 151, 0.05) !important;
+  border-radius: 8px !important;
+  padding-left: 12px !important; /* Slight inset on hover for dynamic feel */
+}
+
 .mega_menu_wrapper .social_area {
-  margin-top: 10px !important;
-  padding-top: 10px !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  margin-top: 15px !important;
+  padding-top: 15px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 .mega_menu_wrapper .social_area .mt-30 {
   margin-top: 10px !important; /* Pull up banner inside left column */
 }
 .mega_menu_wrapper .service_link {
-  padding: 8px 12px !important; /* Tighter padding for bottom card */
+  padding: 14px 20px !important; /* Proper padding for bottom card */
   gap: 15px !important;
+  border-radius: 16px !important; /* Contained within mega menu wrapper perfectly */
+  overflow: hidden !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border: 1px solid rgba(0, 255, 151, 0.2) !important;
+  background: rgba(0, 255, 151, 0.05) !important;
+  transition: transform 0.3s ease !important;
 }
+
+.mega_menu_wrapper .service_link:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(0, 255, 151, 0.1) !important;
+}
+
 .mega_menu_wrapper .service_link .xb-item--inner {
   padding: 0 !important;
+  width: 100%;
 }
 .mega_menu_wrapper .service_link .xb-item--holder {
   margin-top: 0 !important;
-  margin-bottom: 2px !important;
+  margin-bottom: 4px !important;
 }
 .mega_menu_wrapper .service_link .xb-item--title {
-  font-size: 13px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+.mega_menu_wrapper .service_link .xb-item--title a {
+  color: #00ff9d !important; /* Make sure title is clearly visible */
 }
 .mega_menu_wrapper .service_link .xb-item--text {
-  font-size: 11px !important;
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
   margin: 0 !important;
+  line-height: 1.4 !important;
 }
 
 /* Right column card spacing reduction */
 .mega_menu_wrapper .megamenu_case {
   padding: 0 !important;
-  margin-left: 20px !important;
+  margin-left: 15px !important; /* Adjusted margin to not push out */
+  height: 100% !important;
 }
 .mega_menu_wrapper .megamenu_case .xb-item--inner {
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
-  padding: 12px !important;
+  padding: 16px !important; /* Slightly more spacious inner padding */
   background-color: rgba(255, 255, 255, 0.03) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important; /* Clean rounded edges */
 }
 .mega_menu_wrapper .megamenu_case .xb-item--img img {
   max-height: 95px !important; /* Reduced image height to save space */
