@@ -166,7 +166,7 @@ export default function PricingSection() {
 
   return (
     <section id="pricing" className="pricing pt-145 pb-150 bg_img" style={BG_STYLE}>
-      <div className="container">
+      <div className="container-fluid px-4 px-xl-5">
 
         {/* TITLE */}
         <div className="sec-title sec-title--two pricing-sec-title text-center mb-30">
