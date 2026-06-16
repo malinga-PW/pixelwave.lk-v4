@@ -12,6 +12,7 @@ import projectImg01 from "@/public/images/project/cupzo-banner.png";
 import projectImg02 from "@/public/images/project/project-img02.jpg";
 import projectImg03 from "@/public/images/project/project-img03.jpg";
 import projectImg04 from "@/public/images/project/project-img04.jpg";
+import projectImg05 from "@/public/images/project/mega-app-banner.png";
 
 // Icons
 import icon01 from "@/public/images/icon/project-icon01.svg";
@@ -122,6 +123,16 @@ export default function ProjectSection() {
       industry: "Data Science",
       country: "Canada",
       techs: [icon08, icon12, icon13],
+    },
+    {
+      img: projectImg05,
+      title: "All-in-One Mega Community AI App (Ongoing)",
+      desc: "A revolutionary, unified mega ecosystem seamlessly blending social media, video streaming, ride-hailing, e-commerce, and personalized business subdomains under a single AI-driven platform.",
+      industry: "Social Media & Tech Ecosystem",
+      country: "Global (Future Release)",
+      techs: [],
+      techTags: ["Next.js", "React Native", "AI Core", "Microservices", "WebRTC"],
+      link: "/project-details/mega-community-app"
     },
   ];
 
