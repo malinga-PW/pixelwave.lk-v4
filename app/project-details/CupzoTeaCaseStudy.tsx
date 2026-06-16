@@ -25,7 +25,7 @@ const CheckIcon: React.FC = () => (
 );
 
 // ==== main component ====
-export default function ProjectDetailsSection() {
+export default function CupzoTeaCaseStudy() {
   const projectMeta = [
     { icon: icon4, label: "client :", value: "Cupzo Tea" },
     { icon: icon5, label: "industry :", value: "B2B Enterprise Tea Export" },

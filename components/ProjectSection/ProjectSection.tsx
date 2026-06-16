@@ -95,15 +95,17 @@ export default function ProjectSection() {
       country: "Sri Lanka",
       techs: [],
       techTags: ["Next.js", "Tailwind CSS", "n8n Enterprise", "OpenAI", "Supabase"],
-      link: "cupzotea.com"
+      link: "/project-details/cupzo-tea"
     },
     {
       img: projectImg02,
-      title: "maxwelllanka.com",
-      desc: "A comprehensive household item business website, providing a seamless browsing experience for home appliances and everyday essentials.",
-      industry: "Retail & Household",
+      title: "Maxwell Lanka Next-Gen E-Commerce",
+      desc: "A high-performance headless e-commerce architecture with an intelligent conversational AI shopping assistant and real-time financial dashboard.",
+      industry: "E-Commerce / Retail",
       country: "Sri Lanka",
-      techs: [icon01, icon08, icon09],
+      techs: [],
+      techTags: ["Next.js", "Vercel", "Supabase", "Gemini AI", "LangChain", "n8n"],
+      link: "/project-details/maxwell-lanka"
     },
     {
       img: projectImg03,
@@ -203,7 +205,7 @@ export default function ProjectSection() {
                     </div>
 
                     <div className="xb-item---btn mt-70">
-                      <Link className="thm-btn agency-btn" href="/project-details">
+                      <Link className="thm-btn agency-btn" href={project.link || "/project-details"}>
                         <span className="text">read more</span>
                         <span className="arrow">
                           <span className="arrow-icon">
