@@ -48,7 +48,7 @@ export default function BlogSection() {
       </div>
 
       {/* Horizontal Scrolling Marquee */}
-      <div className="xb-blog-marquee-wrap marquee-container mb-60">
+      <div className="xb-blog-marquee-wrap marquee-container mb-60" style={{ paddingTop: "30px", paddingBottom: "30px" }}>
         <div className="marquee-track">
           {marqueeBlogs.map((blog, index) => (
             <div key={index} className="xb-blog-marquee-item">
