@@ -252,7 +252,7 @@ export default function PricingSection() {
                 : "Week";
 
             return (
-              <div key={tier.id} className="col-lg-3 col-md-6 mt-30">
+              <div key={tier.id} className="col-lg-4 col-md-6 mt-30">
                 <div
                   className="pricing-item xb-border bg_img h-100 d-flex flex-column"
                   style={BG_ITEM_STYLE}
