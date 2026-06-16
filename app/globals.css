@@ -264,6 +264,36 @@
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
 }
+/* ── 8. COMPACT FEATURE TILES (Why Choose Us) ────────────── */
+.feature-tile-compact {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 25px 20px !important;
+  min-height: auto !important;
+  gap: 12px !important;
+}
+
+.feature-tile-compact .xb-item--icon {
+  margin: 0 !important;
+  display: flex;
+  justify-content: center;
+}
+
+.feature-tile-compact .xb-item--title {
+  text-align: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 17px !important;
+  line-height: 1.4 !important;
+}
+
+/* Reduce gap between feature items to further decrease overall section height */
+.xb-feature-item2 {
+  margin-bottom: 20px !important;
+}
 
 /* The toggle element resting on the edge */
 .elena-chat-toggle {
