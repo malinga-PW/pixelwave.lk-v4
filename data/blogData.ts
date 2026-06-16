@@ -75,7 +75,7 @@ export const blogData: Record<string, BlogPost> = {
   },
   "mastering-n8n-workflows-for-seamless-api-integrations": {
     slug: "mastering-n8n-workflows-for-seamless-api-integrations",
-    title: "Mastering n8n Workflows for Seamless API Integrations",
+    title: "Mastering n8n Workflows for API Integrations",
     category: "SaaS Development",
     date: "June 05, 2026",
     author: "Elena AI",
