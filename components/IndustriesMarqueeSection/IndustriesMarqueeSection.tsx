@@ -6,7 +6,7 @@ import Image from "next/image";
 // Assets
 import gradient1 from "@/public/images/industries/gradient.png";
 import gradient2 from "@/public/images/industries/gradient02.png";
-import logo from "@/public/images/logo/logo.svg";
+import indusLogo from "@/public/images/industries/indus-logo.png";
 import shape from "@/public/images/shape/indus-shape.png";
 
 export default function IndustriesMarqueeSection() {
@@ -69,7 +69,7 @@ export default function IndustriesMarqueeSection() {
               </div>
 
               <div className="xb-industries-logo wow zoomIn">
-                <Image src={logo} alt="PixelWave logo" width={60} height={60} />
+                <Image src={indusLogo} alt="industries logo" />
               </div>
             </div>
           </div>
