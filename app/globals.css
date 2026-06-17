@@ -626,11 +626,50 @@
   /* Global Widget Overlaps */
   .elena-chat-widget {
     bottom: 85px !important;
-    right: 20px !important;
+    right: 0 !important;
     left: auto !important;
     transform: scale(0.8) !important;
     transform-origin: bottom right !important;
     z-index: 9999 !important;
+  }
+  
+  /* Ensure header elements do not wrap and align nicely */
+  .header__wrap {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  
+  /* Reduce logo size by 20% on mobile */
+  .xb-header-logo img {
+    width: 160px !important;
+  }
+  
+  .xb-header-area-sticky .xb-header-logo img {
+    width: 112px !important;
+  }
+
+  /* Make translation menu flag-only in mobile view */
+  .custom-language-dropdown .dropdown-trigger .lang-label,
+  .custom-language-dropdown .dropdown-trigger i {
+    display: none !important;
+  }
+  
+  .custom-language-dropdown .dropdown-trigger {
+    padding: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* Dropdown list position adjustment for mobile flag-only */
+  .custom-language-dropdown .dropdown-menu-list {
+    transform: translateX(-50%) translateY(5px) !important;
   }
   
   /* Footer adjustments */
@@ -1179,7 +1218,8 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.custom-language-dropdown:hover .dropdown-menu-list {
+.custom-language-dropdown:hover .dropdown-menu-list,
+.custom-language-dropdown .dropdown-menu-list.active {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(5px);
