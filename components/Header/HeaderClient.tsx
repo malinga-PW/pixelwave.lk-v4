@@ -191,7 +191,7 @@ export default function HeaderClient() {
             </div>
 
             {/* Header Buttons and Custom Translator Dropdown */}
-            <div className="header-action-group ul_li align-items-center">
+            <div className="header-action-group ul_li align-items-center d-none d-lg-flex">
               
               {/* Custom Google Translate Dropdown */}
               <div className="custom-language-dropdown notranslate me-3" ref={selectorRef}>

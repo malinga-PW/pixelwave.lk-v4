@@ -45,14 +45,13 @@ export default function BlogDetailsSection({ blog }: { blog: BlogPost }) {
               </p>
 
               {/* VIDEO EMBED */}
-              <div className="blog-details-video mt-75">
+              <div className="blog-details-video mt-75" style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", borderRadius: "12px" }}>
                 <iframe
-                  width="890"
-                  height="440"
                   src="https://www.youtube.com/embed/HISRUrJsD08?si=_cI2X3hO3nluIWHV"
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
                 ></iframe>
               </div>
 

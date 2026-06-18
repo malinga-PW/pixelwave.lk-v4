@@ -143,6 +143,7 @@ export default function ServiceSection() {
               activeId === service.id ? "active" : ""
             }`}
             onMouseEnter={() => setActiveId(service.id)}
+            onClick={() => setActiveId(service.id)}
           >
             <div className="xb-item--inner">
               <div className="xb-item--item">

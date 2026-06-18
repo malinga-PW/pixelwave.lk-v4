@@ -43,13 +43,13 @@ export default function ContactPage() {
                 </div>
 
                 {/* GOOGLE MAP */}
-                <div className="google-map">
+                <div className="google-map" style={{ minHeight: "400px" }}>
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585978184!2d79.77380312061486!3d6.921922084534796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1718386400123!5m2!1sen!2sus"
                     loading="lazy"
                     title="Google Map"
                     referrerPolicy="no-referrer-when-downgrade"
-                    style={{ width: "100%", height: "100%", border: 0 }}
+                    style={{ width: "100%", height: "100%", minHeight: "400px", border: 0 }}
                     allowFullScreen
                   />
                 </div>

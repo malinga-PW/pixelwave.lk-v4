@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import ClientWrapper from "@/components/ClientWrapper/ClientWrapper";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "swiper/css";
@@ -12,6 +12,11 @@ import "../styles/imageRevealHover.css";
 import "../styles/custom-fonts.css";
 import "../styles/main.css";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "PixelWave AI Solutions | Build Smarter. Grow Faster.",

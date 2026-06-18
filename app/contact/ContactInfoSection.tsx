@@ -28,7 +28,7 @@ export default function ContactInfoSection() {
 
           {contactData.map((item, index) => (
             <div className="col-lg-6 col-md-8 mx-auto mt-30" key={index}>
-              <div className="xb-contact-items img-hove-effect xb-border text-center" style={{ padding: "40px" }}>
+              <div className="xb-contact-items img-hove-effect xb-border text-center" style={{ padding: "clamp(20px, 4vw, 40px)" }}>
                 <div className="xb-item--inner">
 
                   {/* Hover images */}
@@ -45,7 +45,7 @@ export default function ContactInfoSection() {
 
                   {/* Content */}
                   <div className="xb-item--holder mt-30">
-                    <p className="xb-item--location" style={{ fontSize: "24px" }}>
+                    <p className="xb-item--location" style={{ fontSize: "clamp(18px, 3vw, 24px)" }}>
                       <a href="https://maps.app.goo.gl/oo3yr24kDV9LhXo28" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>
                         {item.location}
                       </a>

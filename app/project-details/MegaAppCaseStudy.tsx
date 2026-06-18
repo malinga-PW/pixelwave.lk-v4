@@ -40,7 +40,7 @@ export default function MegaAppCaseStudy() {
         {/* Title Block */}
         <div className="mb-50 text-center">
           <span className="sub-title d-block mb-10 text-primary" style={{letterSpacing: '2px', textTransform: 'uppercase', fontSize: '14px', fontWeight: 600}}>Ongoing Internal Project</span>
-          <h1 className="title" style={{ fontSize: '48px', lineHeight: 1.2 }}>The "All-In-One" <br /> <span style={{ color: '#00FF97' }}>AI-Powered Mega Community App</span></h1>
+          <h1 className="title" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.2 }}>The "All-In-One" <br /> <span style={{ color: '#00FF97' }}>AI-Powered Mega Community App</span></h1>
         </div>
 
         {/* image */}
@@ -54,17 +54,19 @@ export default function MegaAppCaseStudy() {
         </div>
 
         {/* meta icons */}
-        <ul className="project-meta ul_li_between mb-80 p-4 rounded bg-dark border border-secondary">
+        <div className="row mb-80 p-4 rounded bg-dark border border-secondary">
           {projectMeta.map((item, i) => (
-            <li key={i} className="mb-3 mb-md-0">
-              <Image src={item.icon} alt={item.label} width={40} height={40} className="me-3" />
-              <div>
-                <span className="d-block text-uppercase text-secondary" style={{fontSize: '12px'}}>{item.label}</span>
-                <strong className={item.value === "In Development" ? "text-warning" : "text-white"}>{item.value}</strong>
+            <div key={i} className="col-6 col-md-3 mb-3 mb-md-0">
+              <div className="d-flex align-items-center gap-2">
+                <Image src={item.icon} alt={item.label} width={40} height={40} className="flex-shrink-0" />
+                <div>
+                  <span className="d-block text-uppercase text-secondary" style={{fontSize: '12px'}}>{item.label}</span>
+                  <strong className={item.value === "In Development" ? "text-warning" : "text-white"}>{item.value}</strong>
+                </div>
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
 
         {/* Executive Summary */}
         <h2 className="details-content-title mb-20 text-white">The Vision</h2>

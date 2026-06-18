@@ -68,7 +68,7 @@ export default function HeroSection() {
           </div>
 
           {/* RIGHT PARTICLE ORB */}
-          <div className="col-lg-5 col-md-5">
+          <div className="col-lg-5 col-md-5 order-first order-md-last">
             <div
               className="hero-icon wow zoomIn"
               data-wow-delay="700ms"

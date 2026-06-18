@@ -43,7 +43,7 @@ export default function GallerySection() {
         {/* Gallery */}
         <div className="career-gallary ul_li_between">
           {careerImages.map((image, index) => (
-            <div key={index} className="xb-image-item img-hove-effect">
+            <div key={index} className="xb-image-item img-hove-effect col-6 col-md-4 col-lg-auto">
               <div className="xb-img">
                 {[...Array(4)].map((_, i) => (
                   <Link key={i} href="/career-details">

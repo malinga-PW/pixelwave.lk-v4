@@ -628,9 +628,26 @@
     bottom: 85px !important;
     right: 0 !important;
     left: auto !important;
-    transform: scale(0.8) !important;
-    transform-origin: bottom right !important;
+    transform: none !important;
     z-index: 9999 !important;
+  }
+
+  /* Chat panel: prevent overflow past left viewport edge */
+  .elena-chat-panel {
+    right: 0 !important;
+    left: auto !important;
+    width: calc(100vw - 20px) !important;
+    max-width: 320px !important;
+  }
+
+  /* Shrink toggle button elements directly instead of scaling the whole widget */
+  .elena-chat-toggle {
+    height: 44px !important;
+    min-height: 44px !important;
+  }
+  .elena-avatar-inner {
+    width: 36px !important;
+    height: 36px !important;
   }
   
   /* Ensure header elements do not wrap and align nicely */
@@ -717,6 +734,214 @@
   /* Elena AI "Book Consultation" contrast fix */
   .btn-book-consultation {
     color: #ffffff !important;
+  }
+}
+
+/* ── 9. SMALL PHONE FIXES (max-width: 575px) ───────────────── */
+@media (max-width: 575px) {
+  /* Prevent horizontal overflow */
+  .body_wrap, .o-clip, section, .container {
+    overflow-x: hidden !important;
+  }
+  .container {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  /* Header: reduce top offset */
+  .xb-header {
+    top: 0 !important;
+  }
+
+  /* Hero: reduce padding, scale title, fix icon overflow */
+  .hero-style {
+    padding-top: 100px !important;
+    min-height: auto !important;
+  }
+  .hero-content .title {
+    font-size: clamp(28px, 8vw, 36px) !important;
+    line-height: 1.2 !important;
+  }
+  .hero-content .sub-title {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    max-width: 100% !important;
+  }
+  .hero-style .hero-icon {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    transform: translate(0, 0) !important;
+    max-width: 100% !important;
+  }
+  .hero-icon .elena-orb-portal-link {
+    max-width: 280px !important;
+  }
+  .col-lg-5.col-md-5.order-first.order-md-last {
+    margin-bottom: 30px !important;
+  }
+
+  /* Hero feature tiles: stack, reduce padding */
+  .xb-feature-item .xb-item--inner {
+    padding: 20px 16px 16px !important;
+  }
+  .xb-feature-item .xb-item--title {
+    font-size: 18px !important;
+    margin: 16px 0 4px !important;
+  }
+  .xb-feature-item .xb-item--content {
+    font-size: 14px !important;
+  }
+
+  /* Section titles: scale down */
+  .sec-title .title,
+  .about-sec-title .title,
+  .sec-title-three .title,
+  .sec-title--two .title,
+  .custom-sec-title .title {
+    font-size: clamp(24px, 7vw, 30px) !important;
+  }
+
+  /* About section */
+  .about .xb-about-img-item {
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: auto !important;
+  }
+  .about-sec-title .title span:nth-child(3) {
+    width: 100px !important;
+    left: 5px !important;
+    top: 10px !important;
+  }
+
+  /* Service section */
+  .xb-service-item .xb-item--item {
+    padding: 40px 16px 40px !important;
+  }
+  .xb-service-item {
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .xb-service-item .xb-item--title {
+    font-size: 22px !important;
+  }
+  .xb-ser-item .xb-item--title {
+    font-size: 20px !important;
+    max-width: 100% !important;
+  }
+  .service-outcome-list {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Feature section tiles */
+  .feature-tile-left,
+  .feature-tile-right {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    padding: 14px 16px !important;
+    min-height: auto !important;
+    gap: 12px !important;
+  }
+  .xb-feature-item2 {
+    margin-bottom: 20px !important;
+  }
+
+  /* Project section */
+  .xb-project-content .xb-item--btn {
+    margin-top: 12px !important;
+  }
+
+  /* Statistics circle */
+  .xb-about-number {
+    width: 180px !important;
+    height: 180px !important;
+  }
+  .xb-about-number .number {
+    font-size: 32px !important;
+  }
+
+  /* Footer: scale decorative text, stack bottom rows */
+  .xb-footer-heading .title {
+    font-size: clamp(28px, 10vw, 40px) !important;
+  }
+  .footer-brand-text {
+    font-size: 28px !important;
+  }
+  .xb-footer-heading .mail {
+    font-size: 14px !important;
+  }
+  .xb-footer-nav {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  .xb-footer-nav-item {
+    width: 100% !important;
+  }
+  .xb-footer-bottom {
+    flex-direction: column !important;
+    gap: 15px !important;
+    text-align: center !important;
+  }
+  .xb-footer-bottom .contact-item {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .xb-social-media-wrap {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Breadcrumb: smaller */
+  .breadcrumb {
+    min-height: 240px !important;
+    padding: 100px 0 60px !important;
+  }
+  .breadcrumb__title {
+    font-size: 28px !important;
+  }
+
+  /* Service details sidebar: disable sticky on mobile */
+  .service-sidebar {
+    position: relative !important;
+    top: 0 !important;
+    padding: 24px !important;
+  }
+
+  /* Mobile menu: narrower drawer */
+  .xb-header-menu {
+    width: 260px !important;
+  }
+
+  /* Blog marquee item width */
+  .xb-blog-marquee-item {
+    width: 260px !important;
+  }
+
+  /* Brand logos */
+  .xb-brand-item img {
+    max-width: 80px !important;
+  }
+
+  /* FAQ accordion */
+  .xb-faq .accordion-body {
+    padding: 12px 0 !important;
+  }
+
+  /* Layout spacing reduction */
+  section {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  .pt-120, .pt-100, .pt-80, .pt-60 {
+    padding-top: 50px !important;
+  }
+  .pb-120, .pb-100, .pb-80, .pb-60 {
+    padding-bottom: 50px !important;
+  }
+  .mt-55 {
+    margin-top: 30px !important;
+  }
+  .mt-30 {
+    margin-top: 20px !important;
   }
 }
 

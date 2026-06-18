@@ -34,7 +34,7 @@ export default function ElenaAIPage() {
             <div className="elena-page-blob elena-page-blob--2" />
 
             <div className="container" style={{ position: "relative", zIndex: 2 }}>
-              <div style={{ textAlign: "center", maxWidth: 780, margin: "0 auto", padding: "140px 0 80px" }}>
+              <div style={{ textAlign: "center", maxWidth: 780, margin: "0 auto", padding: "clamp(80px, 14vw, 140px) 0 clamp(40px, 8vw, 80px)" }}>
                 <div
                   style={{
                     display: "inline-flex",
@@ -133,7 +133,7 @@ export default function ElenaAIPage() {
           </section>
 
           {/* ── FEATURE CARDS ──────────────────────────────────── */}
-          <section style={{ padding: "100px 0", background: "#00020f" }}>
+          <section style={{ padding: "clamp(50px, 8vw, 100px) 0", background: "#00020f" }}>
             <div className="container">
               <div style={{ textAlign: "center", marginBottom: 64 }}>
                 <span className="sub-title" style={{ color: "var(--color-primary)", paddingLeft: 0 }}>
@@ -212,7 +212,7 @@ export default function ElenaAIPage() {
           {/* ── COMING SOON STRIP ──────────────────────────────── */}
           <section
             style={{
-              padding: "80px 0",
+              padding: "clamp(40px, 6vw, 80px) 0",
               textAlign: "center",
               background: "linear-gradient(90deg, rgba(0,255,151,0.06) 0%, rgba(0,210,255,0.06) 100%)",
               borderTop: "1px solid rgba(255,255,255,0.05)",
@@ -290,13 +290,13 @@ export default function ElenaAIPage() {
             pointer-events: none;
           }
           .elena-page-blob--1 {
-            width: 500px; height: 500px;
-            top: -100px; left: -150px;
+            width: min(500px, 80vw); height: min(500px, 80vw);
+            top: -50px; left: -5vw;
             background: rgba(0,255,151,0.15);
           }
           .elena-page-blob--2 {
-            width: 400px; height: 400px;
-            bottom: 50px; right: -100px;
+            width: min(400px, 60vw); height: min(400px, 60vw);
+            bottom: 50px; right: -5vw;
             background: rgba(0,210,255,0.12);
           }
         `}</style>

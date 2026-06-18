@@ -32,7 +32,7 @@ export default function ServiceDetails({ service }: { service: ServiceData }) {
         {/* === Main Content === */}
         <div className="row">
           <div className="col-lg-8">
-            <h2 className="details-content-title mb-15" style={{ color: "#fff", fontSize: "36px", fontWeight: "bold" }}>
+            <h2 className="details-content-title mb-15" style={{ color: "#fff", fontSize: "clamp(22px, 4vw, 36px)", fontWeight: "bold" }}>
               {service.subtitle}
             </h2>
             <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "18px", lineHeight: "1.8", marginBottom: "40px" }}>
@@ -40,7 +40,7 @@ export default function ServiceDetails({ service }: { service: ServiceData }) {
             </p>
 
             {/* === Features List === */}
-            <h3 className="details-content-title mb-20" style={{ color: "#fff", fontSize: "28px" }}>
+            <h3 className="details-content-title mb-20" style={{ color: "#fff", fontSize: "clamp(20px, 3vw, 28px)" }}>
               Key Features
             </h3>
             <ul className="service-outcome-list list-unstyled mt-35 mb-60">
@@ -72,7 +72,7 @@ export default function ServiceDetails({ service }: { service: ServiceData }) {
 
             {/* === FAQ Accordion === */}
             <div className="service-process-wrap pt-60 pb-60" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-              <h3 className="details-content-title mb-40" style={{ color: "#fff", fontSize: "28px" }}>
+              <h3 className="details-content-title mb-40" style={{ color: "#fff", fontSize: "clamp(20px, 3vw, 28px)" }}>
                 Frequently Asked Questions
               </h3>
               <div className="service_process_faq">
@@ -83,7 +83,7 @@ export default function ServiceDetails({ service }: { service: ServiceData }) {
                         className={`accordion-button ${activeFaq === index ? "" : "collapsed"}`}
                         role="button"
                         onClick={() => toggleAccordion(index)}
-                        style={{ padding: "20px", color: activeFaq === index ? "#00FF97" : "#fff", fontWeight: "bold", fontSize: "18px", boxShadow: "none" }}
+                        style={{ padding: "20px", color: activeFaq === index ? "#00FF97" : "#fff", fontWeight: "bold", fontSize: "clamp(15px, 2vw, 18px)", boxShadow: "none" }}
                       >
                         {item.question}
                       </div>

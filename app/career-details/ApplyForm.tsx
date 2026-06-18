@@ -165,7 +165,7 @@ export default function ApplyForm() {
         </div>
 
         {/* File Upload */}
-        <div className="cp-contact-bottom ul_li_between mt-70">
+        <div className="cp-contact-bottom mt-70 d-flex flex-column flex-md-row justify-content-md-between align-items-md-center gap-3">
           <div className="xb-upload_file">
             <label htmlFor="file">Upload your resume / CV</label>
             <input id="file" type="file" onChange={handleFileChange} />

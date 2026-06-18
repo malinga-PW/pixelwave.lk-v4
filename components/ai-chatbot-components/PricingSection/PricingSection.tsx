@@ -252,7 +252,7 @@ export default function PricingSection() {
                 : "Week";
 
             return (
-              <div key={tier.id} className="mt-30 flex-shrink-0" style={{ width: '350px' }}>
+              <div key={tier.id} className="mt-30 flex-shrink-0" style={{ width: 'clamp(260px, 85vw, 350px)' }}>
                 <div
                   className="pricing-item xb-border bg_img h-100 d-flex flex-column"
                   style={BG_ITEM_STYLE}
