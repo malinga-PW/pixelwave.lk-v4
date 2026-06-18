@@ -2,6 +2,12 @@
    PixelWave Custom Overrides — globals.css
    ============================================================ */
 
+/* ── 0. BLOG TILE TITLE SIZE REDUCTION ──────────────────────── */
+.xb-blog-item .xb-item--title {
+  font-size: 18px !important;
+  line-height: 1.4 !important;
+}
+
 /* ── 1. HEADING FONT SIZE OVERRIDES ─────────────────────────── */
 
 .hero-content .title {
