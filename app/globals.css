@@ -741,6 +741,26 @@
   .btn-book-consultation {
     color: #ffffff !important;
   }
+
+  /* Blog marquee: enable touch swipe on tablets */
+  .xb-blog-marquee-wrap.marquee-container .marquee-track,
+  .marquee-container .marquee-track {
+    animation: none !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 20px !important;
+    padding: 0 15px !important;
+    cursor: grab !important;
+    scrollbar-width: none !important;
+  }
+  .xb-blog-marquee-wrap.marquee-container .marquee-track::-webkit-scrollbar {
+    display: none !important;
+  }
+  .xb-blog-marquee-item {
+    scroll-snap-align: start !important;
+    flex-shrink: 0 !important;
+  }
 }
 
 /* ── 9. SMALL PHONE FIXES (max-width: 575px) ───────────────── */
@@ -917,9 +937,25 @@
     width: 260px !important;
   }
 
-  /* Blog marquee item width */
+  /* Blog marquee: pause animation & enable touch swipe */
+  .xb-blog-marquee-wrap.marquee-container .marquee-track,
+  .marquee-container .marquee-track {
+    animation: none !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 20px !important;
+    padding: 0 15px !important;
+    cursor: grab !important;
+    scrollbar-width: none !important;
+  }
+  .xb-blog-marquee-wrap.marquee-container .marquee-track::-webkit-scrollbar {
+    display: none !important;
+  }
   .xb-blog-marquee-item {
-    width: 260px !important;
+    scroll-snap-align: start !important;
+    flex-shrink: 0 !important;
+    width: 280px !important;
   }
 
   /* Brand logos */
