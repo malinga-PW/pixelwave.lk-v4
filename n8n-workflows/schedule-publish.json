@@ -1,0 +1,67 @@
+{
+  "name": "Social Publisher - Schedule & Publish",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "social-schedule",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "social-schedule-webhook"
+    },
+    {
+      "parameters": {
+        "amount": "={{$json.body.scheduleTime}}",
+        "unit": "minutes"
+      },
+      "name": "Wait (Schedule)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "webhookId": "0de6e300-d86b-4e1b-b78f-6f91671239aa"
+    },
+    {
+      "parameters": {
+        "operation": "post",
+        "text": "={{$json.body.draft}}",
+        "additionalFields": {}
+      },
+      "name": "LinkedIn (Publish)",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Wait (Schedule)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait (Schedule)": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn (Publish)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "f7ab0757-0cc6-4eb9-a292-0b2f7d98ec35"
+}
