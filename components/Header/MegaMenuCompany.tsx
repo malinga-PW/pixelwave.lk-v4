@@ -11,7 +11,8 @@ export default function MegaMenuCompany() {
     { title: "💼 Our Portfolio", link: "/project" },
     { title: "👥 Our Team", link: "/team" },
     { title: "🤝 Careers (We're Hiring!)", link: "/career" },
-    { title: "🤖 Elena.AI Interface", link: "/elena-ai" }
+    { title: "🤖 Elena.AI Interface", link: "/elena-ai" },
+    { title: "🔒 Admin Access", link: "/admin" }
   ];
 
   return (
