@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import SimpleReactValidator from "simple-react-validator";
+import { toast } from "react-toastify";
 import Image from "next/image";
 
 // Icons
@@ -45,12 +46,37 @@ export default function ContactForm() {
     setForms((prev) => ({ ...prev, file }));
   };
 
-  const submitHandler = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (validator.current.allValid()) {
-      console.log("✅ Form submitted:", forms);
-      alert("Form submitted successfully!");
+    if (!validator.current.allValid()) {
+      validator.current.showMessages();
+      forceUpdate((n) => n + 1);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        name: forms.name,
+        email: forms.email,
+        phone: forms.phone,
+        service: forms.service,
+        message: forms.message,
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL}/contact-form`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Failed to submit");
+
+      toast.success("Thank you! Your inquiry has been received. We will contact you within 24 hours.");
 
       setForms({
         name: "",
@@ -62,9 +88,10 @@ export default function ContactForm() {
       });
 
       validator.current.hideMessages();
-      forceUpdate((n) => n + 1);
-    } else {
-      validator.current.showMessages();
+    } catch {
+      toast.error("Something went wrong. Please try again or email us directly at contact@pixelwave.lk.");
+    } finally {
+      setIsSubmitting(false);
       forceUpdate((n) => n + 1);
     }
   };
@@ -172,8 +199,8 @@ export default function ContactForm() {
 
       {/* Submit */}
       <div className="form-submit-btn mt-35">
-        <button type="submit" className="thm-btn form-btn">
-          Submit Here
+        <button type="submit" className="thm-btn form-btn" disabled={isSubmitting}>
+          {isSubmitting ? "Sending..." : "Submit Here"}
           <span className="xb-icon">
             <Image src={arrowIcon} alt="arrow" />
             <Image src={arrowIcon} alt="arrow" />

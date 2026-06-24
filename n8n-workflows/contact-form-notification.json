@@ -1,0 +1,226 @@
+{
+  "name": "Contact Form - Notification & Auto-Reply",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact-form",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "contact-form-webhook"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "name",
+              "value": "={{$json.body.name}}"
+            },
+            {
+              "name": "email",
+              "value": "={{$json.body.email}}"
+            },
+            {
+              "name": "phone",
+              "value": "={{$json.body.phone}}"
+            },
+            {
+              "name": "service",
+              "value": "={{$json.body.service}}"
+            },
+            {
+              "name": "message",
+              "value": "={{$json.body.message}}"
+            },
+            {
+              "name": "submittedAt",
+              "value": "={{new Date().toISOString()}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "tableId": "PW_contact_submissions",
+        "dataToSend": "defineBelow",
+        "fieldsToSend": {
+          "values": [
+            {
+              "fieldName": "name",
+              "fieldValue": "={{$json.name}}"
+            },
+            {
+              "fieldName": "email",
+              "fieldValue": "={{$json.email}}"
+            },
+            {
+              "fieldName": "phone",
+              "fieldValue": "={{$json.phone}}"
+            },
+            {
+              "fieldName": "service",
+              "fieldValue": "={{$json.service}}"
+            },
+            {
+              "fieldName": "message",
+              "fieldValue": "={{$json.message}}"
+            },
+            {
+              "fieldName": "created_at",
+              "fieldValue": "={{$json.submittedAt}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Supabase (Store Lead)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@pixelwave.lk",
+        "toEmail": "={{$json.email}}",
+        "subject": "Thank You for Contacting PixelWave AI Solutions",
+        "text": "={{'Hi ' + $json.name + ',\\n\\nThank you for reaching out to PixelWave AI Solutions! We have received your inquiry regarding ' + $json.service + '.\\n\\nOur team will review your message and get back to you within 24 hours.\\n\\nHere is a summary of your submission:\\n- Name: ' + $json.name + '\\n- Email: ' + $json.email + '\\n- Phone: ' + $json.phone + '\\n- Service: ' + $json.service + '\\n- Message: ' + $json.message + '\\n\\nIf you have any urgent questions, please contact us directly at +94 XXX XXX XXX.\\n\\nBest regards,\\nPixelWave AI Solutions Team\\nwww.pixelwave.lk'",
+        "options": {}
+      },
+      "name": "Email (Auto-Reply to Customer)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "fromEmail": "contact@pixelwave.lk",
+        "toEmail": "team@pixelwave.lk",
+        "subject": "={{'New Contact Form Inquiry - ' + $json.service + ' from ' + $json.name}}",
+        "text": "={{'New lead received from pixelwave.lk contact form:\\n\\nName: ' + $json.name + '\\nEmail: ' + $json.email + '\\nPhone: ' + $json.phone + '\\nService: ' + $json.service + '\\nMessage: ' + $json.message + '\\n\\nSubmitted At: ' + $json.submittedAt + '\\n\\n---\\nThis is an automated notification from n8n.'}}",
+        "options": {}
+      },
+      "name": "Email (Notify Team)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "success",
+              "value": "true"
+            },
+            {
+              "name": "message",
+              "value": "Your inquiry has been received. We will contact you within 24 hours."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Response Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {}
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Data": {
+      "main": [
+        [
+          {
+            "node": "Supabase (Store Lead)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase (Store Lead)": {
+      "main": [
+        [
+          {
+            "node": "Email (Notify Team)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email (Notify Team)": {
+      "main": [
+        [
+          {
+            "node": "Email (Auto-Reply to Customer)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email (Auto-Reply to Customer)": {
+      "main": [
+        [
+          {
+            "node": "Response Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response Data": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "f7ab0757-0cc6-4eb9-a292-0b2f7d98ec36"
+}
